@@ -1,0 +1,4 @@
+target 'GreenThumb' do
+  pod 'GoogleMaps', '3.10.0'
+  pod 'GooglePlaces', '3.10.0'
+end
