@@ -22,7 +22,11 @@ setup(
     packages=['greenthumb'],
     include_package_data=True,
 
+<<<<<<< HEAD
     # TODO: Add any packages here that we need.
+=======
+    # TODO: More PACKAGESSSS
+>>>>>>> d86e029a5a46bd2d2c2bf6158ae99e21e7b5f408
     install_requires=[
         'Flask',
         'Flask-PyMongo',
