@@ -21,7 +21,7 @@ setup(
     version='1.0.0',
     packages=['greenthumb'],
     include_package_data=True,
-
+    
     # TODO: Add any packages here that we need.
     install_requires=[
         'Flask',
