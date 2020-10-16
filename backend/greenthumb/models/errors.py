@@ -24,7 +24,7 @@ def bad_request(error):
     )
 
 @greenthumb.app.errorhandler(403)
-def bad_request(error):
+def forbidden_request(error):
 
     """ Handle a 403 error """
 
@@ -37,7 +37,7 @@ def bad_request(error):
     )
 
 @greenthumb.app.errorhandler(404)
-def bad_request(error):
+def not_found_error(error):
 
     """ Handle a 404 error """
 
