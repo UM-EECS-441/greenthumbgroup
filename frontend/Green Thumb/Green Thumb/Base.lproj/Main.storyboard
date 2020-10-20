@@ -513,19 +513,19 @@
         <!--Guides-->
         <scene sceneID="tLH-IM-V8M">
             <objects>
-                <viewController id="otC-e5-cMv" sceneMemberID="viewController">
+                <viewController id="otC-e5-cMv" customClass="gardenGuides" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UfX-rP-X2y">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9j9-81-PYl" customClass="Guides">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="N6o-aX-sQ2">
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="yKx-ju-hCZ">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="guideCell" id="N7q-Q2-76F">
                                         <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="yKx-ju-hCZ" id="LWm-mt-R71">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="N7q-Q2-76F" id="5wm-pK-K5f">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
@@ -536,13 +536,16 @@
                         <viewLayoutGuide key="safeArea" id="Rg1-pT-ba9"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Rg1-pT-ba9" firstAttribute="bottom" secondItem="9j9-81-PYl" secondAttribute="bottom" id="YKV-Jo-iba"/>
-                            <constraint firstItem="Rg1-pT-ba9" firstAttribute="trailing" secondItem="9j9-81-PYl" secondAttribute="trailing" id="eBl-G3-K7G"/>
-                            <constraint firstItem="9j9-81-PYl" firstAttribute="top" secondItem="Rg1-pT-ba9" secondAttribute="top" id="euo-XO-E4s"/>
-                            <constraint firstItem="9j9-81-PYl" firstAttribute="leading" secondItem="Rg1-pT-ba9" secondAttribute="leading" id="lQ8-6V-U3u"/>
+                            <constraint firstItem="Rg1-pT-ba9" firstAttribute="trailing" secondItem="N6o-aX-sQ2" secondAttribute="trailing" id="DLK-uv-Vgc"/>
+                            <constraint firstItem="N6o-aX-sQ2" firstAttribute="leading" secondItem="Rg1-pT-ba9" secondAttribute="leading" id="NwM-a7-8FL"/>
+                            <constraint firstItem="Rg1-pT-ba9" firstAttribute="bottom" secondItem="N6o-aX-sQ2" secondAttribute="bottom" id="UzI-PS-dVr"/>
+                            <constraint firstItem="N6o-aX-sQ2" firstAttribute="top" secondItem="Rg1-pT-ba9" secondAttribute="top" id="rvn-cB-IwF"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Guides" id="o9a-2n-IcJ"/>
+                    <connections>
+                        <outlet property="guideView" destination="N6o-aX-sQ2" id="5bj-VP-6SR"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tq4-Y1-g26" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
