@@ -17,12 +17,26 @@ class gardenGuides: UIViewController {
         guideView.delegate = self
         guideView.dataSource = self
     }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "guideSegue" {
+//            // Setup new view controller
+//        }
+//    }
 
 
 }
 extension gardenGuides: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("hah")
+//        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+//        let destination = storyboard.instantiateViewController(withIdentifier: "thisGuide")
+//        navigationController?.pushViewController(destination, animated: true)
+        
+//        performSegue(withIdentifier: "guideSegue", sender: self)
+
+        
+
+//        print("hah2")
     }
 }
 

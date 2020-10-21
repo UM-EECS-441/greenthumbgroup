@@ -529,6 +529,9 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="osw-37-lGs" kind="show" identifier="guideSegue" id="cx7-a3-Ev2"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -550,6 +553,29 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tq4-Y1-g26" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1051" y="-2201"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="bya-OF-NIs">
+            <objects>
+                <viewController storyboardIdentifier="thisGuide" id="osw-37-lGs" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="eFV-Nb-T3S">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ZJ-hI-ZwJ">
+                                <rect key="frame" x="184" y="433" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="szy-dH-fIZ"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="QTI-hh-hD0"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jTo-sB-oRa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1977" y="-2201"/>
         </scene>
         <!--Plant Catalogue-->
         <scene sceneID="jFg-MU-IHq">
