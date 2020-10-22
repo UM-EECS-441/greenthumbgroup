@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		400EA6A22541110800C8D052 /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400EA6A12541110800C8D052 /* DesignableView.swift */; };
 		40C7CBA5253768FB005A2283 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA4253768FB005A2283 /* AppDelegate.swift */; };
 		40C7CBA7253768FB005A2283 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA6253768FB005A2283 /* SceneDelegate.swift */; };
 		40C7CBA9253768FB005A2283 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA8253768FB005A2283 /* ViewController.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		400EA6A12541110800C8D052 /* DesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
 		40C7CBA1253768FB005A2283 /* Green Thumb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Green Thumb.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40C7CBA4253768FB005A2283 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		40C7CBA6253768FB005A2283 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				40C7CBAF253768FF005A2283 /* LaunchScreen.storyboard */,
 				40C7CBB2253768FF005A2283 /* Info.plist */,
 				81288542253EB41400E6AAD7 /* gardenGuides.swift */,
+				400EA6A12541110800C8D052 /* DesignableView.swift */,
 			);
 			path = "Green Thumb";
 			sourceTree = "<group>";
@@ -143,6 +146,7 @@
 				40C7CBA9253768FB005A2283 /* ViewController.swift in Sources */,
 				40C7CBA5253768FB005A2283 /* AppDelegate.swift in Sources */,
 				40C7CBA7253768FB005A2283 /* SceneDelegate.swift in Sources */,
+				400EA6A22541110800C8D052 /* DesignableView.swift in Sources */,
 				81288543253EB41400E6AAD7 /* gardenGuides.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
