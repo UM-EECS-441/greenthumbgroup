@@ -31,13 +31,14 @@ start_server() {
 
 stop_server() {
     echo "Stopping gunicorn..."
+    set +e
     pkill -f "gunicorn -b 0.0.0.0:5000 wsgi:app"
+    set -e
 }
 
 restart() {
     check_privileges
     stop_server
-    sleep 5s
     start_server
 }
 
