@@ -13,7 +13,7 @@ check_privileges() {
         exit 1
     fi
     # check ufw status
-    if [[ $(ufw status | grep -c "inactive") -ne 0 ||  $(ufw status | grep -c "5000") -eq 0]];
+    if [[ $(ufw status | grep -c "inactive") -ne 0 ||  $(ufw status | grep -c "5000") -eq 0 ]];
     then
         echo "Opening port 5000 in ufw"
         ufw allow 5000
@@ -37,6 +37,7 @@ stop_server() {
 restart() {
     check_privileges
     stop_server
+    sleep 5s
     start_server
 }
 
