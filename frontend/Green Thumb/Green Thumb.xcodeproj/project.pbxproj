@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		400EA6A22541110800C8D052 /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400EA6A12541110800C8D052 /* DesignableView.swift */; };
+		40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */; };
 		40C7CBA5253768FB005A2283 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA4253768FB005A2283 /* AppDelegate.swift */; };
 		40C7CBA7253768FB005A2283 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA6253768FB005A2283 /* SceneDelegate.swift */; };
 		40C7CBA9253768FB005A2283 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA8253768FB005A2283 /* ViewController.swift */; };
@@ -24,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		400EA6A12541110800C8D052 /* DesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
+		40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSettingsVC.swift; sourceTree = "<group>"; };
 		40C7CBA1253768FB005A2283 /* Green Thumb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Green Thumb.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40C7CBA4253768FB005A2283 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		40C7CBA6253768FB005A2283 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				40C7CBA6253768FB005A2283 /* SceneDelegate.swift */,
 				40C7CBA8253768FB005A2283 /* ViewController.swift */,
 				40C7CBAA253768FB005A2283 /* Main.storyboard */,
+				40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */,
 				40C7CBAD253768FF005A2283 /* Assets.xcassets */,
 				40C7CBAF253768FF005A2283 /* LaunchScreen.storyboard */,
 				40C7CBB2253768FF005A2283 /* Info.plist */,
@@ -167,6 +170,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A83E47FF2543B37F003F1193 /* UserPlant.swift in Sources */,
+				40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */,
 				40C7CBA9253768FB005A2283 /* ViewController.swift in Sources */,
 				A83E47FB2543AFCA003F1193 /* GuidePage.swift in Sources */,
 				A83E47FD2543B0F4003F1193 /* CatalogPlant.swift in Sources */,
