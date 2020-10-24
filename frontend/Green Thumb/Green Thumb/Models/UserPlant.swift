@@ -13,10 +13,10 @@ class UserPlant {
     
     // TODO: Add more stuff as we add more properties to user customizable plants such as light data etc.
     
-    init (userPlantId: string, catalogPlantId: String, geodata: GeoData, gardenId: String) {
+    init (userPlantId: String, catalogPlantId: String, geodata: GeoData, gardenId: String) {
         self.userPlantId = userPlantId
         self.catalogPlantId = catalogPlantId
-        self.geodata = GeoData
+        self.geodata = geodata
         self.gardenId = gardenId
     }
 }
