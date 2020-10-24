@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,7 +18,10 @@
 		40C7CBAC253768FB005A2283 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40C7CBAA253768FB005A2283 /* Main.storyboard */; };
 		40C7CBAE253768FF005A2283 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40C7CBAD253768FF005A2283 /* Assets.xcassets */; };
 		40C7CBB1253768FF005A2283 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40C7CBAF253768FF005A2283 /* LaunchScreen.storyboard */; };
+		5665D8DAA8A7A036525377EB /* Pods_Green_Thumb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F268A82F4911AD68A1F4F916 /* Pods_Green_Thumb.framework */; };
 		81288543253EB41400E6AAD7 /* gardenGuides.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81288542253EB41400E6AAD7 /* gardenGuides.swift */; };
+		A56F04752544A4650060976F /* mapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F04742544A4650060976F /* mapVC.swift */; };
+		A56F04AC2544BC6B0060976F /* doticon.png in Resources */ = {isa = PBXBuildFile; fileRef = A56F04AB2544BC6B0060976F /* doticon.png */; };
 		A83E47FB2543AFCA003F1193 /* GuidePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E47FA2543AFCA003F1193 /* GuidePage.swift */; };
 		A83E47FD2543B0F4003F1193 /* CatalogPlant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E47FC2543B0F4003F1193 /* CatalogPlant.swift */; };
 		A83E47FF2543B37F003F1193 /* UserPlant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E47FE2543B37F003F1193 /* UserPlant.swift */; };
@@ -41,11 +44,16 @@
 		40C7CBB0253768FF005A2283 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		40C7CBB2253768FF005A2283 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		81288542253EB41400E6AAD7 /* gardenGuides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gardenGuides.swift; sourceTree = "<group>"; };
+		92F96ABF4FBECF795ED13803 /* Pods-Green Thumb.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Green Thumb.debug.xcconfig"; path = "Target Support Files/Pods-Green Thumb/Pods-Green Thumb.debug.xcconfig"; sourceTree = "<group>"; };
+		A56F04742544A4650060976F /* mapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mapVC.swift; sourceTree = "<group>"; };
+		A56F04AB2544BC6B0060976F /* doticon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = doticon.png; path = "Green Thumb/doticon.png"; sourceTree = SOURCE_ROOT; };
 		A83E47FA2543AFCA003F1193 /* GuidePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidePage.swift; sourceTree = "<group>"; };
 		A83E47FC2543B0F4003F1193 /* CatalogPlant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogPlant.swift; sourceTree = "<group>"; };
 		A83E47FE2543B37F003F1193 /* UserPlant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlant.swift; sourceTree = "<group>"; };
 		A83E48002543B3F6003F1193 /* GeoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoData.swift; sourceTree = "<group>"; };
 		A83E48022543B4D9003F1193 /* UserGarden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserGarden.swift; sourceTree = "<group>"; };
+		BE54E96410C75239B37464E9 /* Pods-Green Thumb.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Green Thumb.release.xcconfig"; path = "Target Support Files/Pods-Green Thumb/Pods-Green Thumb.release.xcconfig"; sourceTree = "<group>"; };
+		F268A82F4911AD68A1F4F916 /* Pods_Green_Thumb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Green_Thumb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5665D8DAA8A7A036525377EB /* Pods_Green_Thumb.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,6 +73,8 @@
 			children = (
 				40C7CBA3253768FB005A2283 /* Green Thumb */,
 				40C7CBA2253768FB005A2283 /* Products */,
+				466AE14F76FCEFB67DD4E013 /* Pods */,
+				62EC2B0DD048E6A734BAE587 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -92,13 +103,32 @@
 				40C7CBB2253768FF005A2283 /* Info.plist */,
 				81288542253EB41400E6AAD7 /* gardenGuides.swift */,
 				400EA6A12541110800C8D052 /* DesignableView.swift */,
+				A56F04742544A4650060976F /* mapVC.swift */,
 			);
 			path = "Green Thumb";
+			sourceTree = "<group>";
+		};
+		466AE14F76FCEFB67DD4E013 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				92F96ABF4FBECF795ED13803 /* Pods-Green Thumb.debug.xcconfig */,
+				BE54E96410C75239B37464E9 /* Pods-Green Thumb.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		62EC2B0DD048E6A734BAE587 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F268A82F4911AD68A1F4F916 /* Pods_Green_Thumb.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		A83E47F72543AF62003F1193 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A56F04AB2544BC6B0060976F /* doticon.png */,
 				A83E47FA2543AFCA003F1193 /* GuidePage.swift */,
 				A83E47FC2543B0F4003F1193 /* CatalogPlant.swift */,
 				A83E47FE2543B37F003F1193 /* UserPlant.swift */,
@@ -115,9 +145,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 40C7CBB5253768FF005A2283 /* Build configuration list for PBXNativeTarget "Green Thumb" */;
 			buildPhases = (
+				E30258121197C767CE36637F /* [CP] Check Pods Manifest.lock */,
 				40C7CB9D253768FB005A2283 /* Sources */,
 				40C7CB9E253768FB005A2283 /* Frameworks */,
 				40C7CB9F253768FB005A2283 /* Resources */,
+				16338D3042BF11A955C9D9FA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -167,11 +199,54 @@
 			files = (
 				40C7CBB1253768FF005A2283 /* LaunchScreen.storyboard in Resources */,
 				40C7CBAE253768FF005A2283 /* Assets.xcassets in Resources */,
+				A56F04AC2544BC6B0060976F /* doticon.png in Resources */,
 				40C7CBAC253768FB005A2283 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		16338D3042BF11A955C9D9FA /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Green Thumb/Pods-Green Thumb-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Green Thumb/Pods-Green Thumb-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Green Thumb/Pods-Green Thumb-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E30258121197C767CE36637F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Green Thumb-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		40C7CB9D253768FB005A2283 /* Sources */ = {
@@ -183,6 +258,7 @@
 				40426456254488DF005C6F8D /* catalogVC.swift in Sources */,
 				40C7CBA9253768FB005A2283 /* ViewController.swift in Sources */,
 				A83E47FB2543AFCA003F1193 /* GuidePage.swift in Sources */,
+				A56F04752544A4650060976F /* mapVC.swift in Sources */,
 				404264512544884A005C6F8D /* catalogTableCell.swift in Sources */,
 				A83E47FD2543B0F4003F1193 /* CatalogPlant.swift in Sources */,
 				40C7CBA5253768FB005A2283 /* AppDelegate.swift in Sources */,
@@ -335,17 +411,18 @@
 		};
 		40C7CBB6253768FF005A2283 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 92F96ABF4FBECF795ED13803 /* Pods-Green Thumb.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 75JK535DUG;
+				DEVELOPMENT_TEAM = AWUU3Q6NX7;
 				INFOPLIST_FILE = "Green Thumb/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "edu.umich.jpriggs.Green-Thumb";
+				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.mworrelGreenThumb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -354,18 +431,21 @@
 		};
 		40C7CBB7253768FF005A2283 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE54E96410C75239B37464E9 /* Pods-Green Thumb.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 75JK535DUG;
+				DEVELOPMENT_TEAM = AWUU3Q6NX7;
 				INFOPLIST_FILE = "Green Thumb/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "edu.umich.jpriggs.Green-Thumb";
+				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.mworrelGreenThumb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

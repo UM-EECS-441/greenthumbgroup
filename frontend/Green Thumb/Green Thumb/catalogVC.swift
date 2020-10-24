@@ -56,7 +56,9 @@ class MainVC: UITableViewController {
         cell.plantName.sizeToFit()
         if (plant.plantImage != "") {
             let img = UIImage(data: Data(base64Encoded: plant.plantImage, options: .ignoreUnknownCharacters)!)!
+            /* TODO:
             cell.plantImage?.image = img.resizeImage(targetSize: CGSize(width: 150, height: 181))
+ */
         } else {
             cell.plantImage?.image = nil
         }
@@ -89,10 +91,12 @@ class MainVC: UITableViewController {
                 self.plants = [CatalogPlant]()
                 let json = try JSONSerialization.jsonObject(with: data!) as! [String:Any]
                 let plantsReceived = json["plants"] as? [[String]] ?? []
+                /* TODO
                 for plantEntry in plantsReceived {
-                    let plant = CatalogPlant(plantName: plantEntry[1], plantImage: chattEntry[5])
+                    let plant = CatalogPlant(plantName: plantEntry[1], plantImage: plantEntry[2])
                     self.plants += [plant]
                 }
+ */
                 DispatchQueue.main.async {
                   self.tableView.estimatedRowHeight = 140
                   self.tableView.rowHeight = UITableView.automaticDimension

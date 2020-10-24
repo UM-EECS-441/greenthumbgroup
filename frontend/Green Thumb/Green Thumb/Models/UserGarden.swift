@@ -6,11 +6,11 @@
 //
 
 class UserGarden {
-    var gardenId: String
+    var gardenId: Int
     var tlGeoData: GeoData
     var brGeoData: GeoData
     
-    init (gardenId: String, var tlGeoData: String, var brGeoData: String) {
+    init (gardenId: Int, tlGeoData: GeoData, brGeoData: GeoData) {
         self.gardenId = gardenId
         self.tlGeoData = tlGeoData
         self.brGeoData = brGeoData

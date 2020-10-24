@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qWm-Mz-XDw">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -727,10 +727,47 @@
         <!--Map-->
         <scene sceneID="P2S-EX-fiU">
             <objects>
-                <viewController title="Map" id="30V-2j-kem" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="mapVC" title="Map" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="30V-2j-kem" customClass="mapVC" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Max-SQ-6SC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HHF-0g-UPU" customClass="GMSMapView">
+                                <rect key="frame" x="0.0" y="151" width="414" height="564"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4j8-jj-9oz">
+                                <rect key="frame" x="0.0" y="85" width="414" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TZQ-Cf-KPb">
+                                <rect key="frame" x="346" y="762" width="48" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancelClicked:" destination="30V-2j-kem" eventType="touchUpInside" id="Ou9-Ud-MuO"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HA4-Wm-gTT">
+                                <rect key="frame" x="20" y="762" width="99" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Delete Garden"/>
+                                <connections>
+                                    <action selector="deleteGardenClicked:" destination="30V-2j-kem" eventType="touchUpInside" id="xOt-TG-aUe"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YTz-C5-QuD">
+                                <rect key="frame" x="137" y="723" width="141" height="42"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" title="Draw Garden"/>
+                                <connections>
+                                    <action selector="drawGardenClicked:" destination="30V-2j-kem" eventType="touchUpInside" id="Z6h-lw-flo"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="SKf-jM-YMM"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
@@ -741,10 +778,17 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="cancelButton" destination="TZQ-Cf-KPb" id="Vnl-z6-ZF1"/>
+                        <outlet property="deleteGardenButton" destination="HA4-Wm-gTT" id="A2a-Z6-eMU"/>
+                        <outlet property="drawGardenButton" destination="YTz-C5-QuD" id="ceq-Pb-kRn"/>
+                        <outlet property="map" destination="HHF-0g-UPU" id="jZm-FY-Ml5"/>
+                        <outlet property="searchBar" destination="4j8-jj-9oz" id="9D2-aA-2Tv"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Fz-er-UQ9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2822" y="75"/>
+            <point key="canvasLocation" x="2821.739130434783" y="75"/>
         </scene>
         <!--Add Plant Options-->
         <scene sceneID="Rlu-rS-2P8">
@@ -755,7 +799,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E7a-PL-i5e" userLabel="Catalog button">
-                                <rect key="frame" x="173" y="226" width="68" height="40"/>
+                                <rect key="frame" x="173" y="170" width="68" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="68" id="OuU-c4-hf5"/>
                                     <constraint firstAttribute="height" constant="40" id="Wdm-jO-P6f"/>
@@ -770,19 +814,19 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add plant from catalog" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rxl-IQ-u0q">
-                                <rect key="frame" x="57" y="135" width="292" height="36"/>
+                                <rect key="frame" x="57" y="79" width="292" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="highlightedColor" systemColor="labelColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add your own plant" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FH7-NL-Ylr">
-                                <rect key="frame" x="79" y="367" width="249" height="36"/>
+                                <rect key="frame" x="79" y="311" width="249" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6O6-1F-3aj" userLabel="Thumb button">
-                                <rect key="frame" x="187" y="458" width="40" height="60"/>
+                                <rect key="frame" x="187" y="402" width="40" height="60"/>
                                 <accessibility key="accessibilityConfiguration" label="Thumb button"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="1r0-BM-4ZA"/>
@@ -1282,7 +1326,7 @@
             <objects>
                 <viewController id="FIp-gS-DXK" userLabel="Payment" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="61w-Yz-f1s">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Z7C-6D-hX8">
@@ -1814,7 +1858,7 @@
             <objects>
                 <tableViewController title="Home Catalog" id="wrm-iF-adb" userLabel="Properties" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Uac-h6-y8r">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" id="qWy-3x-cek">
@@ -1873,6 +1917,18 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Properties" id="HWC-lo-Is1">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="Oci-LV-gw4">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3Di-z2-xWA">
+                                <rect key="frame" x="20" y="11.5" width="73.5" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="map" catalog="system">
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="25"/>
+                                </state>
+                                <connections>
+                                    <segue destination="30V-2j-kem" kind="show" id="GWW-UB-JFR"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="plus.circle.fill" catalog="system" id="h4Q-hC-wIg">
                             <connections>
                                 <segue destination="A5l-0N-Kuv" kind="showDetail" id="3ZU-NH-fTp"/>
@@ -2038,8 +2094,10 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="3ZU-NH-fTp"/>
         <segue reference="6ba-7W-9sN"/>
         <segue reference="wSd-0e-aOS"/>
+        <segue reference="GWW-UB-JFR"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Checkmarkempty" width="30" height="30"/>
@@ -2053,6 +2111,7 @@
         <image name="greenthumbimg" width="125" height="125"/>
         <image name="greenthumbimg2" width="219" height="300"/>
         <image name="house" catalog="system" width="128" height="106"/>
+        <image name="map" catalog="system" width="128" height="110"/>
         <image name="mount_rainier_national_park_3484" width="994" height="1500"/>
         <image name="person" catalog="system" width="128" height="117"/>
         <image name="pin" catalog="system" width="119" height="128"/>
