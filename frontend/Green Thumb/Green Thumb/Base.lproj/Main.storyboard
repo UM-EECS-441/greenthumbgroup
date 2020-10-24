@@ -362,7 +362,7 @@
                             <textInputTraits key="textInputTraits"/>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="100" id="cZH-SU-0OC">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="100" id="cZH-SU-0OC" customClass="catalogTableCell" customModule="Green_Thumb" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="72" width="414" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cZH-SU-0OC" id="EBt-RA-ICO">
@@ -372,38 +372,38 @@
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GWw-7m-Eus" userLabel="Plant Image">
                                             <rect key="frame" x="0.0" y="0.0" width="108" height="100"/>
                                         </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0nR-xQ-C8f">
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0nR-xQ-C8f">
                                             <rect key="frame" x="369" y="36.5" width="28" height="27"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <accessibility key="accessibilityConfiguration" identifier="Info button"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <state key="normal" image="chevron.right.circle" catalog="system">
                                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="24"/>
                                             </state>
                                             <connections>
+                                                <action selector="getPlantInfo:" destination="cZH-SU-0OC" eventType="touchUpInside" id="RVR-PU-2C4"/>
                                                 <segue destination="ge9-Cv-Zj6" kind="show" id="aqp-Yv-9qC"/>
                                             </connections>
                                         </button>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Rose" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="zZE-t3-Ofw" userLabel="Name of plant">
-                                            <rect key="frame" x="135" y="31" width="188" height="38"/>
-                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="188" id="nQM-Kp-ztd"/>
-                                            </constraints>
-                                            <color key="textColor" systemColor="labelColor"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                        </textView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Plant" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wKm-TX-aWs" userLabel="Plant Name">
+                                            <rect key="frame" x="149" y="36" width="45" height="28"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                            <color key="textColor" red="0.16847036739999999" green="0.29847388229999999" blue="0.1804689937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="zZE-t3-Ofw" firstAttribute="leading" secondItem="EBt-RA-ICO" secondAttribute="leading" constant="135" id="3me-bf-vwL"/>
-                                        <constraint firstItem="zZE-t3-Ofw" firstAttribute="centerY" secondItem="EBt-RA-ICO" secondAttribute="centerY" id="8By-6u-btS"/>
-                                        <constraint firstItem="zZE-t3-Ofw" firstAttribute="centerY" secondItem="GWw-7m-Eus" secondAttribute="centerY" id="9TQ-7i-60l"/>
-                                        <constraint firstItem="zZE-t3-Ofw" firstAttribute="centerY" secondItem="0nR-xQ-C8f" secondAttribute="centerY" id="DqD-uF-kX1"/>
-                                        <constraint firstItem="zZE-t3-Ofw" firstAttribute="top" secondItem="EBt-RA-ICO" secondAttribute="topMargin" constant="20" id="Nec-ID-8JN"/>
-                                        <constraint firstItem="zZE-t3-Ofw" firstAttribute="leading" secondItem="GWw-7m-Eus" secondAttribute="trailing" constant="27" id="eqH-iM-28t"/>
-                                        <constraint firstItem="0nR-xQ-C8f" firstAttribute="leading" secondItem="zZE-t3-Ofw" secondAttribute="trailing" constant="46" id="pLB-nU-kVI"/>
+                                        <constraint firstItem="wKm-TX-aWs" firstAttribute="top" secondItem="EBt-RA-ICO" secondAttribute="topMargin" constant="25" id="LnR-ps-2M5"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="wKm-TX-aWs" secondAttribute="bottom" constant="25" id="NbP-li-2eH"/>
+                                        <constraint firstItem="wKm-TX-aWs" firstAttribute="leading" secondItem="GWw-7m-Eus" secondAttribute="trailing" constant="10" id="cxd-FP-6bL"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <accessibility key="accessibilityConfiguration" identifier="catalogTableCell"/>
+                                <connections>
+                                    <outlet property="plantButton" destination="0nR-xQ-C8f" id="lLw-XM-avW"/>
+                                    <outlet property="plantImage" destination="GWw-7m-Eus" id="StF-PQ-XuQ"/>
+                                    <outlet property="plantName" destination="wKm-TX-aWs" id="NOF-R0-1O7"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -1282,7 +1282,7 @@
             <objects>
                 <viewController id="FIp-gS-DXK" userLabel="Payment" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="61w-Yz-f1s">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Z7C-6D-hX8">
@@ -1889,7 +1889,7 @@
             <objects>
                 <viewController id="A5l-0N-Kuv" userLabel="Add Property" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="c6q-7I-KRN">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="46" translatesAutoresizingMaskIntoConstraints="NO" id="Lxo-eW-A5H">

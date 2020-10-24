@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		400EA6A22541110800C8D052 /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400EA6A12541110800C8D052 /* DesignableView.swift */; };
 		40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */; };
+		404264512544884A005C6F8D /* catalogTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042644F25448849005C6F8D /* catalogTableCell.swift */; };
+		404264522544884A005C6F8D /* plantInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042645025448849005C6F8D /* plantInfoVC.swift */; };
+		40426456254488DF005C6F8D /* catalogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40426455254488DF005C6F8D /* catalogVC.swift */; };
 		40C7CBA5253768FB005A2283 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA4253768FB005A2283 /* AppDelegate.swift */; };
 		40C7CBA7253768FB005A2283 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA6253768FB005A2283 /* SceneDelegate.swift */; };
 		40C7CBA9253768FB005A2283 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA8253768FB005A2283 /* ViewController.swift */; };
@@ -26,6 +29,9 @@
 /* Begin PBXFileReference section */
 		400EA6A12541110800C8D052 /* DesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
 		40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSettingsVC.swift; sourceTree = "<group>"; };
+		4042644F25448849005C6F8D /* catalogTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = catalogTableCell.swift; sourceTree = "<group>"; };
+		4042645025448849005C6F8D /* plantInfoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = plantInfoVC.swift; sourceTree = "<group>"; };
+		40426455254488DF005C6F8D /* catalogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogVC.swift; sourceTree = "<group>"; };
 		40C7CBA1253768FB005A2283 /* Green Thumb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Green Thumb.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40C7CBA4253768FB005A2283 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		40C7CBA6253768FB005A2283 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -74,9 +80,12 @@
 			children = (
 				A83E47F72543AF62003F1193 /* Models */,
 				40C7CBA4253768FB005A2283 /* AppDelegate.swift */,
+				4042644F25448849005C6F8D /* catalogTableCell.swift */,
+				40426455254488DF005C6F8D /* catalogVC.swift */,
 				40C7CBA6253768FB005A2283 /* SceneDelegate.swift */,
 				40C7CBA8253768FB005A2283 /* ViewController.swift */,
 				40C7CBAA253768FB005A2283 /* Main.storyboard */,
+				4042645025448849005C6F8D /* plantInfoVC.swift */,
 				40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */,
 				40C7CBAD253768FF005A2283 /* Assets.xcassets */,
 				40C7CBAF253768FF005A2283 /* LaunchScreen.storyboard */,
@@ -171,10 +180,13 @@
 			files = (
 				A83E47FF2543B37F003F1193 /* UserPlant.swift in Sources */,
 				40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */,
+				40426456254488DF005C6F8D /* catalogVC.swift in Sources */,
 				40C7CBA9253768FB005A2283 /* ViewController.swift in Sources */,
 				A83E47FB2543AFCA003F1193 /* GuidePage.swift in Sources */,
+				404264512544884A005C6F8D /* catalogTableCell.swift in Sources */,
 				A83E47FD2543B0F4003F1193 /* CatalogPlant.swift in Sources */,
 				40C7CBA5253768FB005A2283 /* AppDelegate.swift in Sources */,
+				404264522544884A005C6F8D /* plantInfoVC.swift in Sources */,
 				A83E48032543B4D9003F1193 /* UserGarden.swift in Sources */,
 				40C7CBA7253768FB005A2283 /* SceneDelegate.swift in Sources */,
 				400EA6A22541110800C8D052 /* DesignableView.swift in Sources */,
