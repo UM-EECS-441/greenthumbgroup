@@ -25,7 +25,8 @@ setup(
     # TODO: Add any packages here that we need.
     install_requires=[
         'Flask',
-        'Flask-PyMongo',
+        'flask-mongoengine',
+        'gunicorn',
         'requests',
     ],
 )
