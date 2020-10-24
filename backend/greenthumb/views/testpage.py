@@ -11,8 +11,8 @@ import greenthumb
 
 @greenthumb.app.route('/', methods=["GET"])
 def show_test():
-    html = "<h1>" +
-        "If you're reading this, the server was configured correctly." +
-        "</h1>" +
+    html = "<h1>" \
+        "If you're reading this, the server was configured correctly." \
+        "</h1>" \
         "<p>GreenThumb group</p>"
     return html
