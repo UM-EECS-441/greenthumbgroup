@@ -12,7 +12,7 @@ check_privileges() {
         echo "Please run this script as root."
         exit 1
     fi
-    check ufw status
+    # check ufw status
     if [[ $(ufw status | grep -c "inactive") -ne 0 ||  $(ufw status | grep -c "Nginx Full") -eq 0 ]];
     then
         echo "Allowing Nginx in ufw"
