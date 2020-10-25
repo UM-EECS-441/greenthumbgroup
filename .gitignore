@@ -294,3 +294,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# Large resource files
+resources/
