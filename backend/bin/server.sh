@@ -25,16 +25,19 @@ start_server() {
         echo "Error: gunicorn already running."
         exit 1
     fi
+    echo "systemctl: starting greenthumb..."
     systemctl start greenthumb
 }
 
 stop_server() {
+    echo "systemctl: stopping greenthumb..."
     systemctl stop greenthumb
 }
 
 restart() {
     check_privileges
     stop_server
+    echo "systemctl: reloading config files..."
     systemctl daemon-reload
     start_server
 }
