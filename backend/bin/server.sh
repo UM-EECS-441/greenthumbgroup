@@ -12,33 +12,30 @@ check_privileges() {
         echo "Please run this script as root."
         exit 1
     fi
-    # check ufw status
-    if [[ $(ufw status | grep -c "inactive") -ne 0 ||  $(ufw status | grep -c "5000") -eq 0 ]];
+    check ufw status
+    if [[ $(ufw status | grep -c "inactive") -ne 0 ||  $(ufw status | grep -c "Nginx Full") -eq 0 ]];
     then
-        echo "Opening port 5000 in ufw"
-        ufw allow 5000
+        echo "Allowing Nginx in ufw"
+        ufw allow "Nginx Full"
     fi
 }
 
 start_server() {
-    if [ $(pgrep -fc "gunicorn -b 0.0.0.0:5000 wsgi:app") -ne 0 ]; then
+    if [ $(pgrep -fc "gunicorn.*wsgi:app") -ne 0 ]; then
         echo "Error: gunicorn already running."
         exit 1
     fi
-    echo "Running server in background"
-    gunicorn -b 0.0.0.0:5000 wsgi:app &
+    systemctl start greenthumb
 }
 
 stop_server() {
-    echo "Stopping gunicorn..."
-    set +e
-    pkill -f "gunicorn -b 0.0.0.0:5000 wsgi:app"
-    set -e
+    systemctl stop greenthumb
 }
 
 restart() {
     check_privileges
     stop_server
+    systemctl daemon-reload
     start_server
 }
 
