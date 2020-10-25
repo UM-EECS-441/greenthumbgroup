@@ -11,10 +11,10 @@ import flask
 # TODO: May need to setup a models dir/package at some point
 # import greenthumb.models
 
-app = flask.Flask(__name__)
+application = flask.Flask(__name__)
 
-app.config.from_object('greenthumb.config')
-app.config.from_envvar('GREENTHUMB_SETTINGS', silent=True)
+application.config.from_object('greenthumb.config')
+application.config.from_envvar('GREENTHUMB_SETTINGS', silent=True)
 
 import greenthumb.api
 import greenthumb.views
