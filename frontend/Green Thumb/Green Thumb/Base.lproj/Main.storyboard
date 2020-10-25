@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qWm-Mz-XDw">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -733,15 +733,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HHF-0g-UPU" customClass="GMSMapView">
-                                <rect key="frame" x="0.0" y="151" width="414" height="564"/>
+                                <rect key="frame" x="0.0" y="103" width="414" height="612"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4j8-jj-9oz">
-                                <rect key="frame" x="0.0" y="85" width="414" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </searchBar>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TZQ-Cf-KPb">
                                 <rect key="frame" x="346" y="762" width="48" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -767,23 +762,43 @@
                                     <action selector="drawGardenClicked:" destination="30V-2j-kem" eventType="touchUpInside" id="Z6h-lw-flo"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ncc-aj-xru">
+                                <rect key="frame" x="312" y="50" width="67" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Add Plant"/>
+                                <connections>
+                                    <action selector="addPlantClicked:" destination="30V-2j-kem" eventType="touchUpInside" id="4Y3-Zo-AIk"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="acH-eh-ZSZ">
+                                <rect key="frame" x="53" y="50" width="32" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="Back"/>
+                                <connections>
+                                    <segue destination="hUX-OO-F7a" kind="show" id="9oN-O4-owv"/>
+                                </connections>
+                            </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Tap to add plant" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wti-b3-zit">
+                                <rect key="frame" x="146" y="808" width="123" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="SKf-jM-YMM"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" title="Map" id="lhj-Cm-lVq">
-                        <barButtonItem key="rightBarButtonItem" title="Add Plant" id="bmr-Vd-RYx">
-                            <connections>
-                                <segue destination="L0w-0i-LVY" kind="show" id="Vjq-mL-Kmj"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Add Plant" id="bmr-Vd-RYx"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="addPlantLabel" destination="Wti-b3-zit" id="uAh-da-7VV"/>
                         <outlet property="cancelButton" destination="TZQ-Cf-KPb" id="Vnl-z6-ZF1"/>
                         <outlet property="deleteGardenButton" destination="HA4-Wm-gTT" id="A2a-Z6-eMU"/>
                         <outlet property="drawGardenButton" destination="YTz-C5-QuD" id="ceq-Pb-kRn"/>
                         <outlet property="map" destination="HHF-0g-UPU" id="jZm-FY-Ml5"/>
-                        <outlet property="searchBar" destination="4j8-jj-9oz" id="9D2-aA-2Tv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Fz-er-UQ9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -793,13 +808,13 @@
         <!--Add Plant Options-->
         <scene sceneID="Rlu-rS-2P8">
             <objects>
-                <viewController title="Add Plant Options" id="L0w-0i-LVY" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="addPlantOptionsVC" title="Add Plant Options" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="L0w-0i-LVY" customClass="addPlantOptionsVC" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BV9-Gs-XCH">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E7a-PL-i5e" userLabel="Catalog button">
-                                <rect key="frame" x="173" y="170" width="68" height="40"/>
+                                <rect key="frame" x="173" y="214" width="68" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="68" id="OuU-c4-hf5"/>
                                     <constraint firstAttribute="height" constant="40" id="Wdm-jO-P6f"/>
@@ -810,23 +825,23 @@
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="70"/>
                                 </state>
                                 <connections>
-                                    <segue destination="JJZ-Vx-kJC" kind="show" id="BHw-I3-DRH"/>
+                                    <segue destination="hOa-fP-425" kind="presentation" id="Vq6-Rk-KsP"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add plant from catalog" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rxl-IQ-u0q">
-                                <rect key="frame" x="57" y="79" width="292" height="36"/>
+                                <rect key="frame" x="57" y="123" width="292" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="highlightedColor" systemColor="labelColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add your own plant" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FH7-NL-Ylr">
-                                <rect key="frame" x="79" y="311" width="249" height="36"/>
+                                <rect key="frame" x="79" y="355" width="249" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6O6-1F-3aj" userLabel="Thumb button">
-                                <rect key="frame" x="187" y="402" width="40" height="60"/>
+                                <rect key="frame" x="187" y="446" width="40" height="60"/>
                                 <accessibility key="accessibilityConfiguration" label="Thumb button"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="1r0-BM-4ZA"/>
@@ -836,7 +851,18 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <segue destination="fbY-ud-iX8" kind="presentation" id="ZiU-xA-7AT"/>
+                                    <action selector="addOwnPlantClicked:" destination="L0w-0i-LVY" eventType="touchUpInside" id="dsP-44-TZN"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Lp-J9-NKi">
+                                <rect key="frame" x="329" y="43" width="44" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Back">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="backButtonClicked:" destination="L0w-0i-LVY" eventType="touchUpInside" id="K8a-7p-v93"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -862,12 +888,12 @@
             </objects>
             <point key="canvasLocation" x="3714" y="75"/>
         </scene>
-        <!--View Controller-->
+        <!--Add PlantVC-->
         <scene sceneID="7Hu-gS-n9B">
             <objects>
-                <viewController id="0da-pu-X5s" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="addPlantVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="0da-pu-X5s" customClass="addPlantVC" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Hld-Fl-Nsk">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="onb-sa-vLd">
@@ -885,17 +911,35 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="452-q8-7Az" userLabel="Plant Image">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="planticon" translatesAutoresizingMaskIntoConstraints="NO" id="452-q8-7Az" userLabel="Plant Image">
                                 <rect key="frame" x="46" y="109" width="322" height="244"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f5a-2M-SX0">
+                                <rect key="frame" x="327" y="44" width="37" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Done"/>
+                                <connections>
+                                    <action selector="doneButtonClicked:" destination="0da-pu-X5s" eventType="touchUpInside" id="IBq-Gp-SDD"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="GCT-En-XfZ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="B2S-nR-T5R">
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="RWT-Rn-XUd"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="jXc-8y-LbV">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="KfP-cj-XXq">
+                                <rect key="frame" x="302" y="7" width="92" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Done"/>
+                            </button>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="name" destination="PxV-93-srl" id="erp-pi-8vf"/>
+                        <outlet property="plantImage" destination="452-q8-7Az" id="A3H-DV-naf"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="825-50-2iu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -923,11 +967,11 @@
             </objects>
             <point key="canvasLocation" x="140.57971014492756" y="-777.45535714285711"/>
         </scene>
-        <!--My Garden-->
+        <!--My Gardens-->
         <scene sceneID="tBl-Jk-45k">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hUX-OO-F7a" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="My Garden" id="IBx-ci-ePY">
+                    <tabBarItem key="tabBarItem" title="My Gardens" id="IBx-ci-ePY">
                         <imageReference key="image" image="person" catalog="system" symbolScale="large"/>
                     </tabBarItem>
                     <toolbarItems/>
@@ -950,7 +994,7 @@
             <objects>
                 <tableViewController title="Add Catalog" id="JJZ-Vx-kJC" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Rgm-9Y-qWi">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" id="e7Q-mR-3Ba">
@@ -1031,24 +1075,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mtG-LW-ve4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-883" y="75"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="S8W-mE-Ewb">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="fbY-ud-iX8" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="IEr-Sx-cYH">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="0da-pu-X5s" kind="relationship" relationship="rootViewController" id="uhY-QT-UMV"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fUu-wi-Xru" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1977" y="785"/>
         </scene>
         <!--Guides-->
         <scene sceneID="Pal-xz-reI">
@@ -1856,9 +1882,9 @@
         <!--Properties-->
         <scene sceneID="bdY-Lm-h6v">
             <objects>
-                <tableViewController title="Home Catalog" id="wrm-iF-adb" userLabel="Properties" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="gardensTableVC" title="Home Catalog" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="wrm-iF-adb" userLabel="Properties" customClass="gardensTableVC" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Uac-h6-y8r">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" id="qWy-3x-cek">
@@ -1867,48 +1893,52 @@
                             <textInputTraits key="textInputTraits"/>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="100" id="hbM-vf-MF8">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="gardenCell" rowHeight="100" id="hbM-vf-MF8" customClass="gardenCell" customModule="Green_Thumb" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="72" width="414" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hbM-vf-MF8" id="aQE-fT-hpg">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s4s-X3-yfr" userLabel="Property Image">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="s4s-X3-yfr" userLabel="Property Image">
                                             <rect key="frame" x="0.0" y="0.0" width="108" height="100"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="108" id="3K0-Pr-obw"/>
+                                            </constraints>
                                         </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ape-u0-FqB">
-                                            <rect key="frame" x="369" y="36.5" width="28" height="27"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Garden 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hsj-RP-jmW">
+                                            <rect key="frame" x="133" y="40" width="68" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ape-u0-FqB">
+                                            <rect key="frame" x="303" y="14" width="91" height="73"/>
                                             <accessibility key="accessibilityConfiguration" identifier="Info button"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <state key="normal" image="chevron.right.circle" catalog="system">
-                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="24"/>
+                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="40"/>
                                             </state>
                                             <connections>
-                                                <segue destination="30V-2j-kem" kind="show" id="SHZ-Ba-TYR"/>
+                                                <action selector="mapClicked:" destination="hbM-vf-MF8" eventType="touchUpInside" id="PEE-mB-IvJ"/>
                                             </connections>
                                         </button>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Home" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="tTG-y0-PI8" userLabel="Property Name">
-                                            <rect key="frame" x="135" y="31" width="188" height="38"/>
-                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="188" id="XXm-5h-Osy"/>
-                                            </constraints>
-                                            <color key="textColor" systemColor="labelColor"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                        </textView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="ape-u0-FqB" firstAttribute="leading" secondItem="tTG-y0-PI8" secondAttribute="trailing" constant="46" id="2s1-s2-VEz"/>
-                                        <constraint firstItem="tTG-y0-PI8" firstAttribute="leading" secondItem="aQE-fT-hpg" secondAttribute="leading" constant="135" id="Kj8-U5-M9z"/>
-                                        <constraint firstItem="tTG-y0-PI8" firstAttribute="centerY" secondItem="s4s-X3-yfr" secondAttribute="centerY" id="UWI-Xh-caM"/>
-                                        <constraint firstItem="tTG-y0-PI8" firstAttribute="centerY" secondItem="aQE-fT-hpg" secondAttribute="centerY" id="VBn-IU-cDd"/>
-                                        <constraint firstItem="tTG-y0-PI8" firstAttribute="top" secondItem="aQE-fT-hpg" secondAttribute="topMargin" constant="20" id="ihe-DM-4Jv"/>
-                                        <constraint firstItem="tTG-y0-PI8" firstAttribute="leading" secondItem="s4s-X3-yfr" secondAttribute="trailing" constant="27" id="lO4-CS-Uv6"/>
-                                        <constraint firstItem="tTG-y0-PI8" firstAttribute="centerY" secondItem="ape-u0-FqB" secondAttribute="centerY" id="zMd-mo-V2b"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="ape-u0-FqB" secondAttribute="trailing" constant="-3" id="JOf-nr-km1"/>
+                                        <constraint firstItem="s4s-X3-yfr" firstAttribute="centerY" secondItem="aQE-fT-hpg" secondAttribute="centerY" id="OXw-rg-vr0"/>
+                                        <constraint firstItem="ape-u0-FqB" firstAttribute="centerY" secondItem="hsj-RP-jmW" secondAttribute="centerY" id="UB7-Lu-s77"/>
+                                        <constraint firstItem="s4s-X3-yfr" firstAttribute="top" secondItem="aQE-fT-hpg" secondAttribute="topMargin" constant="-11" id="dMP-kn-Ph7"/>
+                                        <constraint firstItem="s4s-X3-yfr" firstAttribute="leading" secondItem="aQE-fT-hpg" secondAttribute="leadingMargin" constant="-20" id="dTR-Gc-16b"/>
+                                        <constraint firstItem="hsj-RP-jmW" firstAttribute="centerY" secondItem="s4s-X3-yfr" secondAttribute="centerY" id="sG6-ed-Qgy"/>
+                                        <constraint firstItem="hsj-RP-jmW" firstAttribute="leading" secondItem="s4s-X3-yfr" secondAttribute="trailing" constant="25" id="uhx-7z-241"/>
+                                        <constraint firstItem="hsj-RP-jmW" firstAttribute="top" secondItem="aQE-fT-hpg" secondAttribute="topMargin" constant="29" id="zsv-fi-3Pu"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="gardenImage" destination="s4s-X3-yfr" id="aPh-oR-h5h"/>
+                                    <outlet property="name" destination="hsj-RP-jmW" id="ACx-9a-Yv8"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -1916,34 +1946,25 @@
                             <outlet property="delegate" destination="wrm-iF-adb" id="vwS-nX-XdD"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Properties" id="HWC-lo-Is1">
-                        <barButtonItem key="leftBarButtonItem" style="plain" id="Oci-LV-gw4">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3Di-z2-xWA">
-                                <rect key="frame" x="20" y="11.5" width="73.5" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="map" catalog="system">
-                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="25"/>
-                                </state>
-                                <connections>
-                                    <segue destination="30V-2j-kem" kind="show" id="GWW-UB-JFR"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
+                    <navigationItem key="navigationItem" title="Gardens" id="HWC-lo-Is1">
                         <barButtonItem key="rightBarButtonItem" image="plus.circle.fill" catalog="system" id="h4Q-hC-wIg">
                             <connections>
                                 <segue destination="A5l-0N-Kuv" kind="showDetail" id="3ZU-NH-fTp"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="gardens" destination="Uac-h6-y8r" id="4lv-A4-Itl"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uo5-3v-ojb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1051" y="75"/>
+            <point key="canvasLocation" x="1050.7246376811595" y="75"/>
         </scene>
         <!--Add Property-->
         <scene sceneID="gbH-OQ-zSv">
             <objects>
-                <viewController id="A5l-0N-Kuv" userLabel="Add Property" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="addGardenVC" title="Add Garden" useStoryboardIdentifierAsRestorationIdentifier="YES" id="A5l-0N-Kuv" userLabel="Add Property" customClass="addGardenVC" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="c6q-7I-KRN">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1951,43 +1972,42 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="46" translatesAutoresizingMaskIntoConstraints="NO" id="Lxo-eW-A5H">
                                 <rect key="frame" x="0.0" y="40" width="414" height="768"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nxs-9r-bPV" userLabel="Property Image">
-                                        <rect key="frame" x="46" y="0.0" width="322" height="300"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rectangle.dashed" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="nxs-9r-bPV" userLabel="Property Image">
+                                        <rect key="frame" x="67" y="17" width="280.5" height="268.5"/>
+                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="300" id="4sa-UL-DYy"/>
                                         </constraints>
+                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="200"/>
                                     </imageView>
-                                    <view contentMode="scaleToFill" verticalHuggingPriority="200" translatesAutoresizingMaskIntoConstraints="NO" id="xYR-NN-xJE">
-                                        <rect key="frame" x="87" y="346" width="240" height="36"/>
-                                        <color key="backgroundColor" red="0.29411104319999998" green="0.51978391410000002" blue="0.31825751070000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="48" translatesAutoresizingMaskIntoConstraints="NO" id="uwr-ok-KH5">
-                                        <rect key="frame" x="16" y="428" width="382" height="148"/>
+                                        <rect key="frame" x="16" y="346" width="382" height="148"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dlw-TZ-qnR">
                                                 <rect key="frame" x="0.0" y="0.0" width="382" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="JFJ-Dg-WCi"/>
                                                 </constraints>
+                                                <color key="textColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <action selector="nameEdited:" destination="A5l-0N-Kuv" eventType="editingChanged" id="eeD-Dt-kkE"/>
+                                                </connections>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="24k-4l-Qya">
                                                 <rect key="frame" x="0.0" y="98" width="382" height="50"/>
+                                                <color key="textColor" systemColor="systemGray6Color"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <action selector="addressEdited:" destination="A5l-0N-Kuv" eventType="editingChanged" id="mJR-wF-ff0"/>
+                                                </connections>
                                             </textField>
                                         </subviews>
                                     </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LzE-py-M02">
-                                        <rect key="frame" x="16" y="622" width="382" height="50"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="HYD-j9-qyc"/>
-                                        </constraints>
-                                        <state key="normal" image="pin" catalog="system"/>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9sw-Dt-abo">
-                                        <rect key="frame" x="16" y="718" width="382" height="50"/>
+                                        <rect key="frame" x="16" y="540" width="382" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="J7Z-bm-STN"/>
                                         </constraints>
@@ -2001,16 +2021,18 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <segue destination="hUX-OO-F7a" kind="showDetail" id="wSd-0e-aOS"/>
+                                            <action selector="addButtonClicked:" destination="A5l-0N-Kuv" eventType="touchUpInside" id="Iau-jo-dPj"/>
                                         </connections>
                                     </button>
+                                    <view contentMode="scaleToFill" verticalHuggingPriority="200" translatesAutoresizingMaskIntoConstraints="NO" id="xYR-NN-xJE">
+                                        <rect key="frame" x="87" y="636" width="240" height="132"/>
+                                        <color key="backgroundColor" red="0.29411104319999998" green="0.51978391410000002" blue="0.31825751070000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="LzE-py-M02" secondAttribute="trailing" constant="16" id="3sP-S0-frX"/>
                                     <constraint firstItem="9sw-Dt-abo" firstAttribute="leading" secondItem="Lxo-eW-A5H" secondAttribute="leading" constant="16" id="6IP-Xj-uMX"/>
                                     <constraint firstAttribute="trailing" secondItem="9sw-Dt-abo" secondAttribute="trailing" constant="16" id="GGP-QI-fjL"/>
                                     <constraint firstItem="uwr-ok-KH5" firstAttribute="leading" secondItem="Lxo-eW-A5H" secondAttribute="leading" constant="16" id="PAb-nK-fs0"/>
-                                    <constraint firstItem="LzE-py-M02" firstAttribute="leading" secondItem="Lxo-eW-A5H" secondAttribute="leading" constant="16" id="fFm-Zh-oMa"/>
                                     <constraint firstAttribute="trailing" secondItem="uwr-ok-KH5" secondAttribute="trailing" constant="16" id="koF-ve-Md5"/>
                                 </constraints>
                             </stackView>
@@ -2027,6 +2049,11 @@
                     <navigationItem key="navigationItem" id="oUh-oy-Z7w">
                         <barButtonItem key="rightBarButtonItem" title="Next" id="dGp-yq-B7f"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="gardenImage" destination="nxs-9r-bPV" id="xv3-ey-dQd"/>
+                        <outlet property="gardenLoc" destination="24k-4l-Qya" id="utn-4k-Lqj"/>
+                        <outlet property="gardenName" destination="dlw-TZ-qnR" id="vbB-MA-gui"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GEt-t3-XfF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -2041,7 +2068,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZAx-KZ-O3n" userLabel="Plant Image">
-                                <rect key="frame" x="20" y="116" width="374" height="200"/>
+                                <rect key="frame" x="20" y="60" width="374" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="cYo-eV-Ksa"/>
                                 </constraints>
@@ -2094,10 +2121,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="3ZU-NH-fTp"/>
         <segue reference="6ba-7W-9sN"/>
-        <segue reference="wSd-0e-aOS"/>
-        <segue reference="GWW-UB-JFR"/>
+        <segue reference="9oN-O4-owv"/>
+        <segue reference="Vq6-Rk-KsP"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Checkmarkempty" width="30" height="30"/>
@@ -2111,18 +2137,21 @@
         <image name="greenthumbimg" width="125" height="125"/>
         <image name="greenthumbimg2" width="219" height="300"/>
         <image name="house" catalog="system" width="128" height="106"/>
-        <image name="map" catalog="system" width="128" height="110"/>
         <image name="mount_rainier_national_park_3484" width="994" height="1500"/>
         <image name="person" catalog="system" width="128" height="117"/>
-        <image name="pin" catalog="system" width="119" height="128"/>
+        <image name="planticon" width="512" height="512"/>
         <image name="play.rectangle.fill" catalog="system" width="128" height="93"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="plus.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="rectangle.dashed" catalog="system" width="128" height="93"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

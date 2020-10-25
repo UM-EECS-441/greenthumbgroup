@@ -7,5 +7,6 @@ target 'Green Thumb' do
 
   # Pods for swiftChatter
   pod 'GoogleMaps'
+  pod 'SwiftyJSON', '~> 4.0'
 
 end

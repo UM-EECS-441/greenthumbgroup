@@ -7,33 +7,86 @@
 
 import UIKit
 import GoogleMaps
+import SwiftyJSON
 
-class mapVC: UIViewController {
+class mapVC: UIViewController, PlantReturnDelegate {
 
     let locmanager = CLLocationManager()
-    var userGarden: UserGarden! = nil
     var addingPlant = false
+    // Must pass in user garden
+    var userGarden: UserGarden!
     var gardenCorners: [GMSGroundOverlay] = [GMSGroundOverlay]()
     var gardenPolygon: GMSPolygon? = GMSPolygon()
+    var plantArray: [UserPlant]? = [UserPlant]()
+    var plantOverlays: [GMSGroundOverlay]? = [GMSGroundOverlay]()
+    var currentPlant: UserPlant? = nil
+    var translatedGardenLoc: CLLocationCoordinate2D? = nil
+    // TODO: store in secure location
+    var apiKey = "AIzaSyCQAqHC69Jq2-nTvK7BJa4MwX5WXqS0VQA"
     @IBOutlet weak var map: GMSMapView!
-    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var drawGardenButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var deleteGardenButton: UIButton!
+    @IBOutlet weak var addPlantLabel: UILabel!
+    
+    func didReturn(_ result: UserPlant) {
+        self.currentPlant = result
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.map.mapType = .satellite
         map.delegate = self
-         
+        
+        
+        // Geocode the address
+        let urlEncoded = userGarden.address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        let fullUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=\(urlEncoded ?? "")&key=\(apiKey)"
+        
+        let url = URL(string: fullUrl)!
+
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            guard let data = data else { return }
+            do {
+                let json = try JSON(data: data)
+                let gardenLat: Double? = json["results"][0]["geometry"]["location"]["lat"].double ?? nil
+                let gardenLong: Double? = json["results"][0]["geometry"]["location"]["lng"].double ?? nil
+                if let lat = gardenLat {
+                    if let lng = gardenLong {
+                        self.translatedGardenLoc = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+                    }
+                }
+                self.centerMapOnGarden()
+            } catch {
+                print(error)
+            }
+            print(String(data: data, encoding: .utf8)!)
+        }
+
+        task.resume()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if (currentPlant != nil){
+            self.addPlantLabel.isHidden = false
+        }
+    }
+    
+    func centerMapOnGarden() {
+        // TODO: eventually get map data from backend
+        // TODO: either zoom in on garden's location from user address input or saved garden coordinates
         // Zoom in on saved user's garden
-        if (userGarden != nil){
+        if (userGarden.brGeoData.loc != "" && userGarden.tlGeoData.loc != ""){
             let gardenCenterLat = self.userGarden.brGeoData.lat + abs(self.userGarden.tlGeoData.lat - self.userGarden.brGeoData.lat)
             let gardenCenterLon = self.userGarden.tlGeoData.lon + abs(self.userGarden.brGeoData.lon - self.userGarden.tlGeoData.lon)
             let coordinate = CLLocationCoordinate2D(latitude: gardenCenterLat, longitude: gardenCenterLon)
             map.camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 22.0)
             drawGarden()
         }
+        else if (self.translatedGardenLoc != nil){
+            map.camera = GMSCameraPosition.camera(withTarget: self.translatedGardenLoc!, zoom: 22.0)
+        }
+        /*
         // Don't have user's garden yet, zoom in on current location
         else {
             // Configure the location manager.
@@ -44,6 +97,7 @@ class mapVC: UIViewController {
             // Start getting user's location
             locmanager.startUpdatingLocation()
         }
+        */
     }
     
     @IBAction func drawGardenClicked(_ sender: UIButton) {
@@ -80,9 +134,18 @@ class mapVC: UIViewController {
         self.drawGardenButton.setTitle("Draw Garden", for: UIControl.State.normal)
         self.drawGardenButton.isHidden = false
         self.deleteGardenButton.isHidden = true
-        self.userGarden = nil
+        // Reset user garden to default
+        self.userGarden = UserGarden(gardenId: 0, name: "", address: "")
         self.gardenPolygon?.map = nil
         self.gardenPolygon = nil
+        // Remove plants
+        if let plantOverlaysUnwrapped = plantOverlays {
+            for overlay in plantOverlaysUnwrapped {
+                overlay.map = nil
+            }
+            self.plantOverlays = nil
+        }
+        self.plantArray = nil
     }
     
     func drawGarden() {
@@ -113,9 +176,17 @@ class mapVC: UIViewController {
         }
         gardenCorners.removeAll()
     }
-
+    
+    @IBAction func addPlantClicked(_ sender: UIButton) {
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let addPlantOptionsVC = storyBoard.instantiateViewController(withIdentifier: "addPlantOptionsVC") as! addPlantOptionsVC
+        addPlantOptionsVC.userGarden = userGarden
+        self.present(addPlantOptionsVC, animated: true, completion: nil)
+    }
+    
 }
 
+/*
 extension mapVC : CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
@@ -129,29 +200,33 @@ extension mapVC : CLLocationManagerDelegate {
         }
     }
 }
+ */
 
 extension mapVC : GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        if (self.drawGardenButton.titleLabel?.text == "Next" && self.userGarden == nil){
+        if (self.drawGardenButton.titleLabel?.text == "Next" && self.userGarden.tlGeoData.loc == ""){
             // User is currently drawing their garden
             // Tap should correspond to top left corner of garden
             let topLeft = GeoData(lat: coordinate.latitude, lon: coordinate.longitude, loc: "topLeft")
             // TODO: garden id switching
-            self.userGarden = UserGarden(gardenId: 0, tlGeoData: topLeft, brGeoData: GeoData(lat: 0, lon: 0, loc: ""))
+            self.userGarden.tlGeoData = topLeft
             // Draw dot corresponding to tap
-            drawIcon(mapView: mapView, coordinate: coordinate, iconName: "doticon.png")
+            drawIcon(mapView: mapView, coordinate: coordinate, iconImage: nil)
         }
-        else if (self.drawGardenButton.titleLabel?.text == "Done" && self.userGarden.brGeoData.loc != "bottomRight"){
+        // TODO: make sure this works
+        else if (self.drawGardenButton.titleLabel?.text == "Done" && self.userGarden.brGeoData.loc == ""){
             // User is currently drawing their garden
             // Tap should correspond to bottom right corner of garden
             let bottomRight = GeoData(lat: coordinate.latitude, lon: coordinate.longitude, loc: "bottomRight")
             self.userGarden.brGeoData = bottomRight
             
             // Draw dot corresponding to tap
-            drawIcon(mapView: mapView, coordinate: coordinate, iconName: "doticon.png")
+            drawIcon(mapView: mapView, coordinate: coordinate, iconImage: nil)
         }
-        else if (self.addingPlant){
-            
+        else if (self.currentPlant != nil){
+            drawIcon(mapView: self.map, coordinate: coordinate, iconImage: currentPlant!.image)
+            self.addPlantLabel.isHidden = true
+            self.currentPlant = nil
         }
     }
     
@@ -159,19 +234,37 @@ extension mapVC : GMSMapViewDelegate {
         // TODO: when user taps plant icon segue to plant vc
     }
     
-    func drawIcon(mapView: GMSMapView, coordinate: CLLocationCoordinate2D, iconName: String) {
+    func drawIcon(mapView: GMSMapView, coordinate: CLLocationCoordinate2D, iconImage: UIImage?) {
         // Draw icon for tap
-        let southWest = CLLocationCoordinate2D(latitude: coordinate.latitude-0.000008, longitude: coordinate.longitude+0.000008)
-        let northEast = CLLocationCoordinate2D(latitude: coordinate.latitude+0.000008, longitude: coordinate.longitude-0.000008)
-        let overlayBounds = GMSCoordinateBounds(coordinate: southWest, coordinate: northEast)
         
-        let icon = UIImage(named: iconName)
-        let overlay = GMSGroundOverlay(bounds: overlayBounds, icon: icon)
-        if (iconName == "doticon.png"){
+        if (iconImage == nil) {
+            // Adding garden corner
+            let southWest = CLLocationCoordinate2D(latitude: coordinate.latitude-0.000008, longitude: coordinate.longitude+0.000008)
+            let northEast = CLLocationCoordinate2D(latitude: coordinate.latitude+0.000008, longitude: coordinate.longitude-0.000008)
+            let overlayBounds = GMSCoordinateBounds(coordinate: southWest, coordinate: northEast)
+            
+            let icon = UIImage(named: "doticon.png")
+            let overlay = GMSGroundOverlay(bounds: overlayBounds, icon: icon)
             self.gardenCorners.append(overlay)
+            overlay.bearing = 0
+            overlay.map = mapView
         }
-        overlay.bearing = 0
-        overlay.map = mapView
+        else {
+            // Adding plant
+            let southWest = CLLocationCoordinate2D(latitude: coordinate.latitude-0.000004, longitude: coordinate.longitude+0.000004)
+            let northEast = CLLocationCoordinate2D(latitude: coordinate.latitude+0.000004, longitude: coordinate.longitude-0.000004)
+            let overlayBounds = GMSCoordinateBounds(coordinate: southWest, coordinate: northEast)
+            
+            let overlay = GMSGroundOverlay(bounds: overlayBounds, icon: iconImage)
+            
+            currentPlant?.geodata = GeoData(lat: coordinate.latitude, lon: coordinate.longitude, loc: "plantLoc")
+            self.plantArray?.append(currentPlant!)
+            plantOverlays?.append(overlay)
+            
+            self.gardenCorners.append(overlay)
+            overlay.bearing = 0
+            overlay.map = mapView
+        }
     }
     
 }
