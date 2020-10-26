@@ -32,7 +32,7 @@ def get_catalog():
     return flask.jsonify(plants)
 
 @greenthumb.app.route('/api/v1/catalog/<string:plant_id>/', methods=['GET'])
-def get_catalog_plant_page(plant_id: str):
+def get_catalog_plant_page(plant_id):
 
     """ Route to get a plant page from the catalog """
 

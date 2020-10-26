@@ -26,7 +26,7 @@ def get_guides():
     return flask.jsonify(guides)
 
 @greenthumb.app.route('/api/v1/guides/<int:guide_page_id>/', methods=['GET'])
-def get_guide_page(guide_page_id: int):
+def get_guide_page(guide_page_id):
 
     """ Route to get a guide page """
 
