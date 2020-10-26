@@ -8,18 +8,18 @@ class users(Document):
 class plant_types(Document):
     '''
     Document of plants catalog:
-    plant_name = common name of the plant
-    plant_species = scientific name of the plant
-    plant_tags = a Map of plant_tag name :
+    name = common name of the plant
+    species = scientific name of the plant
+    tags = a Map of plant_tag name :
      list of tag value string
-    plant_description = String containing description of plant
+    description = String containing description of plant
     //TODO: plant_image = image of each plant
     //TODO: guides = link to guides that might be useful
     '''
 
     name = StringField()
     species = StringField()
-    plant_tags = MapField(ListField(StringField()))
+    tags = MapField(ListField(StringField()))
     description = StringField()
     days_to_water = IntField()
     watering_description = StringField()
