@@ -6,7 +6,7 @@ from flask import (request, session, redirect, url_for, abort)
 
 """
 
-GreenThumb REST API: notifications.
+GreenThumb REST API: accounts.
 
 GreenThumb Group <greenthumb441@umich.edu>
 
@@ -24,7 +24,8 @@ def create_user():
                     # TODO: Change later
                     return redirect(url_for('login'))
             # insert into database, then login
-            users(email=request.form['email'], gardens=[]).save()
+            with util.MongoConnect():
+                users(email=request.form['email'], gardens=[]).save()
             session['email'] = request.form['email']
             # TODO: change based on function name
             return redirect(url_for('user_gardens'))
