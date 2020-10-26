@@ -1,31 +1,43 @@
-import mongoengine
-from mongoengine.fields import ListField, LongField
+from mongoengine import Document
+from mongoengine import (ListField, StringField, IntField, MapField, FloatField, DateField)
 
-class users(mongoengine.Document):
-    email = mongoengine.StringField()
+class users(Document):
+    email = StringField()
     gardens = ListField()
 
-class plant_types(mongoengine.Document):
-    name = mongoengine.StringField()
-    species = mongoengine.StringField()
-    description = mongoengine.StringField()
-    days_to_water = mongoengine.IntField()
-    watering_description = mongoengine.StringField()
+class plant_types(Document):
+    '''
+    Document of plants catalog:
+    plant_name = common name of the plant
+    plant_species = scientific name of the plant
+    plant_tags = a Map of plant_tag name :
+     list of tag value string
+    plant_description = String containing description of plant
+    //TODO: plant_image = image of each plant
+    //TODO: guides = link to guides that might be useful
+    '''
 
-class gardens(mongoengine.Document):
-    topleft_lat = mongoengine.FloatField()
-    topleft_long = mongoengine.FloatField()
-    bottomright_lat = mongoengine.FloatField()
-    bottomright_long = mongoengine.FloatField()
-    plants = mongoengine.ListField()
+    name = StringField()
+    species = StringField()
+    plant_tags = MapField(ListField(StringField()))
+    description = StringField()
+    days_to_water = IntField()
+    watering_description = StringField()
 
-class user_plants(mongoengine.Document):
-    latitude = mongoengine.FloatField()
-    longitude = mongoengine.FloatField()
-    light_level = mongoengine.IntField()
-    last_watered = mongoengine.DateField()
+class gardens(Document):
+    topleft_lat = FloatField()
+    topleft_long = FloatField()
+    bottomright_lat = FloatField()
+    bottomright_long = FloatField()
+    plants = ListField()
 
-class guides(mongoengine.Document):
-    title = mongoengine.StringField()
-    text = mongoengine.StringField()
-    references = mongoengine.StringField()
+class user_plants(Document):
+    latitude = FloatField()
+    longitude = FloatField()
+    light_level = IntField()
+    last_watered = DateField()
+
+class guides(Document):
+    title = StringField()
+    text = StringField()
+    references = StringField()
