@@ -11,7 +11,7 @@ import os
 APPLICATION_ROOT = '/'
 
 # TODO: Set this to the local mongo location or something idk
-MONGO_URI = ""
+MONGO_URI = "data"
 
 # Optional stuff ahead if we decide to set up cookies, login
 # etc. though not sure how it would work with Apple sign in

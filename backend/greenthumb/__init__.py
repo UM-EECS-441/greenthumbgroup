@@ -19,3 +19,4 @@ app.config.from_envvar('GREENTHUMB_SETTINGS', silent=True)
 import greenthumb.api
 import greenthumb.views
 import greenthumb.models
+import greenthumb.util

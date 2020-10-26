@@ -1,7 +1,8 @@
 import greenthumb
 import flask
-import mongoengine
 import json
+
+from greenthumb import util
 
 """
 
@@ -16,12 +17,11 @@ def get_guides():
 
     """ Route to get the guide page list """
 
-    # connects to db
-    mongoengine.connect('data')
-
     guides = []
-    for guide in greenthumb.models.mongo.guides.objects():
-        guides.append(json.loads(guide.to_json()))
+
+    with util.MongoConnect():
+        for guide in greenthumb.models.mongo.guides.objects():
+            guides.append(json.loads(guide.to_json()))
 
     return flask.jsonify(guides)
 
