@@ -25,6 +25,8 @@ class plant_types(Document):
     watering_description = StringField()
 
 class gardens(Document):
+    name = StringField()
+    address = StringField()
     topleft_lat = FloatField()
     topleft_long = FloatField()
     bottomright_lat = FloatField()

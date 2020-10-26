@@ -30,6 +30,9 @@ def get_guide_page(guide_page_id):
 
     """ Route to get a guide page """
 
-    # TODO: Implement.
+    guide = {}
 
-    pass
+    with util.MongoConnect():
+        guide = greenthumb.models.mongo.guides.objects(id=guide_page_id)
+
+    return flask.jsonify(guide)
