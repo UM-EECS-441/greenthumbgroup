@@ -1,6 +1,7 @@
 import greenthumb
 import json
 import mongoengine
+import flask
 
 
 """
@@ -16,30 +17,29 @@ def get_catalog():
 
     """ Route to get the catalog plant list """
 
-    # TODO: Implement, figure out how to do it by page number.
+    # connects to data db
+    mongoengine.connect('data')
 
-    pass
+    # Queries the catalog document for all plants
+    # and returns all their information as json
+    plants = []
+    for plant in greenthumb.models.mongo.catalog.objects():
+        plant.append(json.loads(plant.to_json()))
 
-@greenthumb.app.route('/api/v1/catalog/<int:plant_id>/', methods=['GET'])
-def get_catalog_plant_page(plant_id: int):
+    return flask.jsonify(plants)
+
+@greenthumb.app.route('/api/v1/catalog/<str:plant_id>/', methods=['GET'])
+def get_catalog_plant_page(plant_id: str):
 
     """ Route to get a plant page from the catalog """
-
-    # TODO: Implement.
 
     # connects to data db
     mongoengine.connect('data')
 
-    # Queries plant Document for plant with matching id
-    plant = greenthumb.models.mongo.plants.objects(id=plant_id)
+    # Queries catalog Document for plant with matching id
+    plant = greenthumb.models.mongo.catalog.objects(id=plant_id)
 
     # json.loads(plant.to_json())
 
+    # returns json of plant information
     return flask.jsonify(plant)
-
-    for guide in greenthumb.models.mongo.guides.objects():
-        guides.append(json.loads(guide.to_json()))
-
-    return flask.jsonify(guides)
-
-    pass
