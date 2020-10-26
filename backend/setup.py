@@ -28,5 +28,6 @@ setup(
         'flask-mongoengine',
         'gunicorn',
         'requests',
+        'pandas',
     ],
 )
