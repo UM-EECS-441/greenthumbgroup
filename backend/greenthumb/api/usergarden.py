@@ -1,7 +1,8 @@
 import greenthumb
+import json
 
 from greenthumb import util
-from greenthumb.models.mongo import users
+from greenthumb.models.mongo import (users, gardens)
 from flask import (abort, request, session, jsonify)
 
 """
@@ -21,8 +22,15 @@ def get_user_gardens():
     user_gardens = []
 
     with util.MongoConnect():
-        for garden_id in users.objects(email=session['email'])[0].gardens:
-            pass
+        user = users.objects(email=session['email'])
+        if user == []:
+            abort(401)
+        user = user[0]
+        for garden_id in user.gardens:
+            garden = gardens.objects(_id = garden_id)
+            if garden != []:
+                garden = garden[0]
+                user_gardens.append(json.loads(garden.to_json()))
 
     return jsonify(user_gardens)
 
@@ -35,12 +43,19 @@ def get_garden(garden_id: int):
     garden = {}
 
     with util.MongoConnect():
-        garden = users.objects(email=session['email'])[0].gardens
+        user = users.objects(email=session['email'])
+        if user == []:
+            abort(401)
+        user = user[0]
+        if garden_id in user.gardens:
+            garden = gardens.objects(_id = garden_id)
+            if garden != []:
+                garden = json.loads(garden[0].to_json())
 
-    return garden
+    return jsonify(garden)
 
-@greenthumb.app.route('/api/v1/usergarden/<string:user_id>/add_garden_location', methods=['POST'])
-def add_garden(user_id):
+@greenthumb.app.route('/api/v1/usergarden/add_garden_location', methods=['POST'])
+def add_garden():
     expected = ['name', 'address', 'latitudetl', 'longitudetl', 'latitudebr, longitudebr']
 
     if 'email' not in session:
@@ -53,7 +68,7 @@ def add_garden(user_id):
 
     with util.MongoConnect():
         # if user not in database 401
-        user = greenthumb.models.mongo.users.objects(email=user_id)
+        user = greenthumb.models.mongo.users.objects(email=session['email'])
         if user == []:
             abort(401)
         user = user[0]
