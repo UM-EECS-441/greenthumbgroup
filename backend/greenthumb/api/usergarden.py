@@ -53,12 +53,19 @@ def add_garden(user_id):
 
     with util.MongoConnect():
         # if user not in database 401
-        if greenthumb.models.mongo.users.objects(email=user_id) == []:
+        user = greenthumb.models.mongo.users.objects(email=user_id)
+        if user == []:
             abort(401)
+        user = user[0]
 
         body = request.json
         # add garden to db
-        greenthumb.models.mongo.gardens(name=body['name'], address=body['address'], topleft_lat=body['latitudetl'],
-                                        topleft_long=body['longitudetl'], bottomright_lat=body['latitudebr'], bottomright_long=body['longitudebr']).save()
+        garden = greenthumb.models.mongo.gardens(name=body['name'], address=body['address'], topleft_lat=body['latitudetl'],
+                                        topleft_long=body['longitudetl'], bottomright_lat=body['latitudebr'], bottomright_long=body['longitudebr'])
+        garden.save()
+
+        # add garden id to user's garden list
+        user.gardens.append(garden.id)
+        user.save()
 
     return 200
