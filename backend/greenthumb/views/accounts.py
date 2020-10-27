@@ -12,7 +12,7 @@ GreenThumb Group <greenthumb441@umich.edu>
 
 """
 
-@greenthumb.app.route('/api/v1/accounts/create/', methods=['GET', 'POST'])
+@greenthumb.app.route('/accounts/create/', methods=['GET', 'POST'])
 def create_user():
     if 'email' in session:
         # TODO: change based on function name
@@ -20,19 +20,19 @@ def create_user():
     if request.method == 'POST':
         with util.MongoConnect():
             for user in users.objects():
-                if request.form['email'] == user.email:
+                if request.json['email'] == user.email:
                     # TODO: Change later
                     return redirect(url_for('login'))
             # insert into database, then login
             with util.MongoConnect():
-                users(email=request.form['email'], gardens=[]).save()
-            session['email'] = request.form['email']
+                users(email=request.json['email'], gardens=[]).save()
+            session['email'] = request.json['email']
             # TODO: change based on function name
             return redirect(url_for('user_gardens'))
     # TODO: change this return
     return {}
 
-@greenthumb.app.route('/api/v1/accounts/login/', methods=['GET', 'POST'])
+@greenthumb.app.route('/accounts/login/', methods=['GET', 'POST'])
 def login():
     if 'email' in session:
         # TODO: change based on function name
@@ -40,7 +40,7 @@ def login():
     if request.method == 'POST':
         with util.MongoConnect():
             for user in users.objects():
-                if request.form['email'] == user.email:
+                if request.json['email'] == user.email:
                     session['email'] = user['email']
                     # TODO: change based on function name
                     return redirect(url_for('user_gardens'))
@@ -48,7 +48,7 @@ def login():
     # TODO: change this return
     return {}
 
-@greenthumb.app.route('/api/v1/accounts/logout', methods=['GET'])
+@greenthumb.app.route('/accounts/logout', methods=['GET'])
 def logout():
     session.pop('email', None)
 
