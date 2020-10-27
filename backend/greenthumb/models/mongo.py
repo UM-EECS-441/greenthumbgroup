@@ -24,6 +24,16 @@ class plant_types(Document):
     days_to_water = IntField()
     watering_description = StringField()
 
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "species": self.species,
+            "tags": self.tags,
+            "description": self.description,
+            "days_to_water": self.days_to_water,
+            "watering_description": self.watering_description
+        }
+
 class gardens(Document):
     name = StringField()
     address = StringField()

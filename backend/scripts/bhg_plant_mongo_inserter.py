@@ -1,4 +1,4 @@
-from greenthumb.models import catalog
+from greenthumb.models.mongo import plant_types
 import mongoengine
 import pandas
 import numpy as np
@@ -31,7 +31,7 @@ i = 0
 # inserting it into the mongo database
 # Will also update the document if you change
 # a field in an object already saved in the document
-print("Inserting/Updating plants in \"catalog\" collection")
+print("Inserting/Updating plants in \"plant_types\" collection")
 for row, plant in catalog_df.iterrows():
     
     # print(plant["plant name"])
@@ -54,10 +54,10 @@ for row, plant in catalog_df.iterrows():
         #plant_tags[tag]
 
     # Saves the plant to the catalog document
-    catalog(plant_name = plant["plant name"],
-        plant_species = plant["plant species"],
-        plant_tags = plant_tags,
-        plant_description = plant["description"]).save()
+    plant_types(name = plant["plant name"],
+        species = plant["plant species"],
+        tags = plant_tags,
+        description = plant["description"]).save()
 
     i+= 1
 
