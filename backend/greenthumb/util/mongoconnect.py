@@ -11,6 +11,14 @@ GreenThumb Group <greenthumb441@umich.edu>
 """
 
 class MongoConnect:
+    '''
+    Used in a similar way to opening files:
+
+    with MongoConnect():
+        your_code_here
+    
+    '''
+
     def __enter__(self):
         connect(config.MONGO_URI, alias='default')
     

@@ -1,9 +1,10 @@
 from mongoengine import Document
 from mongoengine import (ListField, StringField, IntField, MapField, FloatField, DateField)
+from mongoengine.base.fields import ObjectIdField
 
 class users(Document):
     email = StringField()
-    gardens = ListField()
+    gardens = ListField(ObjectIdField())
 
 class plant_types(Document):
     '''
@@ -41,9 +42,10 @@ class gardens(Document):
     topleft_long = FloatField()
     bottomright_lat = FloatField()
     bottomright_long = FloatField()
-    plants = ListField()
+    plants = ListField(ObjectIdField)
 
 class user_plants(Document):
+    plant_type_id = ObjectIdField()
     latitude = FloatField()
     longitude = FloatField()
     light_level = IntField()
