@@ -187,3 +187,36 @@ def edit_plant_in_garden(garden_id: int, plant_id: int):
             abort(401)
 
     return 200
+
+@greenthumb.app.route('/api/v1/usergarden/<int:garden_id>/delete_plant/<int:plant_id>', methods=['DELETE'])
+def delete_plant_in_garden(garden_id: int, plant_id: int):
+
+     if 'email' not in session:
+        abort(403)
+
+    with util.MongoConnect():
+        user = users.objects(email=session['email'])
+        if user == []:
+            abort(401)
+        user = user[0]
+        if garden_id in user.gardens:
+            garden = gardens.objects(_id=garden_id)
+            if garden == []:
+                abort(401)
+            garden = garden[0]
+            if plant_id not in garden.plants:
+                abort(401)
+
+            plant = user_plants.objects(_id=plant_id)
+            if plant = []:
+                abort(401)
+            plant = plant[0]
+
+            garden.plants.remove(plant_id)
+            garden.save()
+            plant.delete()
+
+        else:
+            abort(401)
+
+    return 200
