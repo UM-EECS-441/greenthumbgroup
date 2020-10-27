@@ -27,6 +27,7 @@ class plant_types(Document):
 
     def to_dict(self):
         return {
+            "_id": str(self.id),
             "name": self.name,
             "species": self.species,
             "tags": self.tags,
@@ -55,3 +56,10 @@ class guides(Document):
     title = StringField()
     text = StringField()
     references = StringField()
+    def to_dict(self):
+        return {
+            "_id": str(self.id),
+            "title": self.title,
+            "text": self.text,
+            "references": self.references
+        }
