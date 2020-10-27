@@ -19,7 +19,8 @@
 		40C7CBAE253768FF005A2283 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40C7CBAD253768FF005A2283 /* Assets.xcassets */; };
 		40C7CBB1253768FF005A2283 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40C7CBAF253768FF005A2283 /* LaunchScreen.storyboard */; };
 		5665D8DAA8A7A036525377EB /* Pods_Green_Thumb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F268A82F4911AD68A1F4F916 /* Pods_Green_Thumb.framework */; };
-		81288543253EB41400E6AAD7 /* gardenGuides.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81288542253EB41400E6AAD7 /* gardenGuides.swift */; };
+		81288543253EB41400E6AAD7 /* guideTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81288542253EB41400E6AAD7 /* guideTable.swift */; };
+		8172874A254894BE001420BA /* guidePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81728749254894BE001420BA /* guidePage.swift */; };
 		A56B4ECF254522A70041372B /* addPlantVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56B4ECE254522A70041372B /* addPlantVC.swift */; };
 		A56B4ED8254528DE0041372B /* addPlantOptionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56B4ED7254528DE0041372B /* addPlantOptionsVC.swift */; };
 		A56F04752544A4650060976F /* mapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F04742544A4650060976F /* mapVC.swift */; };
@@ -48,7 +49,8 @@
 		40C7CBAD253768FF005A2283 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		40C7CBB0253768FF005A2283 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		40C7CBB2253768FF005A2283 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		81288542253EB41400E6AAD7 /* gardenGuides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gardenGuides.swift; sourceTree = "<group>"; };
+		81288542253EB41400E6AAD7 /* guideTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = guideTable.swift; sourceTree = "<group>"; };
+		81728749254894BE001420BA /* guidePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = guidePage.swift; sourceTree = "<group>"; };
 		92F96ABF4FBECF795ED13803 /* Pods-Green Thumb.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Green Thumb.debug.xcconfig"; path = "Target Support Files/Pods-Green Thumb/Pods-Green Thumb.debug.xcconfig"; sourceTree = "<group>"; };
 		A56B4ECE254522A70041372B /* addPlantVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addPlantVC.swift; sourceTree = "<group>"; };
 		A56B4ED7254528DE0041372B /* addPlantOptionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addPlantOptionsVC.swift; sourceTree = "<group>"; };
@@ -111,7 +113,8 @@
 				40C7CBAD253768FF005A2283 /* Assets.xcassets */,
 				40C7CBAF253768FF005A2283 /* LaunchScreen.storyboard */,
 				40C7CBB2253768FF005A2283 /* Info.plist */,
-				81288542253EB41400E6AAD7 /* gardenGuides.swift */,
+				81288542253EB41400E6AAD7 /* guideTable.swift */,
+				81728749254894BE001420BA /* guidePage.swift */,
 				400EA6A12541110800C8D052 /* DesignableView.swift */,
 				A56F04742544A4650060976F /* mapVC.swift */,
 				A56F04BA2544DAEF0060976F /* addGardenVC.swift */,
@@ -299,12 +302,13 @@
 				40C7CBA5253768FB005A2283 /* AppDelegate.swift in Sources */,
 				404264522544884A005C6F8D /* plantInfoVC.swift in Sources */,
 				A83E48032543B4D9003F1193 /* UserGarden.swift in Sources */,
+				8172874A254894BE001420BA /* guidePage.swift in Sources */,
 				40C7CBA7253768FB005A2283 /* SceneDelegate.swift in Sources */,
 				A56B4ECF254522A70041372B /* addPlantVC.swift in Sources */,
 				400EA6A22541110800C8D052 /* DesignableView.swift in Sources */,
 				A56F04C22544DD480060976F /* gardensTableVC.swift in Sources */,
 				A83E48012543B3F6003F1193 /* GeoData.swift in Sources */,
-				81288543253EB41400E6AAD7 /* gardenGuides.swift in Sources */,
+				81288543253EB41400E6AAD7 /* guideTable.swift in Sources */,
 				A56F04BB2544DAEF0060976F /* addGardenVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

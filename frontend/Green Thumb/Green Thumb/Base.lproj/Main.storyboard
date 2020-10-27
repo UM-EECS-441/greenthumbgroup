@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qWm-Mz-XDw">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -1096,7 +1096,7 @@
         <!--Guides-->
         <scene sceneID="tLH-IM-V8M">
             <objects>
-                <viewController id="otC-e5-cMv" customClass="gardenGuides" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="otC-e5-cMv" customClass="guideTable" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UfX-rP-X2y">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1112,9 +1112,6 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="osw-37-lGs" kind="show" identifier="guideSegue" id="cx7-a3-Ev2"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -1130,35 +1127,61 @@
                     </view>
                     <navigationItem key="navigationItem" title="Guides" id="o9a-2n-IcJ"/>
                     <connections>
-                        <outlet property="guideView" destination="N6o-aX-sQ2" id="5bj-VP-6SR"/>
+                        <outlet property="guideTableView" destination="N6o-aX-sQ2" id="5bj-VP-6SR"/>
+                        <segue destination="osw-37-lGs" kind="show" identifier="guideSegue" id="EFW-5A-cJl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tq4-Y1-g26" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1051" y="-2201"/>
         </scene>
-        <!--View Controller-->
+        <!--Guide Page-->
         <scene sceneID="bya-OF-NIs">
             <objects>
-                <viewController storyboardIdentifier="thisGuide" id="osw-37-lGs" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="guidePage" id="osw-37-lGs" customClass="guidePage" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eFV-Nb-T3S">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ZJ-hI-ZwJ">
-                                <rect key="frame" x="184" y="433" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                            </button>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7hZ-CK-qEf">
+                                <rect key="frame" x="0.0" y="56" width="414" height="703"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LnQ-Vm-GUZ">
+                                        <rect key="frame" x="50" y="50" width="314" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="LnQ-Vm-GUZ" secondAttribute="trailing" constant="-50" id="Ipy-Sz-bjD"/>
+                                    <constraint firstItem="LnQ-Vm-GUZ" firstAttribute="width" secondItem="7hZ-CK-qEf" secondAttribute="width" constant="-100" id="JDa-zn-R2T"/>
+                                    <constraint firstItem="LnQ-Vm-GUZ" firstAttribute="top" secondItem="7hZ-CK-qEf" secondAttribute="top" constant="50" id="ane-1N-xGG"/>
+                                    <constraint firstItem="LnQ-Vm-GUZ" firstAttribute="leading" secondItem="7hZ-CK-qEf" secondAttribute="leading" constant="50" id="jVX-ZI-pkJ"/>
+                                    <constraint firstAttribute="bottom" secondItem="LnQ-Vm-GUZ" secondAttribute="bottom" constant="682.5" placeholder="YES" id="tbv-Pi-KXu"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="L2Q-2Q-fvv"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="rGQ-5b-aqw"/>
+                            </scrollView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="szy-dH-fIZ"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.60592085123062134" green="0.91812425851821899" blue="0.69115167856216431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="7hZ-CK-qEf" firstAttribute="leading" secondItem="szy-dH-fIZ" secondAttribute="leading" id="6mg-Rr-iC4"/>
+                            <constraint firstItem="7hZ-CK-qEf" firstAttribute="top" secondItem="szy-dH-fIZ" secondAttribute="top" id="SQa-ok-107"/>
+                            <constraint firstItem="szy-dH-fIZ" firstAttribute="bottom" secondItem="7hZ-CK-qEf" secondAttribute="bottom" id="eHc-v3-0as"/>
+                            <constraint firstItem="szy-dH-fIZ" firstAttribute="trailing" secondItem="7hZ-CK-qEf" secondAttribute="trailing" id="kSE-qR-dDj"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="QTI-hh-hD0"/>
+                    <connections>
+                        <outlet property="guideText" destination="LnQ-Vm-GUZ" id="F9L-yb-cvB"/>
+                        <outlet property="scrollView" destination="7hZ-CK-qEf" id="Ubi-Pf-q9E"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jTo-sB-oRa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1977" y="-2201"/>
+            <point key="canvasLocation" x="1976.8115942028987" y="-2201.1160714285711"/>
         </scene>
         <!--Plant Catalogue-->
         <scene sceneID="jFg-MU-IHq">
@@ -2122,7 +2145,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="6ba-7W-9sN"/>
-        <segue reference="9oN-O4-owv"/>
+        <segue reference="fwZ-1h-Lq5"/>
         <segue reference="Vq6-Rk-KsP"/>
     </inferredMetricsTieBreakers>
     <resources>
