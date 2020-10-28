@@ -4,6 +4,7 @@ import json
 from greenthumb import util
 from greenthumb.models.mongo import (users, gardens, plant_types, user_plants)
 from flask import (abort, request, session, jsonify)
+from crontab import CronTab
 
 """
 
@@ -166,8 +167,12 @@ def add_plant_to_garden(garden_id: str):
             if garden == []:
                 abort(401)
             garden = garden[0]
-            if plant_types.objects(id=request.json['plant_type_id']) == []:
+
+            plant_type = plant_types.objects(id=request.json['plant_type_id'])
+            if plant_type == []:
                 abort(401)
+            plant_type = plant_type[0]
+
             if (request.json['latitude'] < garden['topleft_lat'] or
                 request.json['latitude'] > garden['bottomright_lat'] or
                 request.json['longitude'] < garden['topleft_long'] or
@@ -183,8 +188,17 @@ def add_plant_to_garden(garden_id: str):
             garden.plants.append(str(user_plant.id))
             garden.save()
 
-            # TODO: do the notification stuff for watering here
-
+            # TODO: implement using/setting last_watered later
+            with CronTab(user='root') as cron:
+                job = cron.new(
+                    command="python notification.py " +
+                    str(session['email']) + " " +
+                    str(plant_type["name"]) + " " +
+                    str(request.json['latitude']) + " " +
+                    str(request.json['longitude']) + " " +
+                    str(plant_type["watering_description"])
+                )
+                job.day.every(plant_type['days_to_water'])
 
 @greenthumb.app.route('/api/v1/usergarden/<string:garden_id>/edit_plant/<string:plant_id>', methods=['PUT'])
 def edit_plant_in_garden(garden_id: str, plant_id: str):

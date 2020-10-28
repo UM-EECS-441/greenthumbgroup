@@ -29,5 +29,6 @@ setup(
         'gunicorn',
         'requests',
         'pandas',
+        'python-crontab',
     ],
 )
