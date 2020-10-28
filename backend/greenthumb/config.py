@@ -16,7 +16,8 @@ MONGO_URI = "data"
 # Optional stuff ahead if we decide to set up cookies, login
 # etc. though not sure how it would work with Apple sign in
 
-# SECRET_KEY = ()
+SECRET_KEY = (b'\x89H\xa9\x19\xedJ\xf2Y\x0f*\xa4G \
+                    \x07\x9a\xb6\xd8\xfb\t\xe7\x12\x7fh\x8e\xfc')
 # SESSION_COOKIE_NAME = ''
 
 # UPLOAD_FOLDER = ''
