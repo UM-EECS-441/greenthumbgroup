@@ -31,7 +31,7 @@ def get_user_gardens():
             abort(401)
         user = user[0]
         for garden_id in user.gardens:
-            garden = gardens.objects(_id=garden_id)
+            garden = gardens.objects(id=garden_id)
             if garden != []:
                 garden = garden[0]
                 user_gardens.append(json.loads(garden.to_json()))
@@ -39,8 +39,8 @@ def get_user_gardens():
     return jsonify(user_gardens)
 
 
-@greenthumb.app.route('/api/v1/usergarden/<int:garden_id>/', methods=['GET', 'DELETE'])
-def get_garden(garden_id: int):
+@greenthumb.app.route('/api/v1/usergarden/<string:garden_id>/', methods=['GET', 'PUT', 'DELETE'])
+def get_garden(garden_id: str):
     '''
     Route which returns a json object with a single garden
     '''
@@ -54,12 +54,40 @@ def get_garden(garden_id: int):
             if user == []:
                 abort(401)
             user = user[0]
-            if garden_id in user.gardens:
-                garden = gardns.objects(_id=garden_id)
+            # need to do str(i) because user.gardens is a list of ObjectIdFields
+            if garden_id in [str(i) for i in user.gardens]:
+                garden = gardens.objects(id=garden_id)
                 if garden == []:
                     abort(404)
-                user.gardens.remove(garden_id)
+                user.gardens.remove(garden[0].id)
                 garden[0].delete()
+                user.save()
+            else:
+                abort(401)
+    elif request.method == 'PUT':
+        expected_fields = ['name', 'address', 'latitudetl',
+        'longitudetl', 'latitudebr', 'longitudebr']
+        for field in expected_fields:
+            if field not in request.json:
+                abort(401)
+
+        with util.MongoConnect():
+            user = users.objects(email=session['email'])
+            if user == []:
+                abort(401)
+            user = user[0]
+            # need to do str(i) because user.gardens is a list of ObjectIdFields
+            if garden_id in [str(i) for i in user.gardens]:
+                garden = gardens.objects(id=garden_id)
+                if garden == []:
+                    abort(404)
+                garden.name = request.json['name']
+                garden.address = request.json['address']
+                garden.latitudetl = request.json['latitudetl']
+                garden.longitudetl = request.json['longitudetl']
+                garden.latitudebr = request.json['latitudebr']
+                garden.longitudebr = request.json['longitudebr']
+                garden.save()
             else:
                 abort(401)
     else:
@@ -70,21 +98,21 @@ def get_garden(garden_id: int):
             if user == []:
                 abort(401)
             user = user[0]
-            if garden_id in user.gardens:
-                garden = gardens.objects(_id=garden_id)
+            if garden_id in [str(i) for i in user.gardens]:
+                garden = gardens.objects(id=garden_id)
                 if garden == []:
                     abort(404)
 
                 garden = json.loads(garden[0].to_json())
 
         return jsonify(garden)
-    return 200
+    return "", 200
 
 
 @greenthumb.app.route('/api/v1/usergarden/add_garden/', methods=['POST'])
 def add_garden_location():
     expected_fields = ['name', 'address', 'latitudetl',
-        'longitudetl', 'latitudebr, longitudebr']
+        'longitudetl', 'latitudebr', 'longitudebr']
 
     if 'email' not in session:
         abort(403)
@@ -108,14 +136,14 @@ def add_garden_location():
         garden.save()
 
         # add garden id to user's garden list
-        user.gardens.append(garden.id)
+        user.gardens.append(str(garden.id))
         user.save()
 
-    return 200
+    return "", 200
 
 
-@greenthumb.app.route('/api/v1/usergarden/<int:garden_id>/add_plant/', methods=['POST'])
-def add_plant_to_garden(garden_id: int):
+@greenthumb.app.route('/api/v1/usergarden/<string:garden_id>/add_plant/', methods=['POST'])
+def add_plant_to_garden(garden_id: str):
 
     expected_fields = ['plant_type_id', 'latitude',
         'longitude', 'light_level', 'last_watered']
@@ -134,11 +162,11 @@ def add_plant_to_garden(garden_id: int):
             abort(401)
         user = user[0]
         if garden_id in user.gardens:
-            garden = gardens.objects(_id=garden_id)
+            garden = gardens.objects(id=garden_id)
             if garden == []:
                 abort(401)
             garden = garden[0]
-            if plant_types.objects(_id=request.json['plant_type_id']) == []:
+            if plant_types.objects(id=request.json['plant_type_id']) == []:
                 abort(401)
             if (request.json['latitude'] < garden['topleft_lat'] or
                 request.json['latitude'] > garden['bottomright_lat'] or
@@ -152,14 +180,14 @@ def add_plant_to_garden(garden_id: int):
                 light_level=request.json['light_level'],
                 last_watered=request.json['last_watered']).save()
 
-            garden.plants.append(user_plant.id)
+            garden.plants.append(str(user_plant.id))
             garden.save()
 
             # TODO: do the notification stuff for watering here
 
 
-@greenthumb.app.route('/api/v1/usergarden/<int:garden_id>/edit_plant/<int:plant_id>', methods=['PUT'])
-def edit_plant_in_garden(garden_id: int, plant_id: int):
+@greenthumb.app.route('/api/v1/usergarden/<string:garden_id>/edit_plant/<string:plant_id>', methods=['PUT'])
+def edit_plant_in_garden(garden_id: str, plant_id: str):
 
     expected_fields = ['plant_type_id', 'latitude',
         'longitude', 'light_level', 'last_watered']
@@ -178,13 +206,13 @@ def edit_plant_in_garden(garden_id: int, plant_id: int):
             abort(401)
         user = user[0]
         if garden_id in user.gardens:
-            garden = gardens.objects(_id=garden_id)
+            garden = gardens.objects(id=garden_id)
             if garden == []:
                 abort(401)
             garden = garden[0]
             if plant_id not in garden.plants:
                 abort(401)
-            if plant_types.objects(_id=request.json['plant_type_id']) == []:
+            if plant_types.objects(id=request.json['plant_type_id']) == []:
                 abort(401)
             if (request.json['latitude'] < garden['topleft_lat'] or
                 request.json['latitude'] > garden['bottomright_lat'] or
@@ -192,7 +220,7 @@ def edit_plant_in_garden(garden_id: int, plant_id: int):
                 request.json['longitude'] > garden['bottomright_long']):
                 abort(401)
 
-            plant = user_plants.objects(_id=plant_id)
+            plant = user_plants.objects(id=plant_id)
             if plant == []:
                 abort(401)
             plant = plant[0]
@@ -207,11 +235,10 @@ def edit_plant_in_garden(garden_id: int, plant_id: int):
         else:
             abort(401)
 
-    return 200
+    return "", 200
 
-
-@greenthumb.app.route('/api/v1/usergarden/<int:garden_id>/delete_plant/<int:plant_id>', methods=['DELETE'])
-def delete_plant_in_garden(garden_id: int, plant_id: int):
+@greenthumb.app.route('/api/v1/usergarden/<string:garden_id>/delete_plant/<string:plant_id>', methods=['DELETE'])
+def delete_plant_in_garden(garden_id: str, plant_id: str):
 
     if 'email' not in session:
         abort(403)
@@ -222,14 +249,14 @@ def delete_plant_in_garden(garden_id: int, plant_id: int):
             abort(401)
         user = user[0]
         if garden_id in user.gardens:
-            garden = gardens.objects(_id=garden_id)
+            garden = gardens.objects(id=garden_id)
             if garden == []:
                 abort(401)
             garden = garden[0]
             if plant_id not in garden.plants:
                 abort(401)
 
-            plant = user_plants.objects(_id=plant_id)
+            plant = user_plants.objects(id=plant_id)
             if plant == []:
                 abort(401)
             plant = plant[0]
@@ -241,4 +268,4 @@ def delete_plant_in_garden(garden_id: int, plant_id: int):
         else:
             abort(401)
 
-    return 200
+    return "", 200

@@ -16,7 +16,7 @@ GreenThumb Group <greenthumb441@umich.edu>
 def create_user():
     if 'email' in session:
         # TODO: change based on function name
-        return redirect(url_for('user_gardens'))
+        return redirect(url_for('get_user_gardens'))
     if request.method == 'POST':
         with util.MongoConnect():
             for user in users.objects():
@@ -48,7 +48,7 @@ def login():
     # TODO: change this return
     return {}
 
-@greenthumb.app.route('/accounts/logout', methods=['GET'])
+@greenthumb.app.route('/accounts/logout/', methods=['GET'])
 def logout():
     session.pop('email', None)
 
