@@ -13,9 +13,9 @@ GreenThumb Group <greenthumb441@umich.edu>
 
 """
 
+
 @greenthumb.app.route('/api/v1/usergarden/', methods=['GET'])
 def get_user_gardens():
-
     '''
     Route which returns a list of all gardens in json format
     '''
@@ -38,9 +38,9 @@ def get_user_gardens():
 
     return jsonify(user_gardens)
 
+
 @greenthumb.app.route('/api/v1/usergarden/<int:garden_id>/', methods=['GET', 'DELETE'])
 def get_garden(garden_id: int):
-
     '''
     Route which returns a json object with a single garden
     '''
@@ -80,9 +80,11 @@ def get_garden(garden_id: int):
         return jsonify(garden)
     return 200
 
+
 @greenthumb.app.route('/api/v1/usergarden/add_garden/', methods=['POST'])
 def add_garden_location():
-    expected_fields = ['name', 'address', 'latitudetl', 'longitudetl', 'latitudebr, longitudebr']
+    expected_fields = ['name', 'address', 'latitudetl',
+        'longitudetl', 'latitudebr, longitudebr']
 
     if 'email' not in session:
         abort(403)
@@ -115,7 +117,8 @@ def add_garden_location():
 @greenthumb.app.route('/api/v1/usergarden/<int:garden_id>/add_plant/', methods=['POST'])
 def add_plant_to_garden(garden_id: int):
 
-    expected_fields = ['plant_type_id', 'latitude', 'longitude', 'light_level', 'last_watered']
+    expected_fields = ['plant_type_id', 'latitude',
+        'longitude', 'light_level', 'last_watered']
 
     if 'email' not in session:
         abort(403)
@@ -124,7 +127,7 @@ def add_plant_to_garden(garden_id: int):
     for field in expected_fields:
         if field not in request.json:
             abort(401)
-    
+
     with util.MongoConnect():
         user = users.objects(email=session['email'])
         if user == []:
@@ -148,19 +151,21 @@ def add_plant_to_garden(garden_id: int):
                 longitude=request.json['longitude'],
                 light_level=request.json['light_level'],
                 last_watered=request.json['last_watered']).save()
-            
+
             garden.plants.append(user_plant.id)
             garden.save()
 
             # TODO: do the notification stuff for watering here
 
+
 @greenthumb.app.route('/api/v1/usergarden/<int:garden_id>/edit_plant/<int:plant_id>', methods=['PUT'])
 def edit_plant_in_garden(garden_id: int, plant_id: int):
 
-    expected_fields = ['plant_type_id', 'latitude', 'longitude', 'light_level', 'last_watered']
+    expected_fields = ['plant_type_id', 'latitude',
+        'longitude', 'light_level', 'last_watered']
 
      if 'email' not in session:
-        abort(403)
+         abort(403)
 
     # check that the right info was provided, else 401
     for field in expected_fields:
@@ -203,6 +208,7 @@ def edit_plant_in_garden(garden_id: int, plant_id: int):
             abort(401)
 
     return 200
+
 
 @greenthumb.app.route('/api/v1/usergarden/<int:garden_id>/delete_plant/<int:plant_id>', methods=['DELETE'])
 def delete_plant_in_garden(garden_id: int, plant_id: int):
