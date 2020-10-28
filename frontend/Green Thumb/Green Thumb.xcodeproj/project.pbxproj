@@ -12,6 +12,7 @@
 		404264512544884A005C6F8D /* catalogTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042644F25448849005C6F8D /* catalogTableCell.swift */; };
 		404264522544884A005C6F8D /* plantInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042645025448849005C6F8D /* plantInfoVC.swift */; };
 		40426456254488DF005C6F8D /* catalogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40426455254488DF005C6F8D /* catalogVC.swift */; };
+		4042645B2548FC9F005C6F8D /* catalogPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042645A2548FC9F005C6F8D /* catalogPage.swift */; };
 		40C7CBA5253768FB005A2283 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA4253768FB005A2283 /* AppDelegate.swift */; };
 		40C7CBA7253768FB005A2283 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA6253768FB005A2283 /* SceneDelegate.swift */; };
 		40C7CBA9253768FB005A2283 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA8253768FB005A2283 /* ViewController.swift */; };
@@ -41,6 +42,7 @@
 		4042644F25448849005C6F8D /* catalogTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = catalogTableCell.swift; sourceTree = "<group>"; };
 		4042645025448849005C6F8D /* plantInfoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = plantInfoVC.swift; sourceTree = "<group>"; };
 		40426455254488DF005C6F8D /* catalogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogVC.swift; sourceTree = "<group>"; };
+		4042645A2548FC9F005C6F8D /* catalogPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogPage.swift; sourceTree = "<group>"; };
 		40C7CBA1253768FB005A2283 /* Green Thumb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Green Thumb.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40C7CBA4253768FB005A2283 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		40C7CBA6253768FB005A2283 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				40C7CBA4253768FB005A2283 /* AppDelegate.swift */,
 				4042644F25448849005C6F8D /* catalogTableCell.swift */,
 				40426455254488DF005C6F8D /* catalogVC.swift */,
+				4042645A2548FC9F005C6F8D /* catalogPage.swift */,
 				40C7CBA6253768FB005A2283 /* SceneDelegate.swift */,
 				40C7CBA8253768FB005A2283 /* ViewController.swift */,
 				40C7CBAA253768FB005A2283 /* Main.storyboard */,
@@ -293,6 +296,7 @@
 				A83E47FF2543B37F003F1193 /* UserPlant.swift in Sources */,
 				40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */,
 				40426456254488DF005C6F8D /* catalogVC.swift in Sources */,
+				4042645B2548FC9F005C6F8D /* catalogPage.swift in Sources */,
 				40C7CBA9253768FB005A2283 /* ViewController.swift in Sources */,
 				A83E47FB2543AFCA003F1193 /* GuidePage.swift in Sources */,
 				A56F04752544A4650060976F /* mapVC.swift in Sources */,
@@ -458,13 +462,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = AWUU3Q6NX7;
+				DEVELOPMENT_TEAM = 75JK535DUG;
 				INFOPLIST_FILE = "Green Thumb/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.mworrelGreenThumb;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.jpriggs.GreenThumb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -479,13 +483,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = AWUU3Q6NX7;
+				DEVELOPMENT_TEAM = 75JK535DUG;
 				INFOPLIST_FILE = "Green Thumb/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.mworrelGreenThumb;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.jpriggs.GreenThumb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

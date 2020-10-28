@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qWm-Mz-XDw">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -351,59 +351,20 @@
         <!--Home Catalog-->
         <scene sceneID="L0g-Gb-Qaq">
             <objects>
-                <tableViewController title="Home Catalog" id="hOa-fP-425" sceneMemberID="viewController">
+                <tableViewController title="Home Catalog" id="hOa-fP-425" customClass="catalogVC" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="1NK-US-z18">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" id="tbG-fh-el7">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <textInputTraits key="textInputTraits"/>
-                        </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="100" id="cZH-SU-0OC" customClass="catalogTableCell" customModule="Green_Thumb" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="72" width="414" height="100"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="catalogTableCell" rowHeight="100" id="cZH-SU-0OC">
+                                <rect key="frame" x="0.0" y="28" width="414" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cZH-SU-0OC" id="EBt-RA-ICO">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GWw-7m-Eus" userLabel="Plant Image">
-                                            <rect key="frame" x="0.0" y="0.0" width="108" height="100"/>
-                                        </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0nR-xQ-C8f">
-                                            <rect key="frame" x="369" y="36.5" width="28" height="27"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <accessibility key="accessibilityConfiguration" identifier="Info button"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                            <state key="normal" image="chevron.right.circle" catalog="system">
-                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="24"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="getPlantInfo:" destination="cZH-SU-0OC" eventType="touchUpInside" id="RVR-PU-2C4"/>
-                                                <segue destination="ge9-Cv-Zj6" kind="show" id="aqp-Yv-9qC"/>
-                                            </connections>
-                                        </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Plant" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wKm-TX-aWs" userLabel="Plant Name">
-                                            <rect key="frame" x="149" y="36" width="45" height="28"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                            <color key="textColor" red="0.16847036739999999" green="0.29847388229999999" blue="0.1804689937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="wKm-TX-aWs" firstAttribute="top" secondItem="EBt-RA-ICO" secondAttribute="topMargin" constant="25" id="LnR-ps-2M5"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="wKm-TX-aWs" secondAttribute="bottom" constant="25" id="NbP-li-2eH"/>
-                                        <constraint firstItem="wKm-TX-aWs" firstAttribute="leading" secondItem="GWw-7m-Eus" secondAttribute="trailing" constant="10" id="cxd-FP-6bL"/>
-                                    </constraints>
                                 </tableViewCellContentView>
                                 <accessibility key="accessibilityConfiguration" identifier="catalogTableCell"/>
-                                <connections>
-                                    <outlet property="plantButton" destination="0nR-xQ-C8f" id="lLw-XM-avW"/>
-                                    <outlet property="plantImage" destination="GWw-7m-Eus" id="StF-PQ-XuQ"/>
-                                    <outlet property="plantName" destination="wKm-TX-aWs" id="NOF-R0-1O7"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -412,10 +373,13 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Catalog" id="PBV-5r-CnY"/>
+                    <connections>
+                        <outlet property="catalogTableView" destination="1NK-US-z18" id="3mf-et-08p"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1fQ-iY-9yX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1051" y="-1487"/>
+            <point key="canvasLocation" x="1050.7246376811595" y="-1487.2767857142856"/>
         </scene>
         <!--Home-->
         <scene sceneID="12Z-eD-73D">
@@ -2085,39 +2049,54 @@
         <!--Plant Info-->
         <scene sceneID="KEi-2j-gkJ">
             <objects>
-                <viewController id="ge9-Cv-Zj6" userLabel="Plant Info" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="catalogPage" id="ge9-Cv-Zj6" userLabel="Plant Info" customClass="catalogPage" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="F64-IE-2Cn">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZAx-KZ-O3n" userLabel="Plant Image">
-                                <rect key="frame" x="20" y="60" width="374" height="200"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="cYo-eV-Ksa"/>
-                                </constraints>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1vL-8P-LjR">
-                                <rect key="frame" x="20" y="371.5" width="374" height="33.5"/>
+                                <rect key="frame" x="20" y="61" width="374" height="33.5"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Species" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Nzq-5F-OYT">
-                                <rect key="frame" x="20" y="435" width="374" height="27"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9uu-RY-AjO">
-                                <rect key="frame" x="20" y="504" width="374" height="27"/>
+                                <rect key="frame" x="20" y="127" width="374" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fx6-8d-smu">
-                                <rect key="frame" x="20" y="583" width="374" height="118"/>
+                                <rect key="frame" x="20" y="271" width="374" height="118"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9uu-RY-AjO">
+                                <rect key="frame" x="20" y="188" width="374" height="27"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Days Until Water" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="aJd-gV-BcS">
+                                <rect key="frame" x="20" y="762" width="374" height="27"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tags" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="L6W-CQ-uTy">
+                                <rect key="frame" x="20" y="417" width="374" height="118"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Watering Info" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="55l-0D-Xj9">
+                                <rect key="frame" x="20" y="810" width="374" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2127,16 +2106,21 @@
                         <viewLayoutGuide key="safeArea" id="jz7-4P-z35"/>
                         <color key="backgroundColor" red="0.29411104319999998" green="0.51978391410000002" blue="0.31825751070000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Nzq-5F-OYT" firstAttribute="top" secondItem="1vL-8P-LjR" secondAttribute="bottom" constant="30" id="FXR-wI-2OX"/>
+                            <constraint firstItem="Nzq-5F-OYT" firstAttribute="top" secondItem="1vL-8P-LjR" secondAttribute="bottom" constant="32.5" id="FXR-wI-2OX"/>
                             <constraint firstItem="1vL-8P-LjR" firstAttribute="leading" secondItem="jz7-4P-z35" secondAttribute="leading" constant="20" id="KQG-AN-XnC"/>
-                            <constraint firstItem="jz7-4P-z35" firstAttribute="trailing" secondItem="ZAx-KZ-O3n" secondAttribute="trailing" constant="20" id="L3j-uV-1RF"/>
-                            <constraint firstItem="ZAx-KZ-O3n" firstAttribute="leading" secondItem="jz7-4P-z35" secondAttribute="leading" constant="20" id="i8a-7T-d6x"/>
-                            <constraint firstItem="1vL-8P-LjR" firstAttribute="top" secondItem="ZAx-KZ-O3n" secondAttribute="bottom" priority="250" constant="30" id="lNE-Ef-eqj"/>
-                            <constraint firstItem="ZAx-KZ-O3n" firstAttribute="top" secondItem="jz7-4P-z35" secondAttribute="top" constant="60" id="oFf-MB-iAs"/>
                             <constraint firstItem="jz7-4P-z35" firstAttribute="trailing" secondItem="1vL-8P-LjR" secondAttribute="trailing" constant="20" id="tQe-ba-6zU"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="sdO-ob-gk4"/>
+                    <connections>
+                        <outlet property="daysTilWater" destination="aJd-gV-BcS" id="rXo-lv-EK1"/>
+                        <outlet property="plantDescription" destination="fx6-8d-smu" id="U8x-DI-eFb"/>
+                        <outlet property="plantName" destination="1vL-8P-LjR" id="9Ge-8v-nK9"/>
+                        <outlet property="plantSpecies" destination="Nzq-5F-OYT" id="ICV-Fd-NZR"/>
+                        <outlet property="plantTags" destination="L6W-CQ-uTy" id="WQc-qk-jjg"/>
+                        <outlet property="plantType" destination="9uu-RY-AjO" id="tyI-S5-RAo"/>
+                        <outlet property="waterInfo" destination="55l-0D-Xj9" id="thd-NQ-udQ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tz6-VY-Do3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
