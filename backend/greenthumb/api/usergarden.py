@@ -13,7 +13,6 @@ GreenThumb Group <greenthumb441@umich.edu>
 
 """
 
-
 @greenthumb.app.route('/api/v1/usergarden/', methods=['GET'])
 def get_user_gardens():
     '''
@@ -65,8 +64,7 @@ def get_garden(garden_id: str):
             else:
                 abort(401)
     elif request.method == 'PUT':
-        expected_fields = ['name', 'address', 'latitudetl',
-        'longitudetl', 'latitudebr', 'longitudebr']
+        expected_fields = ['name', 'address', 'latitudetl', 'longitudetl', 'latitudebr', 'longitudebr']
         for field in expected_fields:
             if field not in request.json:
                 abort(401)
@@ -81,12 +79,13 @@ def get_garden(garden_id: str):
                 garden = gardens.objects(id=garden_id)
                 if garden == []:
                     abort(404)
+                garden = garden[0]
                 garden.name = request.json['name']
                 garden.address = request.json['address']
-                garden.latitudetl = request.json['latitudetl']
-                garden.longitudetl = request.json['longitudetl']
-                garden.latitudebr = request.json['latitudebr']
-                garden.longitudebr = request.json['longitudebr']
+                garden.topleft_lat = request.json['latitudetl']
+                garden.topleft_long = request.json['longitudetl']
+                garden.bottomright_lat = request.json['latitudebr']
+                garden.bottomright_long = request.json['longitudebr']
                 garden.save()
             else:
                 abort(401)
@@ -161,7 +160,8 @@ def add_plant_to_garden(garden_id: str):
         if user == []:
             abort(401)
         user = user[0]
-        if garden_id in user.gardens:
+        # need to do str(i) because user.gardens is a list of ObjectIdFields
+        if garden_id in [str(i) for i in user.gardens]:
             garden = gardens.objects(id=garden_id)
             if garden == []:
                 abort(401)
@@ -205,12 +205,14 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
         if user == []:
             abort(401)
         user = user[0]
-        if garden_id in user.gardens:
+        # need to do str(i) because user.gardens is a list of ObjectIdFields
+        if garden_id in [str(i) for i in user.gardens]:
             garden = gardens.objects(id=garden_id)
             if garden == []:
                 abort(401)
             garden = garden[0]
-            if plant_id not in garden.plants:
+            # same as above
+            if plant_id not in [str(i) for i in garden.plants]:
                 abort(401)
             if plant_types.objects(id=request.json['plant_type_id']) == []:
                 abort(401)
@@ -248,12 +250,14 @@ def delete_plant_in_garden(garden_id: str, plant_id: str):
         if user == []:
             abort(401)
         user = user[0]
-        if garden_id in user.gardens:
+        # need to do str(i) because user.gardens is a list of ObjectIdFields
+        if garden_id in [str(i) for i in user.gardens]:
             garden = gardens.objects(id=garden_id)
             if garden == []:
                 abort(401)
             garden = garden[0]
-            if plant_id not in garden.plants:
+            # same as above
+            if plant_id not in [str(i) for i in garden.plants]:
                 abort(401)
 
             plant = user_plants.objects(id=plant_id)
