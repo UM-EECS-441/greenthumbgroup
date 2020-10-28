@@ -164,8 +164,8 @@ def edit_plant_in_garden(garden_id: int, plant_id: int):
     expected_fields = ['plant_type_id', 'latitude',
         'longitude', 'light_level', 'last_watered']
 
-     if 'email' not in session:
-         abort(403)
+    if 'email' not in session:
+        abort(403)
 
     # check that the right info was provided, else 401
     for field in expected_fields:
