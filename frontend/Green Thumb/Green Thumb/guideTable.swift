@@ -122,13 +122,34 @@ extension guideTable: UITableViewDelegate {
         let guidePage = storyboard?.instantiateViewController(identifier: "guidePage") as? guidePage
         
         let title = guides[indexPath.row]["title"]
-        let titleString = String(describing: title!)
+        var titleString = "Unnamed Guide"
+        if case Optional<Any>.none = title {
+            // is nil
+        } else {
+            // not nil
+            titleString = String(describing: title!)
+        }
         
         let text = guides[indexPath.row]["text"]
-        let textString = String(describing: text!)
+        var textString = "Guide is currently unavailable, sorry"
+        if case Optional<Any>.none = text {
+            //nil
+        } else {
+            //not nil
+            textString = String(describing: text!)
+        }
         
         let reference = guides[indexPath.row]["references"]
-        let referenceString = String(describing: reference!)
+        var referenceString = ""
+        if case Optional<Any>.none = reference {
+            // is nil
+        } else {
+            // not nil
+            referenceString = String(describing: reference!)
+        }
+        
+        
+//        let referenceString = String(describing: reference!)
 //        if let reference = reference, !reference.isEmpty {
 //            /* string is not blank */
 //        }
@@ -142,6 +163,7 @@ extension guideTable: UITableViewDelegate {
         }
         
         self.navigationController?.pushViewController(guidePage!, animated: true)
+        tableView.deselectRow(at: indexPath, animated: false)
 //        performSegue(withIdentifier: "guideSegue", sender: self)
 
     }
