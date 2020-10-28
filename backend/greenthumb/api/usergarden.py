@@ -193,7 +193,7 @@ def edit_plant_in_garden(garden_id: int, plant_id: int):
                 abort(401)
 
             plant = user_plants.objects(_id=plant_id)
-            if plant = []:
+            if plant == []:
                 abort(401)
             plant = plant[0]
 
@@ -213,7 +213,7 @@ def edit_plant_in_garden(garden_id: int, plant_id: int):
 @greenthumb.app.route('/api/v1/usergarden/<int:garden_id>/delete_plant/<int:plant_id>', methods=['DELETE'])
 def delete_plant_in_garden(garden_id: int, plant_id: int):
 
-     if 'email' not in session:
+    if 'email' not in session:
         abort(403)
 
     with util.MongoConnect():
@@ -230,7 +230,7 @@ def delete_plant_in_garden(garden_id: int, plant_id: int):
                 abort(401)
 
             plant = user_plants.objects(_id=plant_id)
-            if plant = []:
+            if plant == []:
                 abort(401)
             plant = plant[0]
 
