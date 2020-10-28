@@ -38,7 +38,7 @@ def get_user_gardens():
 
     return jsonify(user_gardens)
 
-@greenthumb.app.route('/api/v1/usergarden/<int:garden_id>/', methods=['GET'])
+@greenthumb.app.route('/api/v1/usergarden/<int:garden_id>/', methods=['GET', 'DELETE'])
 def get_garden(garden_id: int):
 
     '''
@@ -48,21 +48,37 @@ def get_garden(garden_id: int):
     if 'email' not in session:
         abort(403)
 
-    garden = {}
+    if request.method == 'DELETE':
+        with util.MongoConnect():
+            user = users.objects(email=session['email'])
+            if user == []:
+                abort(401)
+            user = user[0]
+            if garden_id in user.gardens:
+                garden = gardns.objects(_id=garden_id)
+                if garden == []:
+                    abort(404)
+                user.gardens.remove(garden_id)
+                garden[0].delete()
+            else:
+                abort(401)
+    else:
+        garden = {}
 
-    with util.MongoConnect():
-        user = users.objects(email=session['email'])
-        if user == []:
-            abort(401)
-        user = user[0]
-        if garden_id in user.gardens:
-            garden = gardens.objects(_id=garden_id)
-            if garden == []:
-                abort(404)
+        with util.MongoConnect():
+            user = users.objects(email=session['email'])
+            if user == []:
+                abort(401)
+            user = user[0]
+            if garden_id in user.gardens:
+                garden = gardens.objects(_id=garden_id)
+                if garden == []:
+                    abort(404)
 
-            garden = json.loads(garden[0].to_json())
+                garden = json.loads(garden[0].to_json())
 
-    return jsonify(garden)
+        return jsonify(garden)
+    return 200
 
 @greenthumb.app.route('/api/v1/usergarden/add_garden/', methods=['POST'])
 def add_garden_location():

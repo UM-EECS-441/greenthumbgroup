@@ -3,7 +3,7 @@ import flask
 import json
 
 from greenthumb import util
-
+import mongoengine
 """
 
 GreenThumb REST API: guides.
@@ -25,7 +25,7 @@ def get_guides():
 
     return flask.jsonify(guides)
 
-@greenthumb.app.route('/api/v1/guides/<int:guide_page_id>/', methods=['GET'])
+@greenthumb.app.route('/api/v1/guides/<string:guide_page_id>/', methods=['GET'])
 def get_guide_page(guide_page_id):
 
     """ Route to get a guide page """
@@ -33,6 +33,6 @@ def get_guide_page(guide_page_id):
     guide = {}
 
     with util.MongoConnect():
-        guide = greenthumb.models.mongo.guides.objects(id=guide_page_id)
+        guide = greenthumb.models.mongo.guides.objects.get(id=guide_page_id)
 
-    return flask.jsonify(guide)
+        return flask.jsonify(guide.to_dict())
