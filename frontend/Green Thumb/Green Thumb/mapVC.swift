@@ -138,11 +138,13 @@ class mapVC: UIViewController, PlantReturnDelegate {
             var request = URLRequest(url: url)
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpMethod = "PUT"
-            request.httpShouldHandleCookies = true
+            
+            let delegate = UIApplication.shared.delegate as! AppDelegate
+            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
             
             let parameters: [String: Any] = [
                 "name": self.userGarden.name,
-                "address:": self.userGarden.address,
+                "address": self.userGarden.address,
                 "latitudetl": self.userGarden.tlGeoData.lat,
                 "longitudetl": self.userGarden.tlGeoData.lon,
                 "latitudebr": self.userGarden.brGeoData.lat,
