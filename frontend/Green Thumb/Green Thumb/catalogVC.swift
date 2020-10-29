@@ -18,15 +18,31 @@ class catalogVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.refreshControl = UIRefreshControl()
         self.catalogTableView.delegate = self
         self.catalogTableView.dataSource = self
         // setup refreshControl here later
-        refreshControl?.addTarget(self, action: #selector(catalogVC.handleRefresh(_:)), for: UIControl.Event.valueChanged)
+        
+        self.refreshControl?.addTarget(self, action: #selector(self.handleRefresh(_:)), for: UIControl.Event.valueChanged)
+        self.refreshControl?.attributedTitle = NSAttributedString(string: "Getting plant library ...")
+        
+        self.refreshControl?.beginRefreshing()
         getPlants()
     }
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        self.refreshControl?.beginRefreshing()
         getPlants()
+//        run(after: 0.5) {
+//            self.refreshControl?.endRefreshing()
+//            DispatchQueue.main.async { self.catalogTableView.reloadData() }
+//        }
+    }
+    //    https://guides.codepath.com/ios/Using-UIRefreshControl
+    func run(after wait: TimeInterval, closure: @escaping () -> Void) {
+        let queue = DispatchQueue.main
+        queue.asyncAfter(deadline: DispatchTime.now() + wait, execute: closure)
     }
     
     func getPlants() {
@@ -53,7 +69,19 @@ class catalogVC: UITableViewController {
             do {
 //                self.plants = [CatalogPlant]()
                 let json = try JSONSerialization.jsonObject(with: data!) as! [[String:Any]]
-                self.plants = json
+                //sorted
+                let sortedJSON = json.sorted {
+                    //would throw an error if we ever have a null name pls dont
+                    String($0["name"] as! String).lowercased() < String($1["name"] as! String).lowercased()
+                }
+                let groupedPlants = Dictionary(grouping: json, by: {
+                    String($0["name"] as! String).prefix(1).lowercased()
+                })
+                
+                let keys = groupedPlants.keys.sorted()
+                
+                self.plants = sortedJSON
+//                self.plants = groupedSortedPlants
                 
                 DispatchQueue.main.async {
                   self.tableView.estimatedRowHeight = 140
@@ -80,27 +108,74 @@ class catalogVC: UITableViewController {
     
 extension catalogVC {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Tapped")
+//        print("Tapped")
         let catalogPage = storyboard?.instantiateViewController(identifier: "catalogPage") as? catalogPage
         
         let name = plants[indexPath.row]["name"]
-        let nameString = String(describing: name!)
-        
+        var nameString = "I been thru the desert on a plant with no name :("
+        if case Optional<Any>.none = name {
+            //nil
+        } else {
+            //not nil
+            nameString = String(describing: name!)
+        }
+
         let species = plants[indexPath.row]["species"]
-        let speciesString = String(describing: species!)
-        
-        let type = plants[indexPath.row]["type"]
-        let typeString = String(describing: type!)
+        var speciesString = "No Species Available"
+        if case Optional<Any>.none = species {
+            //nil
+        } else {
+            //not nil
+            speciesString = String(describing: species!)
+        }
         
         let description = plants[indexPath.row]["description"]
-        let descriptionString = String(describing: description!)
-       
+        var descriptionString = "No Description Available"
+        if case Optional<Any>.none = description {
+            //nil
+        } else {
+            //not nil
+            descriptionString = String(describing: description!)
+        }
         
+//        let tags = String(describing: plants[indexPath.row]["tags"])
+        let tags: [String: [String]] = plants[indexPath.row]["tags"] as! [String: [String]]
+//        print(tags["plant type"])
+        let height_array = tags["height"]
+        let light_array = tags["light"]
+        let type_array = tags["plant type"]
+        
+//        var heightString = "No Height Found"
+//        var lightString = "No Light Found"
+        var typeString = "No Type Found"
+        
+        if case Optional<Any>.none = type_array {
+            //nil
+        } else {
+            //not nil
+            typeString = String(describing: type_array![0])
+        }
+//        print(typeString)
+        
+//        print(height_array)
+//        print(light_array)
+//        print(type_array)
+        
+
+
+        
+        // currently not working in backend
+        //days_to_water
+        //watering_description
         
         catalogPage?.name = nameString
-        catalogPage?.species = speciesString
-        catalogPage?.type = typeString
+        catalogPage?.species = "Species: " + speciesString
+        catalogPage?.type = "Plant type: " + typeString
         catalogPage?.desc = descriptionString
+        //
+        catalogPage?.tags = "No Tags for this Plant"
+        catalogPage?.waterDays = ""
+        catalogPage?.waterInfo = ""
         
         
         self.navigationController?.pushViewController(catalogPage!, animated: true)
@@ -114,6 +189,7 @@ extension catalogVC {
         // how many rows per section
         return plants.count
     }
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "catalogTableCell", for: indexPath)
