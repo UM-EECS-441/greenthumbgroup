@@ -24,6 +24,7 @@ setup(
     
     # TODO: Add any packages here that we need.
     install_requires=[
+        'wheel',
         'Flask',
         'flask-mongoengine',
         'gunicorn',
