@@ -21,7 +21,7 @@ WATERING_DESCRIPTION = 'Water it.'
 
 def is_valid_id(object_id):
     try:
-        bson.objectid.ObjectId(objectid)
+        bson.objectid.ObjectId(object_id)
     except Exception as e:
         return False
     return True
@@ -40,7 +40,7 @@ def get_user_gardens():
 
     with util.MongoConnect():
         user = users.objects(email=session['email'])
-        if user == []:
+        if str(user) == '[]':
             abort(401)
         user = user[0]
         for garden_id in user.gardens:
@@ -67,7 +67,7 @@ def get_garden(garden_id: str):
     if request.method == 'DELETE':
         with util.MongoConnect():
             user = users.objects(email=session['email'])
-            if user == []:
+            if str(user) == '[]':
                 abort(401)
             user = user[0]
             # need to do str(i) because user.gardens is a list of ObjectIdFields
@@ -76,6 +76,8 @@ def get_garden(garden_id: str):
                     garden = gardens.objects(id=garden_id)
                 except Exception as e:
                     abort(404)
+                if str(garden) == '[]':
+                    abort(404)
                 
                 garden = garden[0]
                 user.gardens.remove(garden.id)
@@ -83,12 +85,12 @@ def get_garden(garden_id: str):
                 # delete all plants in the garden
                 for plant_id in garden.plants:
                     plant = user_plants.objects(id=plant_id)
-                    if plant == []:
+                    if str(plant) == '[]':
                         continue
                     plant = plant[0]
                     plant_type = plant_types.objects(id=plant.plant_type_id)
                     # if no plant type can't delete cronjob
-                    if plant_type == []:
+                    if str(plant_type) == '[]':
                         plant.delete()
                         continue
                     plant_type = plant_type[0]
@@ -115,13 +117,13 @@ def get_garden(garden_id: str):
 
         with util.MongoConnect():
             user = users.objects(email=session['email'])
-            if user == []:
+            if str(user) == '[]':
                 abort(401)
             user = user[0]
             # need to do str(i) because user.gardens is a list of ObjectIdFields
             if garden_id in [str(i) for i in user.gardens]:
                 garden = gardens.objects(id=garden_id)
-                if garden == []:
+                if str(garden) == '[]':
                     abort(404)
                 garden = garden[0]
                 garden.name = request.json['name']
@@ -138,12 +140,12 @@ def get_garden(garden_id: str):
 
         with util.MongoConnect():
             user = users.objects(email=session['email'])
-            if user == []:
+            if str(user) == '[]':
                 abort(401)
             user = user[0]
             if garden_id in [str(i) for i in user.gardens]:
                 garden = gardens.objects(id=garden_id)
-                if garden == []:
+                if str(garden) == '[]':
                     abort(404)
 
                 garden = json.loads(garden[0].to_json())
@@ -164,7 +166,7 @@ def get_user_plants():
 
     with util.MongoConnect():
         user = users.objects(email=session['email'])
-        if user == []:
+        if str(user) == '[]':
             abort(401)
         user = user[0]
         # add all plants in each of the user's gardens
@@ -197,7 +199,7 @@ def get_user_plants_with_id(plant_id):
 
     with util.MongoConnect():
         user = users.objects(email=session['email'])
-        if user == []:
+        if str(user) == '[]':
             abort(401)
         user = user[0]
         # add all plants in each of the user's gardens
@@ -211,6 +213,8 @@ def get_user_plants_with_id(plant_id):
                     try:
                         plant = user_plants.objects(id=plant_id)
                     except Exception as e:
+                        abort(404)
+                    if str(plant) == '[]':
                         abort(404)
                     plant = plant[0]
                     plants_list = plant.to_dict()
@@ -234,7 +238,7 @@ def add_garden_location():
     with util.MongoConnect():
         # if user not in database 401
         user = greenthumb.models.mongo.users.objects(email=session['email'])
-        if user == []:
+        if str(user) == '[]':
             abort(401)
         user = user[0]
 
@@ -275,7 +279,7 @@ def add_plant_to_garden(garden_id: str):
 
     with util.MongoConnect():
         user = users.objects(email=session['email'])
-        if user == []:
+        if str(user) == '[]':
             abort(401)
         user = user[0]
         # need to do str(i) because user.gardens is a list of ObjectIdFields
@@ -284,11 +288,15 @@ def add_plant_to_garden(garden_id: str):
                 garden = gardens.objects(id=garden_id)
             except Exception as e:
                 abort(404)
+            if str(garden) == '[]':
+                abort(404)
             garden = garden[0]
 
             try:
                 plant_type = plant_types.objects(id=request.json['plant_type_id'])
             except Exception as e:
+                abort(404)
+            if str(plant_type) == '[]':
                 abort(404)
             plant_type = plant_type[0]
 
@@ -328,11 +336,17 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
     if 'email' not in session:
         abort(403)
 
+    print('Email in session')
+
     if not is_valid_id(garden_id):
         abort(401)
 
+    print('Garden id valid')
+
     if not is_valid_id(plant_id):
         abort(401)
+
+    print('Plant id valid')
 
     # check that the right info was provided, else 401
     for field in expected_fields:
@@ -342,12 +356,14 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
     if not is_valid_id(request.json['plant_type_id']):
         abort(401)
 
+    print('Plant type id valid')
+
     if request.json['last_watered'].find('.') == -1:
         request.json['last_watered'] = request.json['last_watered'] + '.000000'
 
     with util.MongoConnect():
         user = users.objects(email=session['email'])
-        if user == []:
+        if str(user) == '[]':
             abort(401)
         user = user[0]
         # need to do str(i) because user.gardens is a list of ObjectIdFields
@@ -355,6 +371,8 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
             try:
                 garden = gardens.objects(id=garden_id)
             except Exception as e:
+                abort(404)
+            if str(garden) == '[]':
                 abort(404)
             garden = garden[0]
             # same as above
@@ -364,11 +382,17 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
                 plant_type = plant_types.objects(id=request.json['plant_type_id'])
             except Exception as e:
                 abort(404)
+            print(str(plant_type))
+            if str(plant_type) == '[]':
+                abort(404)
+
             plant_type = plant_type[0]
 
             try:
                 plant = user_plants.objects(id=plant_id)
             except Exception as e:
+                abort(404)
+            if str(plant) == '[]':
                 abort(404)
             plant = plant[0]
 
@@ -420,7 +444,7 @@ def delete_plant_in_garden(garden_id: str, plant_id: str):
 
     with util.MongoConnect():
         user = users.objects(email=session['email'])
-        if user == []:
+        if str(user) == '[]':
             abort(401)
         user = user[0]
         # need to do str(i) because user.gardens is a list of ObjectIdFields
@@ -428,6 +452,8 @@ def delete_plant_in_garden(garden_id: str, plant_id: str):
             try:
                 garden = gardens.objects(id=garden_id)
             except Exception as e:
+                abort(404)
+            if str(garden) == '[]':
                 abort(404)
             garden = garden[0]
             # same as above
@@ -438,10 +464,12 @@ def delete_plant_in_garden(garden_id: str, plant_id: str):
                 plant = user_plants.objects(id=plant_id)
             except Exception as e:
                 abort(404)
+            if str(plant) == '[]':
+                abort(404)
             plant = plant[0]
 
             plant_type = plant_types.objects(id=str(plant.plant_type_id))
-            if plant_type == []:
+            if str(plant_type) == '[]':
                 abort(401)
             plant_type = plant_type[0]
 
