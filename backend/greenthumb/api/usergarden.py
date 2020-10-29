@@ -100,7 +100,6 @@ def get_garden(garden_id: str):
                             str(float(plant["latitude"])) + " " +
                             str(float(plant["longitude"])) + " " +
                             str(WATERING_DESCRIPTION))
-                        cron.write()
 
                     plant.delete()
 
@@ -381,7 +380,6 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
                     str(float(plant["latitude"])) + " " +
                     str(float(plant["longitude"])) + " " +
                     str(WATERING_DESCRIPTION))
-                cron.write()
 
             plant.plant_type_id = plant_type.id
             plant.latitude = request.json['latitude']
@@ -455,7 +453,7 @@ def delete_plant_in_garden(garden_id: str, plant_id: str):
                     str(float(plant["latitude"])) + " " +
                     str(float(plant["longitude"])) + " " +
                     str(WATERING_DESCRIPTION))
-                cron.write()
+
                 #goes in place of "Water it": plant_type["watering_description"]
             garden.plants.remove(plant.id)
             garden.save()
