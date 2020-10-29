@@ -8,14 +8,14 @@
 import UIKit
 
 class UserGarden {
-    var gardenId: Int
+    var gardenId: String
     var name: String
     var address: String
-    var tlGeoData: GeoData = GeoData(lat: 0, lon: 0, loc: "")
-    var brGeoData: GeoData = GeoData(lat: 0, lon: 0, loc: "")
+    var tlGeoData: GeoData = GeoData(lat: -1, lon: -1)
+    var brGeoData: GeoData = GeoData(lat: -1, lon: -1)
     var image: UIImage?
     
-    init (gardenId: Int, name: String, address: String) {
+    init (gardenId: String, name: String, address: String) {
         self.gardenId = gardenId
         self.name = name
         self.address = address

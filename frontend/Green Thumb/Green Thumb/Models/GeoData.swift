@@ -8,11 +8,9 @@
 class GeoData {
     var lat: Double
     var lon: Double
-    var loc: String
 
-    init(lat: Double, lon: Double, loc: String) {
+    init(lat: Double, lon: Double) {
         self.lat = lat
         self.lon = lon
-        self.loc = loc
     }
 }

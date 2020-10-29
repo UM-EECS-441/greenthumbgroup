@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class addGardenVC: UIViewController {
 
@@ -13,7 +14,7 @@ class addGardenVC: UIViewController {
     @IBOutlet weak var gardenLoc: UITextField!
     @IBOutlet weak var gardenImage: UIImageView!
     // TODO: update garden id
-    var newGarden: UserGarden = UserGarden(gardenId: 0, name: "", address: "")
+    var newGarden: UserGarden = UserGarden(gardenId: "", name: "", address: "")
     weak var returnDelegate : ReturnDelegate?
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -69,8 +70,55 @@ class addGardenVC: UIViewController {
 
             self.present(alertController, animated: true, completion: nil)
         } else{
-            returnDelegate?.didReturn(newGarden)
-            dismiss(animated: true, completion: nil)
+            // Add garden to database
+            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/add_garden/")!
+            var request = URLRequest(url: url)
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpMethod = "POST"
+            
+            let delegate = UIApplication.shared.delegate as! AppDelegate
+            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
+            print(delegate.cookie)
+            
+            let parameters: [String: Any] = [
+                "name": self.gardenName.text!,
+                "address": self.gardenLoc.text!,
+                "latitudetl": -1,
+                "longitudetl": -1,
+                "latitudebr": -1,
+                "longitudebr": -1
+            ]
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+                print(request.httpBody)
+                print(self.gardenLoc.text!)
+           } catch let error {
+                print("json error")
+               print(error.localizedDescription)
+           }
+            
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data else {
+                    print("no data")
+                    return
+                }
+                DispatchQueue.main.async {
+                    do {
+                        print(response)
+                        let json = try JSON(data: data, options: .allowFragments)
+                        let gardenId: String? = json["id"].stringValue
+                        self.newGarden.gardenId = gardenId ?? ""
+                        self.returnDelegate?.didReturn(self.newGarden)
+                        self.dismiss(animated: true, completion: nil)
+                    } catch {
+                        print("error with response data")
+                        print(error)
+                    }
+                }
+            }
+
+            task.resume()
         }
     }
 

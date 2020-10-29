@@ -45,25 +45,29 @@ class mapVC: UIViewController, PlantReturnDelegate {
         
         let url = URL(string: fullUrl)!
 
-        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
-            guard let data = data else { return }
-            do {
-                let json = try JSON(data: data)
-                let gardenLat: Double? = json["results"][0]["geometry"]["location"]["lat"].double ?? nil
-                let gardenLong: Double? = json["results"][0]["geometry"]["location"]["lng"].double ?? nil
-                if let lat = gardenLat {
-                    if let lng = gardenLong {
-                        self.translatedGardenLoc = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+        DispatchQueue.main.async {
+            let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+                guard let data = data else { return }
+                DispatchQueue.main.async {
+                    do {
+                        let json = try JSON(data: data)
+                        let gardenLat: Double? = json["results"][0]["geometry"]["location"]["lat"].double ?? nil
+                        let gardenLong: Double? = json["results"][0]["geometry"]["location"]["lng"].double ?? nil
+                        if let lat = gardenLat {
+                            if let lng = gardenLong {
+                                self.translatedGardenLoc = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+                            }
+                        }
+                        self.centerMapOnGarden()
+                    } catch {
+                        print(error)
                     }
                 }
-                self.centerMapOnGarden()
-            } catch {
-                print(error)
+                //print(String(data: data, encoding: .utf8)!)
             }
-            print(String(data: data, encoding: .utf8)!)
-        }
 
-        task.resume()
+            task.resume()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,12 +80,13 @@ class mapVC: UIViewController, PlantReturnDelegate {
         // TODO: eventually get map data from backend
         // TODO: either zoom in on garden's location from user address input or saved garden coordinates
         // Zoom in on saved user's garden
-        if (userGarden.brGeoData.loc != "" && userGarden.tlGeoData.loc != ""){
+        if (userGarden.brGeoData.lat != -1 && userGarden.tlGeoData.lat != -1){
             let gardenCenterLat = self.userGarden.brGeoData.lat + abs(self.userGarden.tlGeoData.lat - self.userGarden.brGeoData.lat)
             let gardenCenterLon = self.userGarden.tlGeoData.lon + abs(self.userGarden.brGeoData.lon - self.userGarden.tlGeoData.lon)
             let coordinate = CLLocationCoordinate2D(latitude: gardenCenterLat, longitude: gardenCenterLon)
             map.camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 22.0)
             drawGarden()
+            // TODO: add saved plants to garden
         }
         else if (self.translatedGardenLoc != nil){
             map.camera = GMSCameraPosition.camera(withTarget: self.translatedGardenLoc!, zoom: 22.0)
@@ -127,6 +132,36 @@ class mapVC: UIViewController, PlantReturnDelegate {
                 corner.map = nil
             }
             gardenCorners.removeAll()
+            // TODO: add garden bounds to database
+            // Add garden to database
+            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(self.userGarden.gardenId)/")!
+            var request = URLRequest(url: url)
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpMethod = "PUT"
+            
+            let delegate = UIApplication.shared.delegate as! AppDelegate
+            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
+            
+            let parameters: [String: Any] = [
+                "name": self.userGarden.name,
+                "address": self.userGarden.address,
+                "latitudetl": self.userGarden.tlGeoData.lat,
+                "longitudetl": self.userGarden.tlGeoData.lon,
+                "latitudebr": self.userGarden.brGeoData.lat,
+                "longitudebr": self.userGarden.brGeoData.lon
+            ]
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+           } catch let error {
+               print(error.localizedDescription)
+           }
+            
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                // TODO: handle bad response
+                print(response ?? "")
+            }
+            task.resume()
         }
     }
     
@@ -135,7 +170,7 @@ class mapVC: UIViewController, PlantReturnDelegate {
         self.drawGardenButton.isHidden = false
         self.deleteGardenButton.isHidden = true
         // Reset user garden to default
-        self.userGarden = UserGarden(gardenId: 0, name: "", address: "")
+        self.userGarden = UserGarden(gardenId: "", name: "", address: "")
         self.gardenPolygon?.map = nil
         self.gardenPolygon = nil
         // Remove plants
@@ -149,7 +184,7 @@ class mapVC: UIViewController, PlantReturnDelegate {
     }
     
     func drawGarden() {
-        // TODO: userGarden should be initialized with tl and br corners
+        // TODO: assert userGarden should be initialized with tl and br corners
         let path = GMSMutablePath()
         // Add top left corner
         path.add(CLLocationCoordinate2D(latitude: self.userGarden.tlGeoData.lat, longitude: self.userGarden.tlGeoData.lon))
@@ -204,20 +239,20 @@ extension mapVC : CLLocationManagerDelegate {
 
 extension mapVC : GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        if (self.drawGardenButton.titleLabel?.text == "Next" && self.userGarden.tlGeoData.loc == ""){
+        if (self.drawGardenButton.titleLabel?.text == "Next" && self.userGarden.tlGeoData.lat == -1){
             // User is currently drawing their garden
             // Tap should correspond to top left corner of garden
-            let topLeft = GeoData(lat: coordinate.latitude, lon: coordinate.longitude, loc: "topLeft")
+            let topLeft = GeoData(lat: coordinate.latitude, lon: coordinate.longitude)
             // TODO: garden id switching
             self.userGarden.tlGeoData = topLeft
             // Draw dot corresponding to tap
             drawIcon(mapView: mapView, coordinate: coordinate, iconImage: nil)
         }
         // TODO: make sure this works
-        else if (self.drawGardenButton.titleLabel?.text == "Done" && self.userGarden.brGeoData.loc == ""){
+        else if (self.drawGardenButton.titleLabel?.text == "Done" && self.userGarden.brGeoData.lat == -1){
             // User is currently drawing their garden
             // Tap should correspond to bottom right corner of garden
-            let bottomRight = GeoData(lat: coordinate.latitude, lon: coordinate.longitude, loc: "bottomRight")
+            let bottomRight = GeoData(lat: coordinate.latitude, lon: coordinate.longitude)
             self.userGarden.brGeoData = bottomRight
             
             // Draw dot corresponding to tap
@@ -236,7 +271,7 @@ extension mapVC : GMSMapViewDelegate {
     
     func drawIcon(mapView: GMSMapView, coordinate: CLLocationCoordinate2D, iconImage: UIImage?) {
         // Draw icon for tap
-        
+    
         if (iconImage == nil) {
             // Adding garden corner
             let southWest = CLLocationCoordinate2D(latitude: coordinate.latitude-0.000008, longitude: coordinate.longitude+0.000008)
@@ -257,7 +292,7 @@ extension mapVC : GMSMapViewDelegate {
             
             let overlay = GMSGroundOverlay(bounds: overlayBounds, icon: iconImage)
             
-            currentPlant?.geodata = GeoData(lat: coordinate.latitude, lon: coordinate.longitude, loc: "plantLoc")
+            currentPlant?.geodata = GeoData(lat: coordinate.latitude, lon: coordinate.longitude)
             self.plantArray?.append(currentPlant!)
             plantOverlays?.append(overlay)
             
