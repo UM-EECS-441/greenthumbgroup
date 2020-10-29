@@ -8,6 +8,8 @@ from crontab import CronTab
 
 import datetime
 
+import bson
+
 """
 
 GreenThumb REST API: usergarden.
@@ -17,6 +19,13 @@ GreenThumb Group <greenthumb441@umich.edu>
 """
 WATERING_DESCRIPTION = 'Water it.'
 
+def is_valid_id(object_id):
+    try:
+        bson.objectid.ObjectId(objectid)
+    except Exception as e:
+        return False
+    return True
+    
 
 @greenthumb.app.route('/api/v1/usergarden/', methods=['GET'])
 def get_user_gardens():
@@ -52,6 +61,9 @@ def get_garden(garden_id: str):
     if 'email' not in session:
         abort(403)
 
+    if not is_valid_id(garden_id):
+        abort(401)
+
     if request.method == 'DELETE':
         with util.MongoConnect():
             user = users.objects(email=session['email'])
@@ -60,9 +72,11 @@ def get_garden(garden_id: str):
             user = user[0]
             # need to do str(i) because user.gardens is a list of ObjectIdFields
             if garden_id in [str(i) for i in user.gardens]:
-                garden = gardens.objects(id=garden_id)
-                if garden == []:
+                try:
+                    garden = gardens.objects(id=garden_id)
+                except Exception as e:
                     abort(404)
+                
                 garden = garden[0]
                 user.gardens.remove(garden.id)
 
@@ -177,6 +191,9 @@ def get_user_plants_with_id(plant_id):
     if 'email' not in session:
         abort(403)
 
+    if not is_valid_id(plant_id):
+        abort(401)
+
     plants_list = {}
 
     with util.MongoConnect():
@@ -192,10 +209,12 @@ def get_user_plants_with_id(plant_id):
                 for user_plant_id in garden.plants:
                     if plant_id != str(user_plant_id):
                         continue
-                    plant = user_plants.objects(id=plant_id)
-                    if plant != []:
-                        plant = plant[0]
-                        plants_list = plant.to_dict()
+                    try:
+                        plant = user_plants.objects(id=plant_id)
+                    except Exception as e:
+                        abort(404)
+                    plant = plant[0]
+                    plants_list = plant.to_dict()
                 
 
     return jsonify(plants_list), 200
@@ -241,10 +260,19 @@ def add_plant_to_garden(garden_id: str):
     if 'email' not in session:
         abort(403)
 
+    if not is_valid_id(garden_id):
+        abort(401)
+
     # check that the right info was provided, else 401
     for field in expected_fields:
         if field not in request.json:
             abort(401)
+
+    if not is_valid_id(request.json['plant_type_id']):
+        abort(401)
+
+    if request.json['last_watered'].find('.') == -1:
+        request.json['last_watered'] = request.json['last_watered'] + '.000000'
 
     with util.MongoConnect():
         user = users.objects(email=session['email'])
@@ -253,21 +281,18 @@ def add_plant_to_garden(garden_id: str):
         user = user[0]
         # need to do str(i) because user.gardens is a list of ObjectIdFields
         if garden_id in [str(i) for i in user.gardens]:
-            garden = gardens.objects(id=garden_id)
-            if garden == []:
-                abort(401)
+            try:
+                garden = gardens.objects(id=garden_id)
+            except Exception as e:
+                abort(404)
             garden = garden[0]
 
-            plant_type = plant_types.objects(id=request.json['plant_type_id'])
-            if plant_type == []:
-                abort(401)
+            try:
+                plant_type = plant_types.objects(id=request.json['plant_type_id'])
+            except Exception as e:
+                abort(404)
             plant_type = plant_type[0]
 
-            if (request.json['latitude'] < garden['topleft_lat'] or
-                request.json['latitude'] > garden['bottomright_lat'] or
-                request.json['longitude'] < garden['topleft_long'] or
-                request.json['longitude'] > garden['bottomright_long']):
-                abort(401)
                 #request.json['last_watered']
             user_plant = user_plants(plant_type_id=request.json['plant_type_id'],
                 latitude=request.json['latitude'],
@@ -304,10 +329,22 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
     if 'email' not in session:
         abort(403)
 
+    if not is_valid_id(garden_id):
+        abort(401)
+
+    if not is_valid_id(plant_id):
+        abort(401)
+
     # check that the right info was provided, else 401
     for field in expected_fields:
         if field not in request.json:
             abort(401)
+
+    if not is_valid_id(request.json['plant_type_id']):
+        abort(401)
+
+    if request.json['last_watered'].find('.') == -1:
+        request.json['last_watered'] = request.json['last_watered'] + '.000000'
 
     with util.MongoConnect():
         user = users.objects(email=session['email'])
@@ -316,26 +353,24 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
         user = user[0]
         # need to do str(i) because user.gardens is a list of ObjectIdFields
         if garden_id in [str(i) for i in user.gardens]:
-            garden = gardens.objects(id=garden_id)
-            if garden == []:
-                abort(401)
+            try:
+                garden = gardens.objects(id=garden_id)
+            except Exception as e:
+                abort(404)
             garden = garden[0]
             # same as above
             if plant_id not in [str(i) for i in garden.plants]:
                 abort(401)
-            plant_type = plant_types.objects(id=request.json['plant_type_id'])
-            if plant_type == []:
-                abort(401)
+            try:
+                plant_type = plant_types.objects(id=request.json['plant_type_id'])
+            except Exception as e:
+                abort(404)
             plant_type = plant_type[0]
-            if (request.json['latitude'] < garden['topleft_lat'] or
-                request.json['latitude'] > garden['bottomright_lat'] or
-                request.json['longitude'] < garden['topleft_long'] or
-                request.json['longitude'] > garden['bottomright_long']):
-                abort(401)
 
-            plant = user_plants.objects(id=plant_id)
-            if plant == []:
-                abort(401)
+            try:
+                plant = user_plants.objects(id=plant_id)
+            except Exception as e:
+                abort(404)
             plant = plant[0]
 
             # delete old cron job since the plants latitude/longitude can change
@@ -380,6 +415,11 @@ def delete_plant_in_garden(garden_id: str, plant_id: str):
     if 'email' not in session:
         abort(403)
 
+    if not is_valid_id(garden_id):
+        abort(401)
+    if not is_valid_id(plant_id):
+        abort(401)
+
     with util.MongoConnect():
         user = users.objects(email=session['email'])
         if user == []:
@@ -387,17 +427,19 @@ def delete_plant_in_garden(garden_id: str, plant_id: str):
         user = user[0]
         # need to do str(i) because user.gardens is a list of ObjectIdFields
         if garden_id in [str(i) for i in user.gardens]:
-            garden = gardens.objects(id=garden_id)
-            if garden == []:
-                abort(401)
+            try:
+                garden = gardens.objects(id=garden_id)
+            except Exception as e:
+                abort(404)
             garden = garden[0]
             # same as above
             if plant_id not in [str(i) for i in garden.plants]:
                 abort(401)
 
-            plant = user_plants.objects(id=plant_id)
-            if plant == []:
-                abort(401)
+            try:
+                plant = user_plants.objects(id=plant_id)
+            except Exception as e:
+                abort(404)
             plant = plant[0]
 
             plant_type = plant_types.objects(id=str(plant.plant_type_id))
