@@ -17,7 +17,6 @@ class mapVC: UIViewController, PlantReturnDelegate {
     var userGarden: UserGarden!
     var gardenCorners: [GMSGroundOverlay] = [GMSGroundOverlay]()
     var gardenPolygon: GMSPolygon? = GMSPolygon()
-    var plantArray: [UserPlant]? = [UserPlant]()
     var plantOverlays: [GMSGroundOverlay]? = [GMSGroundOverlay]()
     var currentPlant: UserPlant? = nil
     var translatedGardenLoc: CLLocationCoordinate2D? = nil
@@ -87,6 +86,35 @@ class mapVC: UIViewController, PlantReturnDelegate {
             map.camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 22.0)
             drawGarden()
             // TODO: add saved plants to garden
+            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(self.userGarden.gardenId)/")!
+            
+            var request = URLRequest(url: url)
+            let delegate = UIApplication.shared.delegate as! AppDelegate
+            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
+            request.httpMethod = "GET"
+
+            let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
+                print(response)
+                //print(data)
+                guard let data = data else {
+                    return
+                }
+                do{
+                    let json = try JSON(data: data)
+                    let plants = json["plants"].array
+                    if let unwrappedplants = plants{
+                        for plant in unwrappedplants {
+                            // TODO: add plant to map
+                        }
+                    }
+                }
+                catch {
+                    print(error)
+                }
+                
+            }
+            
+            task.resume()
         }
         else if (self.translatedGardenLoc != nil){
             map.camera = GMSCameraPosition.camera(withTarget: self.translatedGardenLoc!, zoom: 22.0)
@@ -180,7 +208,7 @@ class mapVC: UIViewController, PlantReturnDelegate {
             }
             self.plantOverlays = nil
         }
-        self.plantArray = nil
+        self.userGarden.plants.removeAll()
     }
     
     func drawGarden() {
@@ -293,7 +321,39 @@ extension mapVC : GMSMapViewDelegate {
             let overlay = GMSGroundOverlay(bounds: overlayBounds, icon: iconImage)
             
             currentPlant?.geodata = GeoData(lat: coordinate.latitude, lon: coordinate.longitude)
-            self.plantArray?.append(currentPlant!)
+            if let plantToAppend = currentPlant{
+                self.userGarden.plants.append(plantToAppend)
+            }
+            // Update plant data in database
+            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(self.userGarden.gardenId)/edit_plant/\(self.currentPlant!.userPlantId)/")!
+            var request = URLRequest(url: url)
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpMethod = "PUT"
+            
+            let delegate = UIApplication.shared.delegate as! AppDelegate
+            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
+            
+            let parameters: [String: Any] = [
+                "plant_type_id": "id",
+                "latitude": self.currentPlant!.geodata.lat,
+                "longitude": self.currentPlant!.geodata.lon,
+                "light_level": -1,
+                "last_watered": "\(Date())"
+            ]
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+           } catch let error {
+               print(error.localizedDescription)
+           }
+            
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                // TODO: handle bad response
+                print(response ?? "")
+            }
+            task.resume()
+            
+            
             plantOverlays?.append(overlay)
             
             self.gardenCorners.append(overlay)

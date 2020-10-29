@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class addPlantVC: UIViewController {
 
@@ -22,11 +23,54 @@ class addPlantVC: UIViewController {
     
     @IBAction func doneButtonClicked(_ sender: UIButton) {
         // TODO: update plant id
-        let newPlant = UserPlant(userPlantId: "", catalogPlantId: nil, gardenId: userGarden.gardenId, name: name.text, image: plantImage.image!)
         // Add plant to database
+        let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(userGarden.gardenId)/add_plant/")!
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
         
-        returnDelegate?.didReturn(newPlant)
-        dismiss(animated: true, completion: nil)
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
+        print(delegate.cookie)
+        print(Date())
+        // TODO: fix plant id
+        let parameters: [String: Any] = [
+            "plant_type_id": "5f97617fcebc5357248531e9",
+            "latitude": -1,
+            "longitude": -1,
+            "light_level": -1,
+            "last_watered": "\(Date())"
+        ]
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+
+       } catch let error {
+            print("json error")
+           print(error.localizedDescription)
+       }
+        
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                print("no data")
+                return
+            }
+            DispatchQueue.main.async {
+                do {
+                    print(response)
+                    let json = try JSON(data: data, options: .allowFragments)
+                    let plantId: String? = json["id"].stringValue
+                    let newPlant = UserPlant(userPlantId: plantId ?? "", gardenId: self.userGarden.gardenId, name: self.name.text, image: self.plantImage.image!)
+                    self.returnDelegate?.didReturn(newPlant)
+                    self.dismiss(animated: true, completion: nil)
+                } catch {
+                    print("error with response data")
+                    print(error)
+                }
+            }
+        }
+
+        task.resume()
     }
     
     /*
