@@ -262,11 +262,6 @@ def add_plant_to_garden(garden_id: str):
                 abort(401)
             plant_type = plant_type[0]
 
-            if (request.json['latitude'] < garden['topleft_lat'] or
-                request.json['latitude'] > garden['bottomright_lat'] or
-                request.json['longitude'] < garden['topleft_long'] or
-                request.json['longitude'] > garden['bottomright_long']):
-                abort(401)
                 #request.json['last_watered']
             user_plant = user_plants(plant_type_id=request.json['plant_type_id'],
                 latitude=request.json['latitude'],
@@ -326,11 +321,6 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
             if plant_type == []:
                 abort(401)
             plant_type = plant_type[0]
-            if (request.json['latitude'] < garden['topleft_lat'] or
-                request.json['latitude'] > garden['bottomright_lat'] or
-                request.json['longitude'] < garden['topleft_long'] or
-                request.json['longitude'] > garden['bottomright_long']):
-                abort(401)
 
             plant = user_plants.objects(id=plant_id)
             if plant == []:
