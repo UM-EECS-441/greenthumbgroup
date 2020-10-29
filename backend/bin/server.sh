@@ -46,6 +46,19 @@ usage() {
     echo "Usage: ./bin/server.sh (start|stop|restart)"
 }
 
+debug() {
+    if [ $(pgrep -fc "gunicorn.*wsgi:app") -ne 0 ]; then
+        echo "Error: gunicorn already running."
+        exit 1
+    fi
+    if [[ $(pwd | grep -c "backend/") -ne 0 ]]; then
+        echo "Please execute this script in the main backend/ directory."
+        exit 1
+    fi
+    export FLASK_ENV=development
+    flask run
+}
+
 if [ $# -ne 1 ]; then
     usage 
     exit 1
@@ -62,5 +75,9 @@ case $1 in
     ;;
     "restart")
     restart
+    ;;
+    "debug")
+    check_privileges
+    debug
     ;;
 esac
