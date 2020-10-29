@@ -9,6 +9,7 @@ import UIKit
 
 class catalogPage: UIViewController {
     
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var plantName: UILabel!
     @IBOutlet weak var plantSpecies: UILabel!
     @IBOutlet weak var plantType: UILabel!
@@ -21,15 +22,22 @@ class catalogPage: UIViewController {
     var species = "Species"
     var type = "Type"
     var desc = "Description"
-    var tags = {}
-    var waterDays = 0
+    var tags = ""
+    var waterDays = ""
     var waterInfo = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: plantWaterInfo.bottomAnchor).isActive = true
+        
         plantName.text = name
         plantSpecies.text = species
         plantType.text = type
         plantDescription.text = desc
+        // Not done yet
+        plantTags.text = tags
+        daysTilWater.text = waterDays
+        plantWaterInfo.text = waterInfo
     }
 }
