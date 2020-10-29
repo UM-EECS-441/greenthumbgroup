@@ -22,13 +22,13 @@ def create_user():
             for user in users.objects():
                 if request.json['email'] == user.email:
                     # TODO: Change later
-                    return redirect(url_for('login'))
+                    return 200
             # insert into database, then login
             with util.MongoConnect():
                 users(email=request.json['email'], gardens=[]).save()
             session['email'] = request.json['email']
             # TODO: change based on function name
-            return redirect(url_for('get_user_gardens'))
+            return 200
     # TODO: change this return
     return {}
 
@@ -43,8 +43,8 @@ def login():
                 if request.json['email'] == user.email:
                     session['email'] = user['email']
                     # TODO: change based on function name
-                    return redirect(url_for('get_user_gardens'))
-            return redirect(url_for('create_user'))
+                    return 200
+            return 200
     # TODO: change this return
     return {}
 
@@ -53,4 +53,4 @@ def logout():
     session.pop('email', None)
 
     # TODO: need different redirect
-    return redirect(url_for('login'))
+    return 200
