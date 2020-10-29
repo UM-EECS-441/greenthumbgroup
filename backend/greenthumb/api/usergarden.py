@@ -6,6 +6,8 @@ from greenthumb.models.mongo import (users, gardens, plant_types, user_plants)
 from flask import (abort, request, session, jsonify)
 from crontab import CronTab
 
+import datetime
+
 """
 
 GreenThumb REST API: usergarden.
@@ -13,6 +15,8 @@ GreenThumb REST API: usergarden.
 GreenThumb Group <greenthumb441@umich.edu>
 
 """
+WATERING_DESCRIPTION = 'Water it.'
+
 
 @greenthumb.app.route('/api/v1/usergarden/', methods=['GET'])
 def get_user_gardens():
@@ -36,7 +40,7 @@ def get_user_gardens():
                 garden = garden[0]
                 user_gardens.append(json.loads(garden.to_json()))
 
-    return jsonify(user_gardens)
+    return jsonify(user_gardens), 200
 
 
 @greenthumb.app.route('/api/v1/usergarden/<string:garden_id>/', methods=['GET', 'PUT', 'DELETE'])
@@ -59,8 +63,34 @@ def get_garden(garden_id: str):
                 garden = gardens.objects(id=garden_id)
                 if garden == []:
                     abort(404)
-                user.gardens.remove(garden[0].id)
-                garden[0].delete()
+                garden = garden[0]
+                user.gardens.remove(garden.id)
+
+                # delete all plants in the garden
+                for plant_id in garden.plants:
+                    plant = user_plants.objects(id=plant_id)
+                    if plant == []:
+                        continue
+                    plant = plant[0]
+                    plant_type = plant_types.objects(id=plant.plant_type_id)
+                    # if no plant type can't delete cronjob
+                    if plant_type == []:
+                        plant.delete()
+                        continue
+                    plant_type = plant_type[0]
+                    # Delete cron job when plant is deleted
+                    with CronTab(user='root') as cron:
+                        cron.remove_all(command="python notification.py " +
+                            str(session['email']) + " " +
+                            str(plant_type["name"]) + " " +
+                            str(float(plant["latitude"])) + " " +
+                            str(float(plant["longitude"])) + " " +
+                            str(WATERING_DESCRIPTION))
+                        cron.write()
+
+                    plant.delete()
+
+                garden.delete()
                 user.save()
             else:
                 abort(401)
@@ -108,6 +138,67 @@ def get_garden(garden_id: str):
         return jsonify(garden)
     return "", 200
 
+@greenthumb.app.route('/api/v1/usergarden/get_plants/', methods=['GET'])
+def get_user_plants():
+    '''
+    Route which returns a list of all of the user's plants in json format
+    '''
+
+    if 'email' not in session:
+        abort(403)
+
+    plants_list = []
+
+    with util.MongoConnect():
+        user = users.objects(email=session['email'])
+        if user == []:
+            abort(401)
+        user = user[0]
+        # add all plants in each of the user's gardens
+        for garden_id in user.gardens:
+            garden = gardens.objects(id=garden_id)
+            if garden != []:
+                garden = garden[0]
+                for plant_id in garden.plants:
+                    plant = user_plants.objects(id=plant_id)
+                    if plant != []:
+                        plant = plant[0]
+                        plants_list.append(plant.to_dict())
+                
+
+    return jsonify(plants_list), 200
+
+@greenthumb.app.route('/api/v1/usergarden/get_plants/<string:plant_id>/', methods=['GET'])
+def get_user_plants_with_id(plant_id):
+    '''
+    Route which returns a the specified plant in json format
+    '''
+
+    if 'email' not in session:
+        abort(403)
+
+    plants_list = {}
+
+    with util.MongoConnect():
+        user = users.objects(email=session['email'])
+        if user == []:
+            abort(401)
+        user = user[0]
+        # add all plants in each of the user's gardens
+        for garden_id in user.gardens:
+            garden = gardens.objects(id=garden_id)
+            if garden != []:
+                garden = garden[0]
+                for user_plant_id in garden.plants:
+                    if plant_id != str(user_plant_id):
+                        continue
+                    plant = user_plants.objects(id=plant_id)
+                    if plant != []:
+                        plant = plant[0]
+                        plants_list = plant.to_dict()
+                
+
+    return jsonify(plants_list), 200
 
 @greenthumb.app.route('/api/v1/usergarden/add_garden/', methods=['POST'])
 def add_garden_location():
@@ -138,8 +229,7 @@ def add_garden_location():
         # add garden id to user's garden list
         user.gardens.append(str(garden.id))
         user.save()
-
-    return "", 200
+        return {"id": str(garden.id)}, 200
 
 
 @greenthumb.app.route('/api/v1/usergarden/<string:garden_id>/add_plant/', methods=['POST'])
@@ -178,13 +268,12 @@ def add_plant_to_garden(garden_id: str):
                 request.json['longitude'] < garden['topleft_long'] or
                 request.json['longitude'] > garden['bottomright_long']):
                 abort(401)
-
+                #request.json['last_watered']
             user_plant = user_plants(plant_type_id=request.json['plant_type_id'],
                 latitude=request.json['latitude'],
                 longitude=request.json['longitude'],
                 light_level=request.json['light_level'],
-                last_watered=request.json['last_watered']).save()
-
+                last_watered=datetime.datetime.strptime(request.json['last_watered'], '%Y-%m-%d %H:%M:%S.%f')).save()
             garden.plants.append(str(user_plant.id))
             garden.save()
 
@@ -194,13 +283,19 @@ def add_plant_to_garden(garden_id: str):
                     command="python notification.py " +
                     str(session['email']) + " " +
                     str(plant_type["name"]) + " " +
-                    str(request.json['latitude']) + " " +
-                    str(request.json['longitude']) + " " +
-                    str(plant_type["watering_description"])
+                    str(float(request.json['latitude'])) + " " +
+                    str(float(request.json['longitude'])) + " " +
+                    str(WATERING_DESCRIPTION)
                 )
-                job.day.every(plant_type['days_to_water'])
+                #goes in place of "Water it": plant_type["watering_description"]
+                #goes in place of 1: plant_type['days_to_water']
+                job.day.every(1)
 
-@greenthumb.app.route('/api/v1/usergarden/<string:garden_id>/edit_plant/<string:plant_id>', methods=['PUT'])
+            return {"id": str(user_plant.id)}, 200
+        else:
+            abort(401)
+
+@greenthumb.app.route('/api/v1/usergarden/<string:garden_id>/edit_plant/<string:plant_id>/', methods=['PUT'])
 def edit_plant_in_garden(garden_id: str, plant_id: str):
 
     expected_fields = ['plant_type_id', 'latitude',
@@ -228,8 +323,10 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
             # same as above
             if plant_id not in [str(i) for i in garden.plants]:
                 abort(401)
-            if plant_types.objects(id=request.json['plant_type_id']) == []:
+            plant_type = plant_types.objects(id=request.json['plant_type_id'])
+            if plant_type == []:
                 abort(401)
+            plant_type = plant_type[0]
             if (request.json['latitude'] < garden['topleft_lat'] or
                 request.json['latitude'] > garden['bottomright_lat'] or
                 request.json['longitude'] < garden['topleft_long'] or
@@ -241,19 +338,43 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
                 abort(401)
             plant = plant[0]
 
-            plant.plant_type_id = request.json['plant_type_id']
-            plant.latitude = request.json['latitude'],
-            plant.longitude = request.json['longitude'],
-            plant.light_level = request.json['light_level'],
-            plant.last_watered = request.json['last_watered']
+            # delete old cron job since the plants latitude/longitude can change
+            with CronTab(user='root') as cron:
+                cron.remove_all(command="python notification.py " +
+                    str(session['email']) + " " +
+                    str(plant_type["name"]) + " " +
+                    str(float(plant["latitude"])) + " " +
+                    str(float(plant["longitude"])) + " " +
+                    str(WATERING_DESCRIPTION))
+                cron.write()
+
+            plant.plant_type_id = plant_type.id
+            plant.latitude = request.json['latitude']
+            plant.longitude = request.json['longitude']
+            plant.light_level = request.json['light_level']
+            plant.last_watered = datetime.datetime.strptime(request.json['last_watered'], '%Y-%m-%d %H:%M:%S.%f')
             plant.save()
+
+            # remake cron job
+            with CronTab(user='root') as cron:
+                job = cron.new(
+                    command="python notification.py " +
+                    str(session['email']) + " " +
+                    str(plant_type["name"]) + " " +
+                    str(float(request.json['latitude'])) + " " +
+                    str(float(request.json['longitude'])) + " " +
+                    str(WATERING_DESCRIPTION)
+                )
+                #goes in place of "Water it": plant_type["watering_description"]
+                #goes in place of 1: plant_type['days_to_water']
+                job.day.every(1)
 
         else:
             abort(401)
 
     return "", 200
 
-@greenthumb.app.route('/api/v1/usergarden/<string:garden_id>/delete_plant/<string:plant_id>', methods=['DELETE'])
+@greenthumb.app.route('/api/v1/usergarden/<string:garden_id>/delete_plant/<string:plant_id>/', methods=['DELETE'])
 def delete_plant_in_garden(garden_id: str, plant_id: str):
 
     if 'email' not in session:
@@ -279,7 +400,22 @@ def delete_plant_in_garden(garden_id: str, plant_id: str):
                 abort(401)
             plant = plant[0]
 
-            garden.plants.remove(plant_id)
+            plant_type = plant_types.objects(id=str(plant.plant_type_id))
+            if plant_type == []:
+                abort(401)
+            plant_type = plant_type[0]
+
+            # Delete cron job when plant is deleted
+            with CronTab(user='root') as cron:
+                cron.remove_all(command="python notification.py " +
+                    str(session['email']) + " " +
+                    str(plant_type["name"]) + " " +
+                    str(float(plant["latitude"])) + " " +
+                    str(float(plant["longitude"])) + " " +
+                    str(WATERING_DESCRIPTION))
+                cron.write()
+                #goes in place of "Water it": plant_type["watering_description"]
+            garden.plants.remove(plant.id)
             garden.save()
             plant.delete()
 
