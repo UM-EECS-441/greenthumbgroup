@@ -15,6 +15,9 @@ class catalogVC: UITableViewController {
                    "watering_description": ""]]  // array of Plants
     
     @IBOutlet var catalogTableView: UITableView!
+    var userGarden: UserGarden?
+    
+    weak var returnDelegate : PlantReturnDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -192,12 +195,25 @@ extension catalogVC {
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "catalogTableCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "catalogCell", for: indexPath) as! catalogCell
         
         
         let name = plants[indexPath.row]["name"]
         let nameString = String(describing: name!)
         cell.textLabel?.text = nameString
+        
+        if self.presentingViewController?.title == "Add Plant Options" {
+            cell.addButton.isHidden = false
+            
+            cell.addClickAction = { () in
+                // TODO: update user plant id
+                // TODO: fix plant icon retrieval
+                //var newPlant: UserPlant = UserPlant(userPlantId: "id", gardenId: userGarden?.gardenId, name: name, image: UIImage(named: "planticon.png"))
+                //newPlant.catalogPlantId = self.plants[indexPath.row]["_id"] as! String
+                //self.returnDelegate?.didReturn(newPlant)
+                //self.dismiss(animated: true, completion: nil)
+            }
+        }
         
         
         return cell

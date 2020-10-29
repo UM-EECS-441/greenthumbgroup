@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qWm-Mz-XDw">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -351,20 +351,35 @@
         <!--Home Catalog-->
         <scene sceneID="L0g-Gb-Qaq">
             <objects>
-                <tableViewController title="Home Catalog" id="hOa-fP-425" customClass="catalogVC" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="catalogVC" title="Home Catalog" useStoryboardIdentifierAsRestorationIdentifier="YES" id="hOa-fP-425" customClass="catalogVC" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="1NK-US-z18">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="catalogTableCell" rowHeight="100" id="cZH-SU-0OC">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="catalogCell" rowHeight="100" id="cZH-SU-0OC" customClass="catalogCell" customModule="Green_Thumb" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cZH-SU-0OC" id="EBt-RA-ICO">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vdH-ZO-9D7">
+                                            <rect key="frame" x="348" y="0.0" width="101" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <state key="normal" title="Button" image="plus" catalog="system">
+                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="addButtonClicked:" destination="cZH-SU-0OC" eventType="touchUpInside" id="T93-By-Rbb"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
                                 </tableViewCellContentView>
                                 <accessibility key="accessibilityConfiguration" identifier="catalogTableCell"/>
+                                <connections>
+                                    <outlet property="addButton" destination="vdH-ZO-9D7" id="K1R-lu-Z9V"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -794,6 +809,7 @@
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="70"/>
                                 </state>
                                 <connections>
+                                    <action selector="addCatalogPlantClicked:" destination="L0w-0i-LVY" eventType="touchUpInside" id="oUG-Iu-6Ze"/>
                                     <segue destination="hOa-fP-425" kind="presentation" id="Vq6-Rk-KsP"/>
                                 </connections>
                             </button>
@@ -2161,7 +2177,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="Vjw-K2-6N9"/>
         <segue reference="fwZ-1h-Lq5"/>
-        <segue reference="Vq6-Rk-KsP"/>
+        <segue reference="sxl-g5-q9U"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Checkmarkempty" width="30" height="30"/>

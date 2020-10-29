@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		400EA6A22541110800C8D052 /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400EA6A12541110800C8D052 /* DesignableView.swift */; };
 		40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */; };
-		404264512544884A005C6F8D /* catalogTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042644F25448849005C6F8D /* catalogTableCell.swift */; };
 		404264522544884A005C6F8D /* plantInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042645025448849005C6F8D /* plantInfoVC.swift */; };
 		40426456254488DF005C6F8D /* catalogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40426455254488DF005C6F8D /* catalogVC.swift */; };
 		4042645B2548FC9F005C6F8D /* catalogPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042645A2548FC9F005C6F8D /* catalogPage.swift */; };
@@ -31,6 +30,7 @@
 		A56F04C52544DD730060976F /* gardenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F04C42544DD730060976F /* gardenCell.swift */; };
 		A5C523B8254A60CD000B2B13 /* registerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C523B7254A60CD000B2B13 /* registerVC.swift */; };
 		A5C523BB254A612E000B2B13 /* loginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C523BA254A612E000B2B13 /* loginVC.swift */; };
+		A5C523C8254B7C84000B2B13 /* catalogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C523C7254B7C84000B2B13 /* catalogCell.swift */; };
 		A83E47FB2543AFCA003F1193 /* GuidePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E47FA2543AFCA003F1193 /* GuidePage.swift */; };
 		A83E47FD2543B0F4003F1193 /* CatalogPlant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E47FC2543B0F4003F1193 /* CatalogPlant.swift */; };
 		A83E47FF2543B37F003F1193 /* UserPlant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E47FE2543B37F003F1193 /* UserPlant.swift */; };
@@ -41,7 +41,6 @@
 /* Begin PBXFileReference section */
 		400EA6A12541110800C8D052 /* DesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
 		40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSettingsVC.swift; sourceTree = "<group>"; };
-		4042644F25448849005C6F8D /* catalogTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = catalogTableCell.swift; sourceTree = "<group>"; };
 		4042645025448849005C6F8D /* plantInfoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = plantInfoVC.swift; sourceTree = "<group>"; };
 		40426455254488DF005C6F8D /* catalogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogVC.swift; sourceTree = "<group>"; };
 		4042645A2548FC9F005C6F8D /* catalogPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogPage.swift; sourceTree = "<group>"; };
@@ -65,6 +64,7 @@
 		A56F04C42544DD730060976F /* gardenCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gardenCell.swift; sourceTree = "<group>"; };
 		A5C523B7254A60CD000B2B13 /* registerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerVC.swift; sourceTree = "<group>"; };
 		A5C523BA254A612E000B2B13 /* loginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginVC.swift; sourceTree = "<group>"; };
+		A5C523C7254B7C84000B2B13 /* catalogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogCell.swift; sourceTree = "<group>"; };
 		A83E47FA2543AFCA003F1193 /* GuidePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidePage.swift; sourceTree = "<group>"; };
 		A83E47FC2543B0F4003F1193 /* CatalogPlant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogPlant.swift; sourceTree = "<group>"; };
 		A83E47FE2543B37F003F1193 /* UserPlant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlant.swift; sourceTree = "<group>"; };
@@ -109,7 +109,6 @@
 			children = (
 				A83E47F72543AF62003F1193 /* Models */,
 				40C7CBA4253768FB005A2283 /* AppDelegate.swift */,
-				4042644F25448849005C6F8D /* catalogTableCell.swift */,
 				40426455254488DF005C6F8D /* catalogVC.swift */,
 				4042645A2548FC9F005C6F8D /* catalogPage.swift */,
 				40C7CBA6253768FB005A2283 /* SceneDelegate.swift */,
@@ -131,6 +130,7 @@
 				A56B4ED7254528DE0041372B /* addPlantOptionsVC.swift */,
 				A5C523B7254A60CD000B2B13 /* registerVC.swift */,
 				A5C523BA254A612E000B2B13 /* loginVC.swift */,
+				A5C523C7254B7C84000B2B13 /* catalogCell.swift */,
 			);
 			path = "Green Thumb";
 			sourceTree = "<group>";
@@ -305,11 +305,11 @@
 				40426456254488DF005C6F8D /* catalogVC.swift in Sources */,
 				4042645B2548FC9F005C6F8D /* catalogPage.swift in Sources */,
 				40C7CBA9253768FB005A2283 /* ViewController.swift in Sources */,
+				A5C523C8254B7C84000B2B13 /* catalogCell.swift in Sources */,
 				A83E47FB2543AFCA003F1193 /* GuidePage.swift in Sources */,
 				A56F04752544A4650060976F /* mapVC.swift in Sources */,
 				A56B4ED8254528DE0041372B /* addPlantOptionsVC.swift in Sources */,
 				A5C523BB254A612E000B2B13 /* loginVC.swift in Sources */,
-				404264512544884A005C6F8D /* catalogTableCell.swift in Sources */,
 				A83E47FD2543B0F4003F1193 /* CatalogPlant.swift in Sources */,
 				40C7CBA5253768FB005A2283 /* AppDelegate.swift in Sources */,
 				404264522544884A005C6F8D /* plantInfoVC.swift in Sources */,
