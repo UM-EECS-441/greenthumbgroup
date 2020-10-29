@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class gardensTableVC: UITableViewController, ReturnDelegate {
     
@@ -14,12 +15,46 @@ class gardensTableVC: UITableViewController, ReturnDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Get user's gardens
+        let url = URL(string: "http://192.81.216.18/api/v1/usergarden/")!
+        
+        var request = URLRequest(url: url)
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
+        request.httpMethod = "GET"
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+        let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
+            print(response)
+            print(data)
+            guard let data = data else {
+                return
+            }
+            do{
+                let json = try JSON(data: data).array
+                if let gardens = json{
+                    for garden in gardens {
+                        let newGarden = UserGarden(gardenId: garden["_id"]["$oid"].stringValue, name: garden["name"].stringValue, address: garden["address"].stringValue)
+                        newGarden.brGeoData = GeoData(lat: Double(garden["bottomright_lat"].stringValue) ?? -1, lon: Double(garden["bottomright_long"].stringValue) ?? -1)
+                        newGarden.tlGeoData = GeoData(lat: Double(garden["topleft_lat"].stringValue) ?? -1, lon: Double(garden["topleft_long"].stringValue) ?? -1)
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+                        self.gardenArray.append(newGarden)
+                    }
+                    
+                    print(json)
+                }
+                
+                DispatchQueue.main.async{
+                    self.tableView.reloadData()
+                }
+            }
+            catch {
+                print(error)
+            }
+            
+        }
+        
+        task.resume()
     }
 
     // MARK: - Table view data source

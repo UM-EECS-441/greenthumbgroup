@@ -23,6 +23,8 @@ class addPlantVC: UIViewController {
     @IBAction func doneButtonClicked(_ sender: UIButton) {
         // TODO: update plant id
         let newPlant = UserPlant(userPlantId: "", catalogPlantId: nil, gardenId: userGarden.gardenId, name: name.text, image: plantImage.image!)
+        // Add plant to database
+        
         returnDelegate?.didReturn(newPlant)
         dismiss(animated: true, completion: nil)
     }

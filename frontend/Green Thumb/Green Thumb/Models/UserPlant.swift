@@ -11,7 +11,7 @@ class UserPlant {
     var userPlantId: String
     var catalogPlantId: String?
     // Make optional bc might not have location data yet when plant created
-    var geodata: GeoData = GeoData(lat: 0, lon: 0, loc: "")
+    var geodata: GeoData = GeoData(lat: -1, lon: -1)
     var gardenId: String
     var name: String
     var image: UIImage

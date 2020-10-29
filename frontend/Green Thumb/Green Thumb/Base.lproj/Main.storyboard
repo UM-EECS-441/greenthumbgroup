@@ -1595,9 +1595,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <segue destination="qWm-Mz-XDw" kind="popoverPresentation" popoverAnchorView="G9x-6L-VkW" id="w8O-l7-UNy">
-                                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                                    </segue>
+                                                    <segue destination="qWm-Mz-XDw" kind="show" id="63d-Sv-BDS"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="az2-3Y-TG3">

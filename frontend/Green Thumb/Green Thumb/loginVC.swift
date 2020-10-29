@@ -23,7 +23,9 @@ class loginVC: UIViewController {
         let url = URL(string: "http://192.81.216.18/accounts/login/")!
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.httpMethod = "POST"
+        //request.httpShouldHandleCookies = true
         
         let parameters: [String: Any] = [
             "email": self.email.text!,
@@ -37,12 +39,18 @@ class loginVC: UIViewController {
         
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data else { return }
-            do {
-                let json = try JSON(data: data)
-                print(json)
-            } catch {
-                print(error)
+            guard let data = data, let httpResponse = response as? HTTPURLResponse, let fields = httpResponse.allHeaderFields as? [String: String] else { return }
+            print(response)
+            DispatchQueue.main.async {
+                do {
+                    let cookies = HTTPCookie.cookies(withResponseHeaderFields: fields, for: url)
+                    let delegate = UIApplication.shared.delegate as! AppDelegate
+                    delegate.cookie = "\(cookies[0].name)=\(cookies[0].value)"
+                    print(delegate.cookie)
+                    let json = try JSON(data: data)
+                } catch {
+                    print(error)
+                }
             }
         }
 
