@@ -40,7 +40,7 @@ def get_user_gardens():
                 garden = garden[0]
                 user_gardens.append(json.loads(garden.to_json()))
 
-    return jsonify(user_gardens)
+    return jsonify(user_gardens), 200
 
 
 @greenthumb.app.route('/api/v1/usergarden/<string:garden_id>/', methods=['GET', 'PUT', 'DELETE'])
@@ -138,6 +138,67 @@ def get_garden(garden_id: str):
         return jsonify(garden)
     return "", 200
 
+@greenthumb.app.route('/api/v1/usergarden/get_plants/', methods=['GET'])
+def get_user_plants():
+    '''
+    Route which returns a list of all of the user's plants in json format
+    '''
+
+    if 'email' not in session:
+        abort(403)
+
+    plants_list = []
+
+    with util.MongoConnect():
+        user = users.objects(email=session['email'])
+        if user == []:
+            abort(401)
+        user = user[0]
+        # add all plants in each of the user's gardens
+        for garden_id in user.gardens:
+            garden = gardens.objects(id=garden_id)
+            if garden != []:
+                garden = garden[0]
+                for plant_id in garden.plants:
+                    plant = user_plants.objects(id=plant_id)
+                    if plant != []:
+                        plant = plant[0]
+                        plants_list.append(plant.to_dict())
+                
+
+    return jsonify(plants_list), 200
+
+@greenthumb.app.route('/api/v1/usergarden/get_plants/<string:plant_id>/', methods=['GET'])
+def get_user_plants_with_id(plant_id):
+    '''
+    Route which returns a the specified plant in json format
+    '''
+
+    if 'email' not in session:
+        abort(403)
+
+    plants_list = {}
+
+    with util.MongoConnect():
+        user = users.objects(email=session['email'])
+        if user == []:
+            abort(401)
+        user = user[0]
+        # add all plants in each of the user's gardens
+        for garden_id in user.gardens:
+            garden = gardens.objects(id=garden_id)
+            if garden != []:
+                garden = garden[0]
+                for user_plant_id in garden.plants:
+                    if plant_id != str(user_plant_id):
+                        continue
+                    plant = user_plants.objects(id=plant_id)
+                    if plant != []:
+                        plant = plant[0]
+                        plants_list = plant.to_dict()
+                
+
+    return jsonify(plants_list), 200
 
 @greenthumb.app.route('/api/v1/usergarden/add_garden/', methods=['POST'])
 def add_garden_location():
@@ -212,8 +273,7 @@ def add_plant_to_garden(garden_id: str):
                 latitude=request.json['latitude'],
                 longitude=request.json['longitude'],
                 light_level=request.json['light_level'],
-                last_watered=datetime.datetime.now()).save()
-
+                last_watered=datetime.datetime.strptime(request.json['last_watered'], '%Y-%m-%d %H:%M:%S.%f')).save()
             garden.plants.append(str(user_plant.id))
             garden.save()
 
@@ -292,7 +352,7 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
             plant.latitude = request.json['latitude']
             plant.longitude = request.json['longitude']
             plant.light_level = request.json['light_level']
-            plant.last_watered = datetime.datetime.now()
+            plant.last_watered = datetime.datetime.strptime(request.json['last_watered'], '%Y-%m-%d %H:%M:%S.%f')
             plant.save()
 
             # remake cron job
