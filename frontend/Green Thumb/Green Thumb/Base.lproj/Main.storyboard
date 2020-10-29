@@ -14,7 +14,7 @@
             <objects>
                 <tableViewController id="l6c-7a-reO" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Rh5-8d-JGg">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
@@ -72,7 +72,7 @@
             <objects>
                 <tableViewController id="EX1-cT-BbN" customClass="ReminderSettingsVC" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="ncu-dR-3aU">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
@@ -384,11 +384,11 @@
         <!--Home-->
         <scene sceneID="12Z-eD-73D">
             <objects>
-                <navigationController id="FR1-aM-HbF" sceneMemberID="viewController">
+                <navigationController modalPresentationStyle="fullScreen" id="FR1-aM-HbF" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" id="AXD-5H-SHs"/>
                     <navigationItem key="navigationItem" id="BcY-mz-xnL"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="7M6-5u-gu2">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -404,7 +404,7 @@
             <objects>
                 <viewController id="sIS-h3-cUh" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZsZ-vZ-2LK">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="mount_rainier_national_park_3484" translatesAutoresizingMaskIntoConstraints="NO" id="yec-BB-eYA">
@@ -412,7 +412,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Help" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dKI-GW-Bxc">
-                                <rect key="frame" x="153" y="68" width="100" height="60"/>
+                                <rect key="frame" x="153" y="100" width="100" height="60"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="50"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -444,9 +444,9 @@
         <!--Home-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController title="Home" id="BYZ-38-t0r" customClass="ViewController" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Home" modalPresentationStyle="fullScreen" id="BYZ-38-t0r" customClass="ViewController" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <userGuides>
                             <userLayoutGuide location="16" affinity="minX"/>
@@ -454,7 +454,7 @@
                         </userGuides>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="VsK-c7-nKV">
-                                <rect key="frame" x="0.0" y="156" width="414" height="360"/>
+                                <rect key="frame" x="0.0" y="188" width="414" height="360"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="greenthumbimg" translatesAutoresizingMaskIntoConstraints="NO" id="7ga-jg-xub">
                                         <rect key="frame" x="107" y="0.0" width="200" height="250"/>
@@ -517,13 +517,13 @@
         <!--Login-->
         <scene sceneID="O80-U2-h43">
             <objects>
-                <viewController id="Y1l-xJ-IyC" userLabel="Login" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="loginVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Y1l-xJ-IyC" userLabel="Login" customClass="loginVC" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qVE-RU-qhR">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="3AT-1T-hJN">
-                                <rect key="frame" x="0.0" y="56" width="414" height="703"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="greenLogin" translatesAutoresizingMaskIntoConstraints="NO" id="SPw-fb-2tN">
                                         <rect key="frame" x="0.0" y="8" width="414" height="128"/>
@@ -629,6 +629,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="loginButtonClicked:" destination="Y1l-xJ-IyC" eventType="touchUpInside" id="gez-9g-cPD"/>
                                                     <segue destination="xTf-VC-1sm" kind="showDetail" id="Vjw-K2-6N9"/>
                                                 </connections>
                                             </button>
@@ -636,23 +637,23 @@
                                         <edgeInsets key="layoutMargins" top="8" left="16" bottom="8" right="16"/>
                                     </stackView>
                                     <view contentMode="scaleToFill" verticalHuggingPriority="200" translatesAutoresizingMaskIntoConstraints="NO" id="Vxu-NC-v1k">
-                                        <rect key="frame" x="27.5" y="421.5" width="359" height="245"/>
+                                        <rect key="frame" x="27.5" y="421.5" width="359" height="257.5"/>
                                         <color key="backgroundColor" red="0.29411104319999998" green="0.51978391410000002" blue="0.31825751070000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="0gA-Am-CGD">
-                                        <rect key="frame" x="89.5" y="674.5" width="235" height="20.5"/>
+                                        <rect key="frame" x="89.5" y="687" width="235" height="30"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="6uh-2g-wG4">
-                                                <rect key="frame" x="0.0" y="0.0" width="235" height="20.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="235" height="30"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tkm-cF-0C5">
-                                                        <rect key="frame" x="0.0" y="0.0" width="179" height="20.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="179" height="30"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </label>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2FT-dE-ISg">
-                                                        <rect key="frame" x="183" y="0.0" width="52" height="20.5"/>
+                                                        <rect key="frame" x="183" y="0.0" width="52" height="30"/>
                                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <state key="normal" title="Sign up">
                                                             <color key="titleColor" red="0.0" green="1" blue="0.47164283880000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -683,6 +684,10 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="yHB-fw-niT"/>
+                    <connections>
+                        <outlet property="email" destination="eXG-8V-4Im" id="l9C-sQ-kFT"/>
+                        <outlet property="password" destination="syb-AT-k6p" id="QLE-98-EOs"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eTp-GL-IfY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -919,7 +924,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="pBw-hE-GqG"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="h01-wO-QEu">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -941,7 +946,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="Eod-4R-3Ri"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="gk5-h8-JYU">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -1021,7 +1026,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="Gys-3f-chJ">
             <objects>
-                <tabBarController id="qWm-Mz-XDw" sceneMemberID="viewController">
+                <tabBarController modalPresentationStyle="fullScreen" id="qWm-Mz-XDw" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="MAg-S6-kqH"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="o4b-Lf-jzN">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
@@ -1046,7 +1051,7 @@
                 <navigationController id="4az-p3-3R0" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Guides" image="a.book.closed.ja" catalog="system" id="mGr-sN-Kqa"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="V4Q-QH-dwh">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -1062,11 +1067,11 @@
             <objects>
                 <viewController id="otC-e5-cMv" customClass="guideTable" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UfX-rP-X2y">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="N6o-aX-sQ2">
-                                <rect key="frame" x="0.0" y="56" width="414" height="703"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="guideCell" id="N7q-Q2-76F">
@@ -1104,11 +1109,11 @@
             <objects>
                 <viewController storyboardIdentifier="guidePage" id="osw-37-lGs" customClass="guidePage" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eFV-Nb-T3S">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7hZ-CK-qEf">
-                                <rect key="frame" x="0.0" y="56" width="414" height="703"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LnQ-Vm-GUZ">
                                         <rect key="frame" x="50" y="50" width="314" height="20.5"/>
@@ -1155,7 +1160,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="3ox-8d-aln"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="q5b-37-Q77">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -1174,7 +1179,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="i9u-5x-9hL"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="VaR-a3-md3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -1189,13 +1194,13 @@
         <!--Register-->
         <scene sceneID="jHt-rZ-G4Y">
             <objects>
-                <viewController id="0Vj-2O-hSO" userLabel="Register" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="registerVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="0Vj-2O-hSO" userLabel="Register" customClass="registerVC" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2CB-BL-in4">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="mQF-Db-mdZ">
-                                <rect key="frame" x="0.0" y="56" width="414" height="703"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="greenLogin" translatesAutoresizingMaskIntoConstraints="NO" id="GfM-zl-7Vo">
                                         <rect key="frame" x="0.0" y="8" width="414" height="128"/>
@@ -1301,6 +1306,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
+                                                    <action selector="registerButtonClicked:" destination="0Vj-2O-hSO" eventType="touchUpInside" id="6yw-NV-bKq"/>
                                                     <segue destination="xTf-VC-1sm" kind="showDetail" id="CyI-Tc-TpP"/>
                                                 </connections>
                                             </button>
@@ -1308,7 +1314,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="16" bottom="8" right="16"/>
                                     </stackView>
                                     <view contentMode="scaleToFill" verticalHuggingPriority="200" translatesAutoresizingMaskIntoConstraints="NO" id="4su-e9-oFK">
-                                        <rect key="frame" x="27.5" y="421.5" width="359" height="273.5"/>
+                                        <rect key="frame" x="27.5" y="421.5" width="359" height="295.5"/>
                                         <color key="backgroundColor" red="0.29411104319999998" green="0.51978391410000002" blue="0.31825751070000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </view>
                                 </subviews>
@@ -1329,6 +1335,10 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="iXz-JO-bog"/>
+                    <connections>
+                        <outlet property="email" destination="wsQ-iB-ydQ" id="vN9-eR-4Bh"/>
+                        <outlet property="password" destination="AUt-Vx-JT7" id="PI3-Xs-Qbi"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xWs-fi-EqB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1339,7 +1349,7 @@
             <objects>
                 <viewController id="FIp-gS-DXK" userLabel="Payment" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="61w-Yz-f1s">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Z7C-6D-hX8">
@@ -1871,7 +1881,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="gardensTableVC" title="Home Catalog" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="wrm-iF-adb" userLabel="Properties" customClass="gardensTableVC" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Uac-h6-y8r">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" id="qWy-3x-cek">
@@ -2128,7 +2138,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="6ba-7W-9sN"/>
+        <segue reference="Vjw-K2-6N9"/>
         <segue reference="fwZ-1h-Lq5"/>
         <segue reference="Vq6-Rk-KsP"/>
     </inferredMetricsTieBreakers>

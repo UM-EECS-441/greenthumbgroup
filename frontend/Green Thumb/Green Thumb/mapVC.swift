@@ -45,25 +45,29 @@ class mapVC: UIViewController, PlantReturnDelegate {
         
         let url = URL(string: fullUrl)!
 
-        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
-            guard let data = data else { return }
-            do {
-                let json = try JSON(data: data)
-                let gardenLat: Double? = json["results"][0]["geometry"]["location"]["lat"].double ?? nil
-                let gardenLong: Double? = json["results"][0]["geometry"]["location"]["lng"].double ?? nil
-                if let lat = gardenLat {
-                    if let lng = gardenLong {
-                        self.translatedGardenLoc = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+        DispatchQueue.main.async {
+            let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+                guard let data = data else { return }
+                DispatchQueue.main.async {
+                    do {
+                        let json = try JSON(data: data)
+                        let gardenLat: Double? = json["results"][0]["geometry"]["location"]["lat"].double ?? nil
+                        let gardenLong: Double? = json["results"][0]["geometry"]["location"]["lng"].double ?? nil
+                        if let lat = gardenLat {
+                            if let lng = gardenLong {
+                                self.translatedGardenLoc = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+                            }
+                        }
+                        self.centerMapOnGarden()
+                    } catch {
+                        print(error)
                     }
                 }
-                self.centerMapOnGarden()
-            } catch {
-                print(error)
+                //print(String(data: data, encoding: .utf8)!)
             }
-            print(String(data: data, encoding: .utf8)!)
-        }
 
-        task.resume()
+            task.resume()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -135,7 +139,7 @@ class mapVC: UIViewController, PlantReturnDelegate {
         self.drawGardenButton.isHidden = false
         self.deleteGardenButton.isHidden = true
         // Reset user garden to default
-        self.userGarden = UserGarden(gardenId: 0, name: "", address: "")
+        self.userGarden = UserGarden(gardenId: "", name: "", address: "")
         self.gardenPolygon?.map = nil
         self.gardenPolygon = nil
         // Remove plants
@@ -236,7 +240,7 @@ extension mapVC : GMSMapViewDelegate {
     
     func drawIcon(mapView: GMSMapView, coordinate: CLLocationCoordinate2D, iconImage: UIImage?) {
         // Draw icon for tap
-        
+    
         if (iconImage == nil) {
             // Adding garden corner
             let southWest = CLLocationCoordinate2D(latitude: coordinate.latitude-0.000008, longitude: coordinate.longitude+0.000008)
