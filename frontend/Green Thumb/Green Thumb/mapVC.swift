@@ -32,6 +32,11 @@ class mapVC: UIViewController, PlantReturnDelegate {
         self.currentPlant = result
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.map.mapType = .satellite

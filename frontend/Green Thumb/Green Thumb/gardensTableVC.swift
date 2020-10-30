@@ -63,6 +63,13 @@ class gardensTableVC: UITableViewController, ReturnDelegate {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
+    
+    //need to make sure this is working or whatever
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let mapVC = storyboard?.instantiateViewController(withIdentifier: "mapVC") as! mapVC
+        mapVC.userGarden = self.gardenArray[indexPath.row]
+        self.present(mapVC, animated: true, completion: nil)
+    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
