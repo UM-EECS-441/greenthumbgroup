@@ -39,12 +39,15 @@ class registerVC: UIViewController {
         
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data else { return }
-            do {
-                let json = try JSON(data: data)
-                print(json)
-            } catch {
-                print(error)
+            guard let httpResponse = response as? HTTPURLResponse, let fields = httpResponse.allHeaderFields as? [String: String] else { return }
+            print(response ?? "")
+            DispatchQueue.main.async {
+                let cookies = HTTPCookie.cookies(withResponseHeaderFields: fields, for: url)
+                let delegate = UIApplication.shared.delegate as! AppDelegate
+                if !cookies.isEmpty{
+                    delegate.cookie = "\(cookies[0].name)=\(cookies[0].value)"
+                    print(delegate.cookie)
+                }
             }
         }
 

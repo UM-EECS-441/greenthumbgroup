@@ -104,36 +104,39 @@ class mapVC: UIViewController, PlantReturnDelegate {
                     let plants = json["plants"].array
                     if let unwrappedplants = plants{
                         for plant in unwrappedplants {
-                            // Get plant data
-                            let plantId = plant["$oid"].stringValue
-                            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/get_plants/\(plantId)/")!
-                            
-                            var request = URLRequest(url: url)
-                            let delegate = UIApplication.shared.delegate as! AppDelegate
-                            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
-                            request.httpMethod = "GET"
+                            DispatchQueue.main.async {
+                                // Get plant data
+                                let plantId = plant["$oid"].stringValue
+                                let url = URL(string: "http://192.81.216.18/api/v1/usergarden/get_plants/\(plantId)/")!
+                                
+                                var request = URLRequest(url: url)
+                                let delegate = UIApplication.shared.delegate as! AppDelegate
+                                request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
+                                request.httpMethod = "GET"
 
-                            let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
-                                print(response)
-                                //print(data)
-                                guard let data = data else {
-                                    return
-                                }
-                                DispatchQueue.main.async{
-                                    do{
-                                        let json = try JSON(data: data)
-                                        let lat = json["latitude"].doubleValue
-                                        let lon = json["longitude"].doubleValue
-                                        let overlay = self.drawIcon(mapView: self.map, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon), iconImage: UIImage(named: "planticon.png"))
-                                        self.plantOverlays?.append(overlay)
+                                let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
+                                    print(response)
+                                    //print(data)
+                                    guard let data = data else {
+                                        return
                                     }
-                                    catch {
-                                        print(error)
+                                    DispatchQueue.main.async{
+                                        do{
+                                            let json = try JSON(data: data)
+                                            let lat = json["latitude"].doubleValue
+                                            let lon = json["longitude"].doubleValue
+                                            let overlay = self.drawIcon(mapView: self.map, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon), iconImage: UIImage(named: "planticon.png"))
+                                            overlay.isTappable = true
+                                            self.plantOverlays?.append(overlay)
+                                        }
+                                        catch {
+                                            print(error)
+                                        }
                                     }
                                 }
+                                
+                                task.resume()
                             }
-                            
-                            task.resume()
                         }
                     }
                 }
@@ -355,7 +358,7 @@ extension mapVC : GMSMapViewDelegate {
             }
             task.resume()
             
-            
+            overlay.isTappable = true
             plantOverlays?.append(overlay)
             self.addPlantLabel.isHidden = true
             self.currentPlant = nil
@@ -363,7 +366,15 @@ extension mapVC : GMSMapViewDelegate {
     }
     
     func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
-        // TODO: when user taps plant icon segue to plant vc
+        // Check that tapped a plant
+        print("tapped")
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewGardenPlantVC = storyBoard.instantiateViewController(withIdentifier: "viewGardenPlantVC") as! viewGardenPlantVC
+        if let data: [String: String] = overlay.userData as? [String : String]{
+            viewGardenPlantVC.latText = data["latitude"] ?? ""
+            viewGardenPlantVC.lonText = data["longitude"] ?? ""
+        }
+        self.present(viewGardenPlantVC, animated: true, completion: nil)
     }
     
     func drawIcon(mapView: GMSMapView, coordinate: CLLocationCoordinate2D, iconImage: UIImage?) -> GMSGroundOverlay {
@@ -376,6 +387,10 @@ extension mapVC : GMSMapViewDelegate {
 
         overlay.bearing = 0
         overlay.map = mapView
+        overlay.userData = [
+            "latitude": String(coordinate.latitude),
+            "longitude": String(coordinate.longitude)
+        ]
         return overlay
         
     }
