@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance serving GreenThumb backend
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/greenthumb/greenthumbgroup/backend/
+Environment="PATH=/greenthumb/greenthumbgroup/backend/bin/"
+ExecStart=/usr/local/bin/gunicorn --workers 3 -b 0.0.0.0:5000 -m 007 wsgi:app
+
+[Install]
+WantedBy=multi-user.target
