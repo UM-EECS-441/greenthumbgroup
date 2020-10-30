@@ -37,9 +37,9 @@ class addPlantVC: UIViewController {
         df.dateFormat = "yyyy-MM-dd hh:mm:ss"
         let date = df.string(from: Date())
         print(date)
-        // TODO: fix plant id
+        // TODO: fix plant id, using dummy rn
         let parameters: [String: Any] = [
-            "plant_type_id": "5f97617fcebc5357248531e9",
+            "plant_type_id": "5f97617fcebc535724853218",
             "latitude": -1,
             "longitude": -1,
             "light_level": -1,
@@ -67,6 +67,7 @@ class addPlantVC: UIViewController {
                     print("plantid: \(plantId)")
                     print(json)
                     let newPlant = UserPlant(userPlantId: plantId ?? "", gardenId: self.userGarden.gardenId, name: self.name.text, image: self.plantImage.image!)
+                    newPlant.catalogPlantId = "5f97617fcebc535724853218"
                     self.returnDelegate?.didReturn(newPlant)
                     self.dismiss(animated: true, completion: nil)
                 } catch {
