@@ -33,7 +33,7 @@ class addPlantOptionsVC: UIViewController {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let catalogVC = storyBoard.instantiateViewController(withIdentifier: "catalogVC") as! catalogVC
         catalogVC.userGarden = userGarden
-        //addPlantVC.returnDelegate = presentingViewController as? PlantReturnDelegate
+        catalogVC.returnDelegate = presentingViewController as? PlantReturnDelegate
         self.present(catalogVC, animated: true, completion: nil)
     }
     

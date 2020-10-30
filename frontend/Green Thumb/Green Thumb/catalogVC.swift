@@ -7,6 +7,7 @@
 
 
 import UIKit
+import SwiftyJSON
 
 class catalogVC: UITableViewController {
     
@@ -112,79 +113,137 @@ class catalogVC: UITableViewController {
 extension catalogVC {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        print("Tapped")
-        let catalogPage = storyboard?.instantiateViewController(identifier: "catalogPage") as? catalogPage
-        
-        let name = plants[indexPath.row]["name"]
-        var nameString = "I been thru the desert on a plant with no name :("
-        if case Optional<Any>.none = name {
-            //nil
-        } else {
-            //not nil
-            nameString = String(describing: name!)
-        }
+        if self.presentingViewController?.title == "Add Plant Options" {
+            // Create plant for tap, add to database, and return using delegate
+            // Add plant to database
+            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(userGarden!.gardenId)/add_plant/")!
+            var request = URLRequest(url: url)
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpMethod = "POST"
+            
+            let delegate = UIApplication.shared.delegate as! AppDelegate
+            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
 
-        let species = plants[indexPath.row]["species"]
-        var speciesString = "No Species Available"
-        if case Optional<Any>.none = species {
-            //nil
-        } else {
-            //not nil
-            speciesString = String(describing: species!)
+            let df = DateFormatter()
+            df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+            let date = df.string(from: Date())
+            print(plants[indexPath.row])
+
+            let parameters: [String: Any] = [
+                "plant_type_id": plants[indexPath.row]["_id"] ?? "",
+                "latitude": -1,
+                "longitude": -1,
+                "light_level": -1,
+                "last_watered": date
+            ]
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+
+           } catch let error {
+                print("json error")
+               print(error.localizedDescription)
+           }
+            
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data else {
+                    print("no data")
+                    return
+                }
+                DispatchQueue.main.async {
+                    do {
+                        print(response)
+                        let json = try JSON(data: data, options: .allowFragments)
+                        let plantId = json["id"].stringValue
+                        // TODO: don't force unwrap
+                        let newPlant: UserPlant = UserPlant(userPlantId: plantId, gardenId: self.userGarden!.gardenId, name: self.plants[indexPath.row]["name"] as! String, image: UIImage(named: "planticon.png")!)
+                        self.returnDelegate?.didReturn(newPlant)
+                        self.dismiss(animated: true, completion: nil)
+                    } catch {
+                        print("error with response data")
+                        print(error)
+                    }
+                }
+            }
+
+            task.resume()
+            self.dismiss(animated: true, completion: nil)
         }
-        
-        let description = plants[indexPath.row]["description"]
-        var descriptionString = "No Description Available"
-        if case Optional<Any>.none = description {
-            //nil
-        } else {
-            //not nil
-            descriptionString = String(describing: description!)
-        }
-        
-//        let tags = String(describing: plants[indexPath.row]["tags"])
-        let tags: [String: [String]] = plants[indexPath.row]["tags"] as! [String: [String]]
-//        print(tags["plant type"])
-        let height_array = tags["height"]
-        let light_array = tags["light"]
-        let type_array = tags["plant type"]
-        
-//        var heightString = "No Height Found"
-//        var lightString = "No Light Found"
-        var typeString = "No Type Found"
-        
-        if case Optional<Any>.none = type_array {
-            //nil
-        } else {
-            //not nil
-            typeString = String(describing: type_array![0])
-        }
-//        print(typeString)
-        
-//        print(height_array)
-//        print(light_array)
-//        print(type_array)
-        
+        else{
+            let catalogPage = storyboard?.instantiateViewController(identifier: "catalogPage") as? catalogPage
+            
+            let name = plants[indexPath.row]["name"]
+            var nameString = "I been thru the desert on a plant with no name :("
+            if case Optional<Any>.none = name {
+                //nil
+            } else {
+                //not nil
+                nameString = String(describing: name!)
+            }
+
+            let species = plants[indexPath.row]["species"]
+            var speciesString = "No Species Available"
+            if case Optional<Any>.none = species {
+                //nil
+            } else {
+                //not nil
+                speciesString = String(describing: species!)
+            }
+            
+            let description = plants[indexPath.row]["description"]
+            var descriptionString = "No Description Available"
+            if case Optional<Any>.none = description {
+                //nil
+            } else {
+                //not nil
+                descriptionString = String(describing: description!)
+            }
+            
+    //        let tags = String(describing: plants[indexPath.row]["tags"])
+            let tags: [String: [String]] = plants[indexPath.row]["tags"] as! [String: [String]]
+    //        print(tags["plant type"])
+            let height_array = tags["height"]
+            let light_array = tags["light"]
+            let type_array = tags["plant type"]
+            
+    //        var heightString = "No Height Found"
+    //        var lightString = "No Light Found"
+            var typeString = "No Type Found"
+            
+            if case Optional<Any>.none = type_array {
+                //nil
+            } else {
+                //not nil
+                typeString = String(describing: type_array![0])
+            }
+    //        print(typeString)
+            
+    //        print(height_array)
+    //        print(light_array)
+    //        print(type_array)
+            
 
 
-        
-        // currently not working in backend
-        //days_to_water
-        //watering_description
-        
-        catalogPage?.name = nameString
-        catalogPage?.species = "Species: " + speciesString
-        catalogPage?.type = "Plant type: " + typeString
-        catalogPage?.desc = descriptionString
-        //
-        catalogPage?.tags = "No Tags for this Plant"
-        catalogPage?.waterDays = ""
-        catalogPage?.waterInfo = ""
-        
-        
-        self.navigationController?.pushViewController(catalogPage!, animated: true)
-//        performSegue(withIdentifier: "guideSegue", sender: self)
+            
+            // currently not working in backend
+            //days_to_water
+            //watering_description
+            
+            catalogPage?.name = nameString
+            catalogPage?.species = "Species: " + speciesString
+            catalogPage?.type = "Plant type: " + typeString
+            catalogPage?.desc = descriptionString
+            //
+            catalogPage?.tags = "No Tags for this Plant"
+            catalogPage?.waterDays = ""
+            catalogPage?.waterInfo = ""
+            
+            
+            self.navigationController?.pushViewController(catalogPage!, animated: true)
+    //        performSegue(withIdentifier: "guideSegue", sender: self)
 
-    }
+        }
+        }
 }
 
 extension catalogVC {
@@ -201,19 +260,6 @@ extension catalogVC {
         let name = plants[indexPath.row]["name"]
         let nameString = String(describing: name!)
         cell.textLabel?.text = nameString
-        
-        if self.presentingViewController?.title == "Add Plant Options" {
-            cell.addButton.isHidden = false
-            
-            cell.addClickAction = { () in
-                // TODO: update user plant id
-                // TODO: fix plant icon retrieval
-                //var newPlant: UserPlant = UserPlant(userPlantId: "id", gardenId: userGarden?.gardenId, name: name, image: UIImage(named: "planticon.png"))
-                //newPlant.catalogPlantId = self.plants[indexPath.row]["_id"] as! String
-                //self.returnDelegate?.didReturn(newPlant)
-                //self.dismiss(animated: true, completion: nil)
-            }
-        }
         
         
         return cell

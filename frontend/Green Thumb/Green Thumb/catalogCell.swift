@@ -8,17 +8,10 @@
 import UIKit
 
 class catalogCell: UITableViewCell {
-
-    @IBOutlet weak var addButton: UIButton!
-    var addClickAction : (() -> ())?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-    }
-
-    @IBAction func addButtonClicked(_ sender: UIButton) {
-        addClickAction?()
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

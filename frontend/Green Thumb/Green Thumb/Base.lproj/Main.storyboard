@@ -363,23 +363,8 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cZH-SU-0OC" id="EBt-RA-ICO">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vdH-ZO-9D7">
-                                            <rect key="frame" x="348" y="0.0" width="101" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" title="Button" image="plus" catalog="system">
-                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="addButtonClicked:" destination="cZH-SU-0OC" eventType="touchUpInside" id="T93-By-Rbb"/>
-                                            </connections>
-                                        </button>
-                                    </subviews>
                                 </tableViewCellContentView>
                                 <accessibility key="accessibilityConfiguration" identifier="catalogTableCell"/>
-                                <connections>
-                                    <outlet property="addButton" destination="vdH-ZO-9D7" id="K1R-lu-Z9V"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
