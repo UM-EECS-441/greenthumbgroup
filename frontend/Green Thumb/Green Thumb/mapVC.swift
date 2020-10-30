@@ -104,7 +104,36 @@ class mapVC: UIViewController, PlantReturnDelegate {
                     let plants = json["plants"].array
                     if let unwrappedplants = plants{
                         for plant in unwrappedplants {
-                            // TODO: add plant to map
+                            // Get plant data
+                            let plantId = plant["$oid"].stringValue
+                            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/get_plants/\(plantId)/")!
+                            
+                            var request = URLRequest(url: url)
+                            let delegate = UIApplication.shared.delegate as! AppDelegate
+                            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
+                            request.httpMethod = "GET"
+
+                            let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
+                                print(response)
+                                //print(data)
+                                guard let data = data else {
+                                    return
+                                }
+                                DispatchQueue.main.async{
+                                    do{
+                                        let json = try JSON(data: data)
+                                        let lat = json["latitude"].doubleValue
+                                        let lon = json["longitude"].doubleValue
+                                        let overlay = self.drawIcon(mapView: self.map, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon), iconImage: UIImage(named: "planticon.png"))
+                                        self.plantOverlays?.append(overlay)
+                                    }
+                                    catch {
+                                        print(error)
+                                    }
+                                }
+                            }
+                            
+                            task.resume()
                         }
                     }
                 }
@@ -274,7 +303,8 @@ extension mapVC : GMSMapViewDelegate {
             // TODO: garden id switching
             self.userGarden.tlGeoData = topLeft
             // Draw dot corresponding to tap
-            drawIcon(mapView: mapView, coordinate: coordinate, iconImage: nil)
+            let overlay = drawIcon(mapView: mapView, coordinate: coordinate, iconImage: UIImage(named: "doticon.png"))
+            self.gardenCorners.append(overlay)
         }
         // TODO: make sure this works
         else if (self.drawGardenButton.titleLabel?.text == "Done" && self.userGarden.brGeoData.lat == -1){
@@ -284,41 +314,11 @@ extension mapVC : GMSMapViewDelegate {
             self.userGarden.brGeoData = bottomRight
             
             // Draw dot corresponding to tap
-            drawIcon(mapView: mapView, coordinate: coordinate, iconImage: nil)
+            let overlay = drawIcon(mapView: mapView, coordinate: coordinate, iconImage: UIImage(named: "doticon.png"))
+            self.gardenCorners.append(overlay)
         }
         else if (self.currentPlant != nil){
-            drawIcon(mapView: self.map, coordinate: coordinate, iconImage: currentPlant!.image)
-            self.addPlantLabel.isHidden = true
-            self.currentPlant = nil
-        }
-    }
-    
-    func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
-        // TODO: when user taps plant icon segue to plant vc
-    }
-    
-    func drawIcon(mapView: GMSMapView, coordinate: CLLocationCoordinate2D, iconImage: UIImage?) {
-        // Draw icon for tap
-    
-        if (iconImage == nil) {
-            // Adding garden corner
-            let southWest = CLLocationCoordinate2D(latitude: coordinate.latitude-0.000008, longitude: coordinate.longitude+0.000008)
-            let northEast = CLLocationCoordinate2D(latitude: coordinate.latitude+0.000008, longitude: coordinate.longitude-0.000008)
-            let overlayBounds = GMSCoordinateBounds(coordinate: southWest, coordinate: northEast)
-            
-            let icon = UIImage(named: "doticon.png")
-            let overlay = GMSGroundOverlay(bounds: overlayBounds, icon: icon)
-            self.gardenCorners.append(overlay)
-            overlay.bearing = 0
-            overlay.map = mapView
-        }
-        else {
-            // Adding plant
-            let southWest = CLLocationCoordinate2D(latitude: coordinate.latitude-0.000004, longitude: coordinate.longitude+0.000004)
-            let northEast = CLLocationCoordinate2D(latitude: coordinate.latitude+0.000004, longitude: coordinate.longitude-0.000004)
-            let overlayBounds = GMSCoordinateBounds(coordinate: southWest, coordinate: northEast)
-            
-            let overlay = GMSGroundOverlay(bounds: overlayBounds, icon: iconImage)
+            let overlay = drawIcon(mapView: self.map, coordinate: coordinate, iconImage: currentPlant!.image)
             
             currentPlant?.geodata = GeoData(lat: coordinate.latitude, lon: coordinate.longitude)
             if let plantToAppend = currentPlant{
@@ -332,13 +332,15 @@ extension mapVC : GMSMapViewDelegate {
             
             let delegate = UIApplication.shared.delegate as! AppDelegate
             request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
-            
+            let df = DateFormatter()
+            df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+            let date = df.string(from: Date())
             let parameters: [String: Any] = [
-                "plant_type_id": "id",
+                "plant_type_id": "5f97617fcebc5357248531e9",
                 "latitude": self.currentPlant!.geodata.lat,
                 "longitude": self.currentPlant!.geodata.lon,
                 "light_level": -1,
-                "last_watered": "\(Date())"
+                "last_watered": date
             ]
             do {
                 request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
@@ -355,11 +357,27 @@ extension mapVC : GMSMapViewDelegate {
             
             
             plantOverlays?.append(overlay)
-            
-            self.gardenCorners.append(overlay)
-            overlay.bearing = 0
-            overlay.map = mapView
+            self.addPlantLabel.isHidden = true
+            self.currentPlant = nil
         }
+    }
+    
+    func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
+        // TODO: when user taps plant icon segue to plant vc
+    }
+    
+    func drawIcon(mapView: GMSMapView, coordinate: CLLocationCoordinate2D, iconImage: UIImage?) -> GMSGroundOverlay {
+        // Draw icon for tap
+        let southWest = CLLocationCoordinate2D(latitude: coordinate.latitude-0.000008, longitude: coordinate.longitude+0.000008)
+        let northEast = CLLocationCoordinate2D(latitude: coordinate.latitude+0.000008, longitude: coordinate.longitude-0.000008)
+        let overlayBounds = GMSCoordinateBounds(coordinate: southWest, coordinate: northEast)
+        
+        let overlay = GMSGroundOverlay(bounds: overlayBounds, icon: iconImage)
+
+        overlay.bearing = 0
+        overlay.map = mapView
+        return overlay
+        
     }
     
 }

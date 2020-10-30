@@ -33,13 +33,16 @@ class addPlantVC: UIViewController {
         request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
         print(delegate.cookie)
         print(Date())
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        let date = df.string(from: Date())
         // TODO: fix plant id
         let parameters: [String: Any] = [
             "plant_type_id": "5f97617fcebc5357248531e9",
             "latitude": -1,
             "longitude": -1,
             "light_level": -1,
-            "last_watered": "\(Date())"
+            "last_watered": date
         ]
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
