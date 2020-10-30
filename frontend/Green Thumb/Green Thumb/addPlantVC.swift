@@ -36,6 +36,7 @@ class addPlantVC: UIViewController {
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd hh:mm:ss"
         let date = df.string(from: Date())
+        print(date)
         // TODO: fix plant id
         let parameters: [String: Any] = [
             "plant_type_id": "5f97617fcebc5357248531e9",
@@ -63,6 +64,8 @@ class addPlantVC: UIViewController {
                     print(response)
                     let json = try JSON(data: data, options: .allowFragments)
                     let plantId: String? = json["id"].stringValue
+                    print("plantid: \(plantId)")
+                    print(json)
                     let newPlant = UserPlant(userPlantId: plantId ?? "", gardenId: self.userGarden.gardenId, name: self.name.text, image: self.plantImage.image!)
                     self.returnDelegate?.didReturn(newPlant)
                     self.dismiss(animated: true, completion: nil)

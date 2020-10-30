@@ -128,7 +128,7 @@ extension catalogVC {
             df.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let date = df.string(from: Date())
             print(plants[indexPath.row])
-
+            print("id \(plants[indexPath.row]["_id"])")
             let parameters: [String: Any] = [
                 "plant_type_id": plants[indexPath.row]["_id"] ?? "",
                 "latitude": -1,
@@ -155,8 +155,10 @@ extension catalogVC {
                         print(response)
                         let json = try JSON(data: data, options: .allowFragments)
                         let plantId = json["id"].stringValue
+                        print("plantid \(plantId)")
                         // TODO: don't force unwrap
                         let newPlant: UserPlant = UserPlant(userPlantId: plantId, gardenId: self.userGarden!.gardenId, name: self.plants[indexPath.row]["name"] as! String, image: UIImage(named: "planticon.png")!)
+                        newPlant.catalogPlantId = self.plants[indexPath.row]["_id"] as! String
                         self.returnDelegate?.didReturn(newPlant)
                         self.dismiss(animated: true, completion: nil)
                     } catch {

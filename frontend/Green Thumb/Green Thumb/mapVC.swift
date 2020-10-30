@@ -337,14 +337,14 @@ extension mapVC : GMSMapViewDelegate {
             var request = URLRequest(url: url)
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpMethod = "PUT"
-            
+            print("check id \(self.currentPlant!.catalogPlantId)")
             let delegate = UIApplication.shared.delegate as! AppDelegate
             request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
             let df = DateFormatter()
             df.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let date = df.string(from: Date())
             let parameters: [String: Any] = [
-                "plant_type_id": "5f97617fcebc5357248531e9",
+                "plant_type_id": self.currentPlant!.catalogPlantId,
                 "latitude": self.currentPlant!.geodata.lat,
                 "longitude": self.currentPlant!.geodata.lon,
                 "light_level": -1,
