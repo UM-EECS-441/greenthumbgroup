@@ -1,0 +1,536 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		400EA6A22541110800C8D052 /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400EA6A12541110800C8D052 /* DesignableView.swift */; };
+		40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */; };
+		404264522544884A005C6F8D /* plantInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042645025448849005C6F8D /* plantInfoVC.swift */; };
+		40426456254488DF005C6F8D /* catalogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40426455254488DF005C6F8D /* catalogVC.swift */; };
+		4042645B2548FC9F005C6F8D /* catalogPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042645A2548FC9F005C6F8D /* catalogPage.swift */; };
+		40C7CBA5253768FB005A2283 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA4253768FB005A2283 /* AppDelegate.swift */; };
+		40C7CBA7253768FB005A2283 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA6253768FB005A2283 /* SceneDelegate.swift */; };
+		40C7CBA9253768FB005A2283 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA8253768FB005A2283 /* ViewController.swift */; };
+		40C7CBAC253768FB005A2283 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40C7CBAA253768FB005A2283 /* Main.storyboard */; };
+		40C7CBAE253768FF005A2283 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40C7CBAD253768FF005A2283 /* Assets.xcassets */; };
+		40C7CBB1253768FF005A2283 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40C7CBAF253768FF005A2283 /* LaunchScreen.storyboard */; };
+		5665D8DAA8A7A036525377EB /* Pods_Green_Thumb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F268A82F4911AD68A1F4F916 /* Pods_Green_Thumb.framework */; };
+		81288543253EB41400E6AAD7 /* guideTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81288542253EB41400E6AAD7 /* guideTable.swift */; };
+		8172874A254894BE001420BA /* guidePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81728749254894BE001420BA /* guidePage.swift */; };
+		A50034B2254BA4BC00C12F95 /* viewGardenPlantVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50034B1254BA4BC00C12F95 /* viewGardenPlantVC.swift */; };
+		A56B4ECF254522A70041372B /* addPlantVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56B4ECE254522A70041372B /* addPlantVC.swift */; };
+		A56B4ED8254528DE0041372B /* addPlantOptionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56B4ED7254528DE0041372B /* addPlantOptionsVC.swift */; };
+		A56F04752544A4650060976F /* mapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F04742544A4650060976F /* mapVC.swift */; };
+		A56F04AC2544BC6B0060976F /* doticon.png in Resources */ = {isa = PBXBuildFile; fileRef = A56F04AB2544BC6B0060976F /* doticon.png */; };
+		A56F04BB2544DAEF0060976F /* addGardenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F04BA2544DAEF0060976F /* addGardenVC.swift */; };
+		A56F04C22544DD480060976F /* gardensTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F04C12544DD480060976F /* gardensTableVC.swift */; };
+		A56F04C52544DD730060976F /* gardenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F04C42544DD730060976F /* gardenCell.swift */; };
+		A5C523B8254A60CD000B2B13 /* registerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C523B7254A60CD000B2B13 /* registerVC.swift */; };
+		A5C523BB254A612E000B2B13 /* loginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C523BA254A612E000B2B13 /* loginVC.swift */; };
+		A5C523C8254B7C84000B2B13 /* catalogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C523C7254B7C84000B2B13 /* catalogCell.swift */; };
+		A83E47FB2543AFCA003F1193 /* GuidePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E47FA2543AFCA003F1193 /* GuidePage.swift */; };
+		A83E47FD2543B0F4003F1193 /* CatalogPlant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E47FC2543B0F4003F1193 /* CatalogPlant.swift */; };
+		A83E47FF2543B37F003F1193 /* UserPlant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E47FE2543B37F003F1193 /* UserPlant.swift */; };
+		A83E48012543B3F6003F1193 /* GeoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E48002543B3F6003F1193 /* GeoData.swift */; };
+		A83E48032543B4D9003F1193 /* UserGarden.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E48022543B4D9003F1193 /* UserGarden.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		400EA6A12541110800C8D052 /* DesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
+		40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSettingsVC.swift; sourceTree = "<group>"; };
+		4042645025448849005C6F8D /* plantInfoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = plantInfoVC.swift; sourceTree = "<group>"; };
+		40426455254488DF005C6F8D /* catalogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogVC.swift; sourceTree = "<group>"; };
+		4042645A2548FC9F005C6F8D /* catalogPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogPage.swift; sourceTree = "<group>"; };
+		40C7CBA1253768FB005A2283 /* Green Thumb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Green Thumb.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		40C7CBA4253768FB005A2283 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		40C7CBA6253768FB005A2283 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		40C7CBA8253768FB005A2283 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		40C7CBAB253768FB005A2283 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		40C7CBAD253768FF005A2283 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		40C7CBB0253768FF005A2283 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		40C7CBB2253768FF005A2283 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		81288542253EB41400E6AAD7 /* guideTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = guideTable.swift; sourceTree = "<group>"; };
+		81728749254894BE001420BA /* guidePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = guidePage.swift; sourceTree = "<group>"; };
+		92F96ABF4FBECF795ED13803 /* Pods-Green Thumb.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Green Thumb.debug.xcconfig"; path = "Target Support Files/Pods-Green Thumb/Pods-Green Thumb.debug.xcconfig"; sourceTree = "<group>"; };
+		A50034B1254BA4BC00C12F95 /* viewGardenPlantVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = viewGardenPlantVC.swift; sourceTree = "<group>"; };
+		A56B4ECE254522A70041372B /* addPlantVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addPlantVC.swift; sourceTree = "<group>"; };
+		A56B4ED7254528DE0041372B /* addPlantOptionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addPlantOptionsVC.swift; sourceTree = "<group>"; };
+		A56F04742544A4650060976F /* mapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mapVC.swift; sourceTree = "<group>"; };
+		A56F04AB2544BC6B0060976F /* doticon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = doticon.png; path = "Green Thumb/doticon.png"; sourceTree = SOURCE_ROOT; };
+		A56F04BA2544DAEF0060976F /* addGardenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addGardenVC.swift; sourceTree = "<group>"; };
+		A56F04C12544DD480060976F /* gardensTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gardensTableVC.swift; sourceTree = "<group>"; };
+		A56F04C42544DD730060976F /* gardenCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gardenCell.swift; sourceTree = "<group>"; };
+		A5C523B7254A60CD000B2B13 /* registerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerVC.swift; sourceTree = "<group>"; };
+		A5C523BA254A612E000B2B13 /* loginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginVC.swift; sourceTree = "<group>"; };
+		A5C523C7254B7C84000B2B13 /* catalogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogCell.swift; sourceTree = "<group>"; };
+		A83E47FA2543AFCA003F1193 /* GuidePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidePage.swift; sourceTree = "<group>"; };
+		A83E47FC2543B0F4003F1193 /* CatalogPlant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogPlant.swift; sourceTree = "<group>"; };
+		A83E47FE2543B37F003F1193 /* UserPlant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlant.swift; sourceTree = "<group>"; };
+		A83E48002543B3F6003F1193 /* GeoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoData.swift; sourceTree = "<group>"; };
+		A83E48022543B4D9003F1193 /* UserGarden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserGarden.swift; sourceTree = "<group>"; };
+		BE54E96410C75239B37464E9 /* Pods-Green Thumb.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Green Thumb.release.xcconfig"; path = "Target Support Files/Pods-Green Thumb/Pods-Green Thumb.release.xcconfig"; sourceTree = "<group>"; };
+		F268A82F4911AD68A1F4F916 /* Pods_Green_Thumb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Green_Thumb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		40C7CB9E253768FB005A2283 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5665D8DAA8A7A036525377EB /* Pods_Green_Thumb.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		40C7CB98253768FB005A2283 = {
+			isa = PBXGroup;
+			children = (
+				40C7CBA3253768FB005A2283 /* Green Thumb */,
+				40C7CBA2253768FB005A2283 /* Products */,
+				466AE14F76FCEFB67DD4E013 /* Pods */,
+				62EC2B0DD048E6A734BAE587 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		40C7CBA2253768FB005A2283 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				40C7CBA1253768FB005A2283 /* Green Thumb.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		40C7CBA3253768FB005A2283 /* Green Thumb */ = {
+			isa = PBXGroup;
+			children = (
+				A83E47F72543AF62003F1193 /* Models */,
+				40C7CBA4253768FB005A2283 /* AppDelegate.swift */,
+				40426455254488DF005C6F8D /* catalogVC.swift */,
+				4042645A2548FC9F005C6F8D /* catalogPage.swift */,
+				40C7CBA6253768FB005A2283 /* SceneDelegate.swift */,
+				40C7CBA8253768FB005A2283 /* ViewController.swift */,
+				40C7CBAA253768FB005A2283 /* Main.storyboard */,
+				4042645025448849005C6F8D /* plantInfoVC.swift */,
+				40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */,
+				40C7CBAD253768FF005A2283 /* Assets.xcassets */,
+				40C7CBAF253768FF005A2283 /* LaunchScreen.storyboard */,
+				40C7CBB2253768FF005A2283 /* Info.plist */,
+				81288542253EB41400E6AAD7 /* guideTable.swift */,
+				81728749254894BE001420BA /* guidePage.swift */,
+				400EA6A12541110800C8D052 /* DesignableView.swift */,
+				A56F04742544A4650060976F /* mapVC.swift */,
+				A56F04BA2544DAEF0060976F /* addGardenVC.swift */,
+				A56F04C12544DD480060976F /* gardensTableVC.swift */,
+				A56F04C42544DD730060976F /* gardenCell.swift */,
+				A56B4ECE254522A70041372B /* addPlantVC.swift */,
+				A56B4ED7254528DE0041372B /* addPlantOptionsVC.swift */,
+				A5C523B7254A60CD000B2B13 /* registerVC.swift */,
+				A5C523BA254A612E000B2B13 /* loginVC.swift */,
+				A5C523C7254B7C84000B2B13 /* catalogCell.swift */,
+				A50034B1254BA4BC00C12F95 /* viewGardenPlantVC.swift */,
+			);
+			path = "Green Thumb";
+			sourceTree = "<group>";
+		};
+		466AE14F76FCEFB67DD4E013 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				92F96ABF4FBECF795ED13803 /* Pods-Green Thumb.debug.xcconfig */,
+				BE54E96410C75239B37464E9 /* Pods-Green Thumb.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		62EC2B0DD048E6A734BAE587 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F268A82F4911AD68A1F4F916 /* Pods_Green_Thumb.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A83E47F72543AF62003F1193 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A56F04AB2544BC6B0060976F /* doticon.png */,
+				A83E47FA2543AFCA003F1193 /* GuidePage.swift */,
+				A83E47FC2543B0F4003F1193 /* CatalogPlant.swift */,
+				A83E47FE2543B37F003F1193 /* UserPlant.swift */,
+				A83E48002543B3F6003F1193 /* GeoData.swift */,
+				A83E48022543B4D9003F1193 /* UserGarden.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		40C7CBA0253768FB005A2283 /* Green Thumb */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 40C7CBB5253768FF005A2283 /* Build configuration list for PBXNativeTarget "Green Thumb" */;
+			buildPhases = (
+				E30258121197C767CE36637F /* [CP] Check Pods Manifest.lock */,
+				40C7CB9D253768FB005A2283 /* Sources */,
+				40C7CB9E253768FB005A2283 /* Frameworks */,
+				40C7CB9F253768FB005A2283 /* Resources */,
+				16338D3042BF11A955C9D9FA /* [CP] Copy Pods Resources */,
+				0C0AE52653CD1F384143BE33 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Green Thumb";
+			productName = "Green Thumb";
+			productReference = 40C7CBA1253768FB005A2283 /* Green Thumb.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		40C7CB99253768FB005A2283 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1200;
+				LastUpgradeCheck = 1200;
+				TargetAttributes = {
+					40C7CBA0253768FB005A2283 = {
+						CreatedOnToolsVersion = 12.0.1;
+					};
+				};
+			};
+			buildConfigurationList = 40C7CB9C253768FB005A2283 /* Build configuration list for PBXProject "Green Thumb" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 40C7CB98253768FB005A2283;
+			productRefGroup = 40C7CBA2253768FB005A2283 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				40C7CBA0253768FB005A2283 /* Green Thumb */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		40C7CB9F253768FB005A2283 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40C7CBB1253768FF005A2283 /* LaunchScreen.storyboard in Resources */,
+				40C7CBAE253768FF005A2283 /* Assets.xcassets in Resources */,
+				A56F04AC2544BC6B0060976F /* doticon.png in Resources */,
+				40C7CBAC253768FB005A2283 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0C0AE52653CD1F384143BE33 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Green Thumb/Pods-Green Thumb-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Green Thumb/Pods-Green Thumb-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Green Thumb/Pods-Green Thumb-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		16338D3042BF11A955C9D9FA /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Green Thumb/Pods-Green Thumb-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Green Thumb/Pods-Green Thumb-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Green Thumb/Pods-Green Thumb-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E30258121197C767CE36637F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Green Thumb-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		40C7CB9D253768FB005A2283 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A56F04C52544DD730060976F /* gardenCell.swift in Sources */,
+				A83E47FF2543B37F003F1193 /* UserPlant.swift in Sources */,
+				40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */,
+				A5C523B8254A60CD000B2B13 /* registerVC.swift in Sources */,
+				40426456254488DF005C6F8D /* catalogVC.swift in Sources */,
+				4042645B2548FC9F005C6F8D /* catalogPage.swift in Sources */,
+				40C7CBA9253768FB005A2283 /* ViewController.swift in Sources */,
+				A5C523C8254B7C84000B2B13 /* catalogCell.swift in Sources */,
+				A83E47FB2543AFCA003F1193 /* GuidePage.swift in Sources */,
+				A56F04752544A4650060976F /* mapVC.swift in Sources */,
+				A50034B2254BA4BC00C12F95 /* viewGardenPlantVC.swift in Sources */,
+				A56B4ED8254528DE0041372B /* addPlantOptionsVC.swift in Sources */,
+				A5C523BB254A612E000B2B13 /* loginVC.swift in Sources */,
+				A83E47FD2543B0F4003F1193 /* CatalogPlant.swift in Sources */,
+				40C7CBA5253768FB005A2283 /* AppDelegate.swift in Sources */,
+				404264522544884A005C6F8D /* plantInfoVC.swift in Sources */,
+				A83E48032543B4D9003F1193 /* UserGarden.swift in Sources */,
+				8172874A254894BE001420BA /* guidePage.swift in Sources */,
+				40C7CBA7253768FB005A2283 /* SceneDelegate.swift in Sources */,
+				A56B4ECF254522A70041372B /* addPlantVC.swift in Sources */,
+				400EA6A22541110800C8D052 /* DesignableView.swift in Sources */,
+				A56F04C22544DD480060976F /* gardensTableVC.swift in Sources */,
+				A83E48012543B3F6003F1193 /* GeoData.swift in Sources */,
+				81288543253EB41400E6AAD7 /* guideTable.swift in Sources */,
+				A56F04BB2544DAEF0060976F /* addGardenVC.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		40C7CBAA253768FB005A2283 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				40C7CBAB253768FB005A2283 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		40C7CBAF253768FF005A2283 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				40C7CBB0253768FF005A2283 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		40C7CBB3253768FF005A2283 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		40C7CBB4253768FF005A2283 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		40C7CBB6253768FF005A2283 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 92F96ABF4FBECF795ED13803 /* Pods-Green Thumb.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 75JK535DUG;
+				INFOPLIST_FILE = "Green Thumb/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.jpriggs.GreenThumb;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		40C7CBB7253768FF005A2283 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE54E96410C75239B37464E9 /* Pods-Green Thumb.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 75JK535DUG;
+				INFOPLIST_FILE = "Green Thumb/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.jpriggs.GreenThumb;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		40C7CB9C253768FB005A2283 /* Build configuration list for PBXProject "Green Thumb" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				40C7CBB3253768FF005A2283 /* Debug */,
+				40C7CBB4253768FF005A2283 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		40C7CBB5253768FF005A2283 /* Build configuration list for PBXNativeTarget "Green Thumb" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				40C7CBB6253768FF005A2283 /* Debug */,
+				40C7CBB7253768FF005A2283 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 40C7CB99253768FB005A2283 /* Project object */;
+}
