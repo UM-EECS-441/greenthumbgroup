@@ -12,9 +12,10 @@ class Plant_Types_Test_Suite(unittest.TestCase):
     Tests the plant_types db and its functions
     """
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(Plant_Types_Test_Suite, self).__init__(*args, **kwargs)
         # Catalog api url for localhost
-        self.url = "127.0.0.1:5000/api/v1/catalog/"
+        self.url = "http://127.0.0.1:5000/api/v1/catalog/"
 
     def setUp(self):
         """
@@ -24,22 +25,22 @@ class Plant_Types_Test_Suite(unittest.TestCase):
         # connects to the test database to
         connect("test")
 
-        
+        plant_types.drop_collection()
         
         # Adds 3 plants to the database
         self.p1 = plant_types(name="p1_name",
             species="p1_species",
-            tags = [{"flower color": "red", "zones": "1,2,3,4"}],
+            tags = {"flower color": ["red"], "zones": ["1","2","3","4"]},
             description = "pl description.....").save()
 
         self.p2 = plant_types(name="p2_name",
                     species="p2_species",
-                    tags = [{"flower color": "red", "zones": "5,6,7", "light": "Sun"}],
+                    tags = {"flower color": ["red"], "zones": ["5","6","7"], "light": ["Sun"]},
                     description = "p2 description.....").save()
 
         self.p3 = plant_types(name="p3_name",
         species="p3_species",
-        tags = [{"zones": "3, 4, 5, 6", "light": "Shade"}],
+        tags = {"zones": ["3", "4", "5", "6"], "light": ["Shade"]},
         description = "p3 description.....").save()
 
     def tearDown(self):
@@ -48,7 +49,7 @@ class Plant_Types_Test_Suite(unittest.TestCase):
         """
         # Removes all documents from the plant_types collection
         # and disconnects from the mongo engine
-        plant_types.remove( {} )
+        plant_types.drop_collection()
         
         disconnect()
     
@@ -73,7 +74,7 @@ class Plant_Types_Test_Suite(unittest.TestCase):
         tests querying the plant_types db for one plant
         """
         
-        response = requests.get(self.url + self.p1.id)
+        response = requests.get(self.url + str(self.p1.id))
 
         # Checks if request was received as 200
         self.assertEqual(response.status_code, 200)

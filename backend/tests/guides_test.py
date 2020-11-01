@@ -12,9 +12,10 @@ class Guides_Test_Suite(unittest.TestCase):
     Tests the guides db and its functions
     """
 
-    def __init__(self):
-        # Catalog api url for localhost
-        self.url = "127.0.0.1:5000/api/v1/guides/"
+    def __init__(self, *args, **kwargs):
+            super(Guides_Test_Suite, self).__init__(*args, **kwargs)
+            # Catalog api url for localhost
+            self.url = "http://127.0.0.1:5000/api/v1/guides/"
 
     def setUp(self):
         """
@@ -24,6 +25,7 @@ class Guides_Test_Suite(unittest.TestCase):
         # connects to the test database to
         connect("test")
 
+        guides.drop_collection()
         
         
         # Adds 3 guides to the database
@@ -42,7 +44,7 @@ class Guides_Test_Suite(unittest.TestCase):
         """
         # Removes all documents from the plant_types collection
         # and disconnects from the mongo engine
-        guides.remove( {} )
+        guides.drop_collection()
         
         disconnect()
     
@@ -67,7 +69,7 @@ class Guides_Test_Suite(unittest.TestCase):
         tests querying the plant_types db for one plant
         """
         
-        response = requests.get(self.url + self.g1.id)
+        response = requests.get(self.url + str(self.g1.id))
 
         # Checks if request was received as 200
         self.assertEqual(response.status_code, 200)
