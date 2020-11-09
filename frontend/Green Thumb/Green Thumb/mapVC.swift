@@ -128,10 +128,21 @@ class mapVC: UIViewController, PlantReturnDelegate {
                                     DispatchQueue.main.async{
                                         do{
                                             let json = try JSON(data: data)
-                                            let lat = json["latitude"].doubleValue
+                                            //let name = json["name"]
+                                            let water = json["last_watered"].stringValue
+                                            let light = json["light_level"].doubleValue
                                             let lon = json["longitude"].doubleValue
+                                            let lat = json["latitude"].doubleValue
+                                            let id = json["plant_type_id"].stringValue
                                             let overlay = self.drawIcon(mapView: self.map, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon), iconImage: UIImage(named: "planticon.png"))
                                             overlay.isTappable = true
+                                            overlay.userData = [
+                                                // TODO: implement name
+                                                "name": String(""),
+                                                "id": String(id),
+                                                "last_watered": String(water),
+                                                "light_level": String(light)
+                                            ]
                                             self.plantOverlays?.append(overlay)
                                         }
                                         catch {
@@ -365,6 +376,16 @@ extension mapVC : GMSMapViewDelegate {
             
             overlay.isTappable = true
             plantOverlays?.append(overlay)
+            // TODO: fix user data
+            let light = -1
+            let water = date
+            let name = ""
+            overlay.userData = [
+                "name": name,
+                "id": String(currentPlant!.catalogPlantId),
+                "last_watered": String(water),
+                "light_level": String(light)
+            ]
             self.addPlantLabel.isHidden = true
             self.currentPlant = nil
         }
@@ -375,9 +396,13 @@ extension mapVC : GMSMapViewDelegate {
         print("tapped")
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let viewGardenPlantVC = storyBoard.instantiateViewController(withIdentifier: "viewGardenPlantVC") as! viewGardenPlantVC
+        print(overlay.userData)
         if let data: [String: String] = overlay.userData as? [String : String]{
-            viewGardenPlantVC.latText = data["latitude"] ?? ""
-            viewGardenPlantVC.lonText = data["longitude"] ?? ""
+            print(data)
+            viewGardenPlantVC.nameText = data["name"] ?? ""
+            viewGardenPlantVC.id = data["id"] ?? ""
+            viewGardenPlantVC.lightEst = data["light_level"] ?? ""
+            viewGardenPlantVC.lastWatered = data["last_watered"] ?? ""
         }
         self.present(viewGardenPlantVC, animated: true, completion: nil)
     }
@@ -392,10 +417,7 @@ extension mapVC : GMSMapViewDelegate {
 
         overlay.bearing = 0
         overlay.map = mapView
-        overlay.userData = [
-            "latitude": String(coordinate.latitude),
-            "longitude": String(coordinate.longitude)
-        ]
+
         return overlay
         
     }
