@@ -258,7 +258,7 @@ def add_garden_location():
 def add_plant_to_garden(garden_id: str):
 
     expected_fields = ['plant_type_id', 'latitude',
-        'longitude', 'light_level', 'last_watered']
+        'longitude', 'light_duration', 'light_intensity', 'last_watered', 'name', 'price']
 
     if 'email' not in session:
         abort(403)
@@ -304,7 +304,10 @@ def add_plant_to_garden(garden_id: str):
             user_plant = user_plants(plant_type_id=request.json['plant_type_id'],
                 latitude=request.json['latitude'],
                 longitude=request.json['longitude'],
-                light_level=request.json['light_level'],
+                light_duration=request.json['light_duration'],
+                light_intensity=request.json['light_intensity'],
+                name=request.json['name'],
+                price=request.json['price'],
                 last_watered=datetime.datetime.strptime(request.json['last_watered'], '%Y-%m-%d %H:%M:%S.%f')).save()
             garden.plants.append(str(user_plant.id))
             garden.save()
@@ -331,22 +334,19 @@ def add_plant_to_garden(garden_id: str):
 def edit_plant_in_garden(garden_id: str, plant_id: str):
 
     expected_fields = ['plant_type_id', 'latitude',
-        'longitude', 'light_level', 'last_watered']
+        'longitude', 'light_duration', 'light_intensity', 'last_watered', 'name', 'price']
 
     if 'email' not in session:
         abort(403)
 
-    print('Email in session')
 
     if not is_valid_id(garden_id):
         abort(401)
 
-    print('Garden id valid')
 
     if not is_valid_id(plant_id):
         abort(401)
 
-    print('Plant id valid')
 
     # check that the right info was provided, else 401
     for field in expected_fields:
@@ -356,7 +356,6 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
     if not is_valid_id(request.json['plant_type_id']):
         abort(401)
 
-    print('Plant type id valid')
 
     if request.json['last_watered'].find('.') == -1:
         request.json['last_watered'] = request.json['last_watered'] + '.000000'
@@ -382,7 +381,7 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
                 plant_type = plant_types.objects(id=request.json['plant_type_id'])
             except Exception as e:
                 abort(404)
-            print(str(plant_type))
+
             if str(plant_type) == '[]':
                 abort(404)
 
@@ -408,7 +407,10 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
             plant.plant_type_id = plant_type.id
             plant.latitude = request.json['latitude']
             plant.longitude = request.json['longitude']
-            plant.light_level = request.json['light_level']
+            plant.light_duration = request.json['light_duration']
+            plant.light_intensity = request.json['light_intensity']
+            plant.name = request.json['name']
+            plant.price = request.json['price']
             plant.last_watered = datetime.datetime.strptime(request.json['last_watered'], '%Y-%m-%d %H:%M:%S.%f')
             plant.save()
 

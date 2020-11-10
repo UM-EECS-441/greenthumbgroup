@@ -49,8 +49,11 @@ class user_plants(Document):
     plant_type_id = ObjectIdField()
     latitude = FloatField()
     longitude = FloatField()
-    light_level = IntField()
+    light_duration = FloatField()
+    light_intensity = FloatField()
     last_watered = DateField()
+    name = StringField()
+    price = FloatField()
 
     def to_dict(self):
         return {
@@ -58,8 +61,11 @@ class user_plants(Document):
             "plant_type_id": str(self.plant_type_id),
             "latitude": self.latitude,
             "longitude": self.longitude,
-            "light_level": self.light_level,
+            "light_duration": self.light_duration,
+            "light_intensity": self.light_intensity,
             "last_watered": self.last_watered,
+            "name": self.name,
+            "price": self.price,
         }
 
 class guides(Document):
