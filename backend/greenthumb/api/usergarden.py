@@ -269,7 +269,13 @@ def add_plant_to_garden(garden_id: str):
     # check that the right info was provided, else 401
     for field in expected_fields:
         if field not in request.json:
-            abort(401)
+            # Don't reject if still using the old set of expected fields
+            if field in ['light_duration', 'light_intensity', 'price']:
+                request.json[field] = 0
+            elif field == 'name':
+                request.json['name'] = ''
+            else:
+                abort(401)
 
     if not is_valid_id(request.json['plant_type_id']):
         abort(401)
@@ -351,7 +357,13 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
     # check that the right info was provided, else 401
     for field in expected_fields:
         if field not in request.json:
-            abort(401)
+             # Don't reject if still using the old set of expected fields
+            if field in ['light_duration', 'light_intensity', 'price']:
+                request.json[field] = 0
+            elif field == 'name':
+                request.json['name'] = ''
+            else:
+                abort(401)
 
     if not is_valid_id(request.json['plant_type_id']):
         abort(401)
