@@ -67,7 +67,6 @@ class mapVC: UIViewController, PlantReturnDelegate {
                         print(error)
                     }
                 }
-                //print(String(data: data, encoding: .utf8)!)
             }
 
             task.resume()
@@ -81,16 +80,15 @@ class mapVC: UIViewController, PlantReturnDelegate {
     }
     
     func centerMapOnGarden() {
-        // TODO: eventually get map data from backend
-        // TODO: either zoom in on garden's location from user address input or saved garden coordinates
-        // Zoom in on saved user's garden
+        // Zoom in on saved user's garden if have already mapped garden
         if (userGarden.brGeoData.lat != -1 && userGarden.tlGeoData.lat != -1){
             let gardenCenterLat = self.userGarden.brGeoData.lat + abs(self.userGarden.tlGeoData.lat - self.userGarden.brGeoData.lat)
             let gardenCenterLon = self.userGarden.tlGeoData.lon + abs(self.userGarden.brGeoData.lon - self.userGarden.tlGeoData.lon)
             let coordinate = CLLocationCoordinate2D(latitude: gardenCenterLat, longitude: gardenCenterLon)
             map.camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 22.0)
             drawGarden()
-            // TODO: add saved plants to garden
+            
+            // Add saved plants to garden
             let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(self.userGarden.gardenId)/")!
             
             var request = URLRequest(url: url)
@@ -120,39 +118,31 @@ class mapVC: UIViewController, PlantReturnDelegate {
                                 request.httpMethod = "GET"
 
                                 let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
-                                    print(response)
-                                    //print(data)
+                                    print(response ?? "")
                                     guard let data = data else {
                                         return
                                     }
                                     DispatchQueue.main.async{
                                         do{
                                             let json = try JSON(data: data)
-                                            //let name = json["name"]
-                                            print(json)
                                             let water = json["last_watered"].stringValue
                                             let light = json["light_level"].doubleValue
                                             let lon = json["longitude"].doubleValue
                                             let lat = json["latitude"].doubleValue
                                             let id = json["plant_type_id"].stringValue
+                                            let name = json["name"].string ?? ""
                                             let overlay = self.drawIcon(mapView: self.map, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon), iconImage: UIImage(named: "planticon.png"))
                                             overlay.isTappable = true
                                             overlay.userData = [
-                                                // TODO: implement name
-                                                "name": String(""),
+                                                "name": String(name),
                                                 "uniq_id": String(plantId),
                                                 "type_id": String(id),
                                                 "garden_id": String(self.userGarden.gardenId),
                                                 "lat": String(lat),
-                                                "lon":
-                                                    String(lon),
+                                                "lon": String(lon),
                                                 "last_watered": String(water),
                                                 "light_level": String(light)
                                             ]
-                                            print("uniq_id: \(plantId)")
-                                            print("type_id: \(id)")
-                                            print(water)
-                                            print(light)
                                             self.plantOverlays?.append(overlay)
                                         }
                                         catch {
@@ -174,21 +164,10 @@ class mapVC: UIViewController, PlantReturnDelegate {
             
             task.resume()
         }
+        // Haven't mapped garden yet, zoom in on garden address instead
         else if (self.translatedGardenLoc != nil){
             map.camera = GMSCameraPosition.camera(withTarget: self.translatedGardenLoc!, zoom: 22.0)
         }
-        /*
-        // Don't have user's garden yet, zoom in on current location
-        else {
-            // Configure the location manager.
-            locmanager.delegate = self
-            locmanager.desiredAccuracy = kCLLocationAccuracyBest
-            locmanager.requestWhenInUseAuthorization()
-
-            // Start getting user's location
-            locmanager.startUpdatingLocation()
-        }
-        */
     }
     
     @IBAction func drawGardenClicked(_ sender: UIButton) {
@@ -218,7 +197,6 @@ class mapVC: UIViewController, PlantReturnDelegate {
                 corner.map = nil
             }
             gardenCorners.removeAll()
-            // TODO: add garden bounds to database
             // Add garden to database
             let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(self.userGarden.gardenId)/")!
             var request = URLRequest(url: url)
@@ -267,10 +245,10 @@ class mapVC: UIViewController, PlantReturnDelegate {
             self.plantOverlays = nil
         }
         self.userGarden.plants.removeAll()
+        // TODO: update database with values
     }
     
     func drawGarden() {
-        // TODO: assert userGarden should be initialized with tl and br corners
         let path = GMSMutablePath()
         // Add top left corner
         path.add(CLLocationCoordinate2D(latitude: self.userGarden.tlGeoData.lat, longitude: self.userGarden.tlGeoData.lon))
@@ -300,28 +278,13 @@ class mapVC: UIViewController, PlantReturnDelegate {
     
     @IBAction func addPlantClicked(_ sender: UIButton) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let addPlantOptionsVC = storyBoard.instantiateViewController(withIdentifier: "addPlantOptionsVC") as! addPlantOptionsVC
-        addPlantOptionsVC.userGarden = userGarden
-        self.present(addPlantOptionsVC, animated: true, completion: nil)
+        let homeCatalogVC = storyBoard.instantiateViewController(withIdentifier: "catalogVC") as! catalogVC
+        homeCatalogVC.userGarden = userGarden
+        homeCatalogVC.returnDelegate = self
+        self.present(homeCatalogVC, animated: true, completion: nil)
     }
     
 }
-
-/*
-extension mapVC : CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first {
-            // Zoom in to the user's current location
-            let coordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-            map.camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 22.0)
-            // put mylocation marker down
-            map.isMyLocationEnabled = true
-
-            locmanager.stopUpdatingLocation()
-        }
-    }
-}
- */
 
 extension mapVC : GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
@@ -329,13 +292,11 @@ extension mapVC : GMSMapViewDelegate {
             // User is currently drawing their garden
             // Tap should correspond to top left corner of garden
             let topLeft = GeoData(lat: coordinate.latitude, lon: coordinate.longitude)
-            // TODO: garden id switching
             self.userGarden.tlGeoData = topLeft
             // Draw dot corresponding to tap
             let overlay = drawIcon(mapView: mapView, coordinate: coordinate, iconImage: UIImage(named: "doticon.png"))
             self.gardenCorners.append(overlay)
         }
-        // TODO: make sure this works
         else if (self.drawGardenButton.titleLabel?.text == "Done" && self.userGarden.brGeoData.lat == -1){
             // User is currently drawing their garden
             // Tap should correspond to bottom right corner of garden
@@ -353,6 +314,7 @@ extension mapVC : GMSMapViewDelegate {
             if let plantToAppend = currentPlant{
                 self.userGarden.plants.append(plantToAppend)
             }
+            
             // Update plant data in database
             let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(self.userGarden.gardenId)/edit_plant/\(self.currentPlant!.userPlantId)/")!
             var request = URLRequest(url: url)
@@ -365,7 +327,9 @@ extension mapVC : GMSMapViewDelegate {
             df.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let date = df.string(from: Date())
             // TODO: edit last watered
+            // TODO: edit light level
             let parameters: [String: Any] = [
+                "name": self.currentPlant!.name,
                 "plant_type_id": self.currentPlant!.catalogPlantId,
                 "latitude": self.currentPlant!.geodata.lat,
                 "longitude": self.currentPlant!.geodata.lon,
@@ -390,9 +354,8 @@ extension mapVC : GMSMapViewDelegate {
             // TODO: fix user data
             let light = -1
             let water = date
-            let name = ""
             overlay.userData = [
-                "name": name,
+                "name": String(currentPlant!.name),
                 "uniq_id": String(currentPlant!.userPlantId),
                 "type_id": String(currentPlant!.catalogPlantId),
                 "garden_id": String(currentPlant!.gardenId),
@@ -421,6 +384,7 @@ extension mapVC : GMSMapViewDelegate {
             viewGardenPlantVC.lat = Double(data["lat"] ?? "") ?? -1
             viewGardenPlantVC.lon = Double(data["lon"] ?? "") ?? -1
             viewGardenPlantVC.lightEst = data["light_level"] ?? ""
+            viewGardenPlantVC.nameText = data["name"] ?? ""
             viewGardenPlantVC.lastWatered = data["last_watered"] ?? ""
         }
         self.present(viewGardenPlantVC, animated: true, completion: nil)

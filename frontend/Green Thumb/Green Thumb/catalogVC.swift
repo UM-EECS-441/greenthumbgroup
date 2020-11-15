@@ -113,63 +113,16 @@ class catalogVC: UITableViewController {
 extension catalogVC {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        print("Tapped")
-        if self.presentingViewController?.title == "Add Plant Options" {
-            // Create plant for tap, add to database, and return using delegate
-            // Add plant to database
-            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(userGarden!.gardenId)/add_plant/")!
-            var request = URLRequest(url: url)
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpMethod = "POST"
-            
-            let delegate = UIApplication.shared.delegate as! AppDelegate
-            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
-
-            let df = DateFormatter()
-            df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-            let date = df.string(from: Date())
-            print(plants[indexPath.row])
-            print("id \(plants[indexPath.row]["_id"])")
-            let parameters: [String: Any] = [
-                "plant_type_id": plants[indexPath.row]["_id"] ?? "",
-                "latitude": -1,
-                "longitude": -1,
-                "light_level": -1,
-                "last_watered": date
-            ]
-            do {
-                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
-
-           } catch let error {
-                print("json error")
-               print(error.localizedDescription)
-           }
-            
-            
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                guard let data = data else {
-                    print("no data")
-                    return
-                }
-                DispatchQueue.main.async {
-                    do {
-                        print(response)
-                        let json = try JSON(data: data, options: .allowFragments)
-                        let plantId = json["id"].stringValue
-                        print("plantid \(plantId)")
-                        // TODO: don't force unwrap
-                        let newPlant: UserPlant = UserPlant(userPlantId: plantId, gardenId: self.userGarden!.gardenId, name: self.plants[indexPath.row]["name"] as! String, image: UIImage(named: "planticon.png")!)
-                        newPlant.catalogPlantId = self.plants[indexPath.row]["_id"] as! String
-                        self.returnDelegate?.didReturn(newPlant)
-                        self.dismiss(animated: true, completion: nil)
-                    } catch {
-                        print("error with response data")
-                        print(error)
-                    }
-                }
-            }
-
-            task.resume()
-            self.dismiss(animated: true, completion: nil)
+        if self.presentingViewController?.title == "Map" {
+            // Create plant for tap
+            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let addPlantVC = storyBoard.instantiateViewController(withIdentifier: "addPlantVC") as! addPlantVC
+            addPlantVC.userGarden = userGarden
+            addPlantVC.returnDelegate = self.returnDelegate
+            // TODO: just add species here
+            let newPlant: UserPlant = UserPlant(catalogPlantId: self.plants[indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.plants[indexPath.row]["name"] as! String)
+            addPlantVC.currentPlant = newPlant
+            self.present(addPlantVC, animated: true, completion: nil)
         }
         else{
             let catalogPage = storyboard?.instantiateViewController(identifier: "catalogPage") as? catalogPage

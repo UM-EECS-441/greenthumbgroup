@@ -35,8 +35,6 @@ class viewGardenPlantVC: UIViewController {
         self.lightEstimation.text = lightEst
         self.lastWateredLabel.text = lastWatered
         
-        print(lat)
-        print(lon)
         
         // Get the plant data from catalogue
         let url = URL(string: "http://192.81.216.18/api/v1/catalog/\(self.type_id!)/")!
@@ -47,17 +45,20 @@ class viewGardenPlantVC: UIViewController {
         request.httpMethod = "GET"
 
         let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
-            print(response)
+            print(response ?? "")
             //print(data)
-            guard let data = data else {
-                return
-            }
-            do{
-                let json = try JSON(data: data)
-                print(json)
-            }
-            catch {
-                print(error)
+            DispatchQueue.main.async {
+                guard let data = data else {
+                    return
+                }
+                do{
+                    let json = try JSON(data: data)
+                    print(json)
+                    self.species.text = json["species"].stringValue
+                }
+                catch {
+                    print(error)
+                }
             }
         }
         
@@ -78,7 +79,7 @@ class viewGardenPlantVC: UIViewController {
         self.lastWatered = date
     }
     
-    @IBAction func nameChanged(_ sender: UITextField) {
+    @IBAction func nameChanged(_ sender: Any) {
         self.nameText = name.text ?? ""
     }
     
@@ -94,13 +95,14 @@ class viewGardenPlantVC: UIViewController {
         df.dateFormat = "yyyy-MM-dd hh:mm:ss"
         let date = df.string(from: Date())
         print(date)
-        // TODO: edit last watered
+        // TODO: fix date
         let parameters: [String: Any] = [
-            "plant_type_id": self.type_id,
-            "latitude": self.lat,
-            "longitude": self.lon,
+            "plant_type_id": self.type_id ?? "",
+            "name": self.nameText,
+            "latitude": self.lat ?? 0,
+            "longitude": self.lon ?? 0,
             "light_level": Double(self.lightEst) ?? -1,
-            "last_watered": self.lastWatered
+            "last_watered": date
         ]
         print(parameters)
         do {
@@ -116,14 +118,5 @@ class viewGardenPlantVC: UIViewController {
         }
         task.resume()
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

@@ -13,16 +13,18 @@ class addPlantVC: UIViewController {
     @IBOutlet weak var plantImage: UIImageView!
     @IBOutlet weak var name: UITextView!
     var userGarden: UserGarden!
+    var currentPlant: UserPlant!
     weak var returnDelegate : PlantReturnDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.name.text = currentPlant.name
 
         // Do any additional setup after loading the view.
     }
     
     @IBAction func doneButtonClicked(_ sender: UIButton) {
-        // TODO: update plant id
         // Add plant to database
         let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(userGarden.gardenId)/add_plant/")!
         var request = URLRequest(url: url)
@@ -37,9 +39,9 @@ class addPlantVC: UIViewController {
         df.dateFormat = "yyyy-MM-dd hh:mm:ss"
         let date = df.string(from: Date())
         print(date)
-        // TODO: fix plant id, using dummy rn
         let parameters: [String: Any] = [
-            "plant_type_id": "5f97617fcebc535724853218",
+            "plant_type_id": self.currentPlant.catalogPlantId,
+            "name": self.name.text ?? "",
             "latitude": -1,
             "longitude": -1,
             "light_level": -1,
@@ -64,12 +66,10 @@ class addPlantVC: UIViewController {
                     print(response)
                     let json = try JSON(data: data, options: .allowFragments)
                     let plantId: String? = json["id"].stringValue
-                    print("plantid: \(plantId)")
-                    print(json)
-                    let newPlant = UserPlant(userPlantId: plantId ?? "", gardenId: self.userGarden.gardenId, name: self.name.text, image: self.plantImage.image!)
-                    newPlant.catalogPlantId = "5f97617fcebc535724853218"
-                    self.returnDelegate?.didReturn(newPlant)
-                    self.dismiss(animated: true, completion: nil)
+                    self.currentPlant.userPlantId = plantId ?? ""
+                    self.returnDelegate?.didReturn(self.currentPlant)
+                    // Go back to map
+                    self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
                 } catch {
                     print("error with response data")
                     print(error)
