@@ -9,7 +9,7 @@ import UIKit
 import GoogleMaps
 import SwiftyJSON
 
-class mapVC: UIViewController, PlantReturnDelegate {
+class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
 
     let locmanager = CLLocationManager()
     var addingPlant = false
@@ -18,6 +18,7 @@ class mapVC: UIViewController, PlantReturnDelegate {
     var gardenCorners: [GMSGroundOverlay] = [GMSGroundOverlay]()
     var gardenPolygon: GMSPolygon? = GMSPolygon()
     var plantOverlays: [GMSGroundOverlay]? = [GMSGroundOverlay]()
+    var currentOverlay: GMSOverlay = GMSGroundOverlay()
     var currentPlant: UserPlant? = nil
     var translatedGardenLoc: CLLocationCoordinate2D? = nil
     // TODO: store in secure location
@@ -32,13 +33,24 @@ class mapVC: UIViewController, PlantReturnDelegate {
         self.currentPlant = result
     }
     
+    func didReturnOverlay(_ result: GMSOverlay) {
+        self.currentOverlay = result
+        print(self.currentOverlay)
+    }
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         navigationController?.popViewController(animated: true)
         dismiss(animated: true, completion: nil)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(false)
+        
+        if (currentPlant != nil){
+            self.addPlantLabel.isHidden = false
+        }
+        
         self.map.mapType = .satellite
         map.delegate = self
         
@@ -70,12 +82,6 @@ class mapVC: UIViewController, PlantReturnDelegate {
             }
 
             task.resume()
-        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        if (currentPlant != nil){
-            self.addPlantLabel.isHidden = false
         }
     }
     
@@ -324,8 +330,8 @@ extension mapVC : GMSMapViewDelegate {
             let delegate = UIApplication.shared.delegate as! AppDelegate
             request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
             let df = DateFormatter()
-            df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-            let date = df.string(from: Date())
+            df.dateFormat = "yyyy-MM-dd"
+            let date = df.string(from: Date()) + " 00:00:00"
             // TODO: edit last watered
             // TODO: edit light level
             let parameters: [String: Any] = [
@@ -336,6 +342,7 @@ extension mapVC : GMSMapViewDelegate {
                 "light_level": -1,
                 "last_watered": date
             ]
+            print(parameters)
             do {
                 request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
            } catch let error {
@@ -353,7 +360,10 @@ extension mapVC : GMSMapViewDelegate {
             plantOverlays?.append(overlay)
             // TODO: fix user data
             let light = -1
-            let water = date
+            let dfsave = DateFormatter()
+            dfsave.dateFormat = "E, d MMM yyyy"
+            let datesave = dfsave.string(from: Date()) + " 00:00:00 GMT"
+            let water = datesave
             overlay.userData = [
                 "name": String(currentPlant!.name),
                 "uniq_id": String(currentPlant!.userPlantId),
@@ -374,7 +384,9 @@ extension mapVC : GMSMapViewDelegate {
         print("tapped")
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let viewGardenPlantVC = storyBoard.instantiateViewController(withIdentifier: "viewGardenPlantVC") as! viewGardenPlantVC
-        print(overlay.userData)
+        viewGardenPlantVC.overlayDelegate = self
+        viewGardenPlantVC.currentOverlay = overlay
+        print(overlay.userData ?? "")
         if let data: [String: String] = overlay.userData as? [String : String]{
             print(data)
             viewGardenPlantVC.nameText = data["name"] ?? ""

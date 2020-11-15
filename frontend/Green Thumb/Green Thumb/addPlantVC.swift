@@ -36,9 +36,9 @@ class addPlantVC: UIViewController {
         print(delegate.cookie)
         print(Date())
         let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-        let date = df.string(from: Date())
-        print(date)
+        df.dateFormat = "yyyy-MM-dd"
+        let date = df.string(from: Date()) + " 00:00:00"
+        
         let parameters: [String: Any] = [
             "plant_type_id": self.currentPlant.catalogPlantId,
             "name": self.name.text ?? "",

@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftyJSON
+import GoogleMaps
 
 class viewGardenPlantVC: UIViewController {
 
@@ -25,6 +26,9 @@ class viewGardenPlantVC: UIViewController {
     var lat: Double!
     var lon: Double!
     @IBOutlet weak var lastWateredLabel: UILabel!
+    var currentOverlay: GMSOverlay!
+    
+    var overlayDelegate: OverlayReturnDelegate!
     
     
     override func viewDidLoad() {
@@ -33,7 +37,11 @@ class viewGardenPlantVC: UIViewController {
         self.name.text = nameText
         self.species.text = speciesText
         self.lightEstimation.text = lightEst
+        lastWatered = lastWatered.replacingOccurrences(of: " 00:00:00 GMT", with: "")
+        lastWatered = lastWatered.replacingOccurrences(of: " 00:00:00", with: "")
         self.lastWateredLabel.text = lastWatered
+        self.lastWateredPicker.datePickerMode = UIDatePicker.Mode.date
+
         
         
         // Get the plant data from catalogue
@@ -73,8 +81,9 @@ class viewGardenPlantVC: UIViewController {
     @IBAction func dateChanged(_ sender: Any) {
         let newLastWatered: Date = lastWateredPicker.date
         let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-        let date = df.string(from: newLastWatered)
+        df.dateFormat = "yyyy-MM-dd"
+        var date = df.string(from: newLastWatered)
+        date += " 00:00:00"
         print(date)
         self.lastWatered = date
     }
@@ -91,20 +100,14 @@ class viewGardenPlantVC: UIViewController {
         request.httpMethod = "PUT"
         let delegate = UIApplication.shared.delegate as! AppDelegate
         request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-        let date = df.string(from: Date())
-        print(date)
-        // TODO: fix date
         let parameters: [String: Any] = [
             "plant_type_id": self.type_id ?? "",
             "name": self.nameText,
             "latitude": self.lat ?? 0,
             "longitude": self.lon ?? 0,
             "light_level": Double(self.lightEst) ?? -1,
-            "last_watered": date
+            "last_watered": self.lastWatered
         ]
-        print(parameters)
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
        } catch let error {
@@ -117,6 +120,32 @@ class viewGardenPlantVC: UIViewController {
             print(response ?? "")
         }
         task.resume()
+        
+        var data = currentOverlay.userData as! [String: String]
+        data["name"] = self.nameText
+        data["light_level"] = self.lightEst
+        
+        let dfsave = DateFormatter()
+        dfsave.dateFormat = "E, d MMM yyyy"
+        let datesave = dfsave.string(from: self.lastWateredPicker.date) + " 00:00:00 GMT"
+        
+        data["last_watered"] = datesave
+        
+        currentOverlay.userData = data
+        
+        print(currentOverlay.userData)
+        print(data)
+        
+        overlayDelegate.didReturnOverlay(currentOverlay);
+        self.dismiss(animated: false, completion: nil)
     }
+    
+    
 
 }
+
+// Generic return result delegate protocol
+protocol OverlayReturnDelegate: UIViewController {
+    func didReturnOverlay(_ result: GMSOverlay)
+}
+
