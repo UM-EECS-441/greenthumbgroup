@@ -224,8 +224,26 @@ extension catalogVC {
     //        print(light_array)
     //        print(type_array)
             
-
-
+            let days_to_water = plants[indexPath.row]["days_to_water"]
+            var days_to_water_String = "N/A"
+            if days_to_water is NSNull {
+                //<null>
+            }
+            else {
+                //not <null>
+                print("days to water not nil")
+                days_to_water_String = String(describing: days_to_water!)
+            }
+            
+            let water_description = plants[indexPath.row]["watering_description"]
+            var water_description_string = "No Watering Description Available"
+            if water_description is NSNull {
+                //<null>
+            } else {
+                //not <null>
+                water_description_string = String(describing: water_description!)
+            }
+            
             
             // currently not working in backend
             //days_to_water
@@ -237,8 +255,13 @@ extension catalogVC {
             catalogPage?.desc = descriptionString
             //
             catalogPage?.tags = "No Tags for this Plant"
-            catalogPage?.waterDays = ""
-            catalogPage?.waterInfo = ""
+            if days_to_water_String == "N/A" {
+                catalogPage?.waterDays = ""
+            }
+            else {
+                catalogPage?.waterDays = "Days until next watering: " + days_to_water_String
+            }
+            catalogPage?.waterInfo = water_description_string
             
             
             self.navigationController?.pushViewController(catalogPage!, animated: true)
