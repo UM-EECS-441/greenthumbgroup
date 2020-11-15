@@ -156,21 +156,13 @@ extension catalogVC {
             
     //        let tags = String(describing: plants[indexPath.row]["tags"])
             let tags: [String: [String]] = plants[indexPath.row]["tags"] as! [String: [String]]
-            var tagsString = ""
     //        print(tags["plant type"])
-            for (tag, items) in tags {
-                if tag != "plant type" {
-                    tagsString += "\(tag.capitalized): "
-                    for item in items {
-                        tagsString += "\(item), "
-                    }
-                    tagsString = String(tagsString.dropLast(2))
-                    tagsString += "\n"
-                }
-            }
-            print(tagsString)
+            let height_array = tags["height"]
+            let light_array = tags["light"]
             let type_array = tags["plant type"]
             
+    //        var heightString = "No Height Found"
+    //        var lightString = "No Light Found"
             var typeString = "No Type Found"
             
             if case Optional<Any>.none = type_array {
@@ -179,47 +171,27 @@ extension catalogVC {
                 //not nil
                 typeString = String(describing: type_array![0])
             }
+    //        print(typeString)
             
-            let days_to_water = plants[indexPath.row]["days_to_water"]
-            var days_to_water_String = "N/A"
-            if days_to_water is NSNull {
-                //<null>
-            }
-            else {
-                //not <null>
-                print("days to water not nil")
-                days_to_water_String = String(describing: days_to_water!)
-            }
+    //        print(height_array)
+    //        print(light_array)
+    //        print(type_array)
             
-            let water_description = plants[indexPath.row]["watering_description"]
-            var water_description_string = "No Watering Description Available"
-            if water_description is NSNull {
-                //<null>
-            } else {
-                //not <null>
-                water_description_string = String(describing: water_description!)
-            }
+
+
             
-            
+            // currently not working in backend
+            //days_to_water
+            //watering_description
             
             catalogPage?.name = nameString
             catalogPage?.species = "Species: " + speciesString
             catalogPage?.type = "Plant type: " + typeString
             catalogPage?.desc = descriptionString
-            catalogPage?.tags = tagsString
-            if days_to_water_String == "N/A" {
-                catalogPage?.waterDays = ""
-            }
-            else {
-                catalogPage?.waterDays = "Days until next watering: " + days_to_water_String
-            }
-            if water_description_string == "No Watering Description Available" {
-                catalogPage?.waterInfo = ""
-            }
-            else {
-                catalogPage?.waterInfo = water_description_string
-            }
-            
+            //
+            catalogPage?.tags = "No Tags for this Plant"
+            catalogPage?.waterDays = ""
+            catalogPage?.waterInfo = ""
             
             
             self.navigationController?.pushViewController(catalogPage!, animated: true)

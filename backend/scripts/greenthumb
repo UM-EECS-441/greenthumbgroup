@@ -1,9 +1,0 @@
-server {
-	listen 80;
-	server_name <YOUR_SERVER_NAME> www.<YOUR_SERVER_NAME>;
-	
-	location / {
-		include proxy_params;
-		proxy_pass http://0.0.0.0:5000;
-	}
-}
