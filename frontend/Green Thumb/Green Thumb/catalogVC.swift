@@ -203,13 +203,21 @@ extension catalogVC {
             
     //        let tags = String(describing: plants[indexPath.row]["tags"])
             let tags: [String: [String]] = plants[indexPath.row]["tags"] as! [String: [String]]
+            var tagsString = ""
     //        print(tags["plant type"])
-            let height_array = tags["height"]
-            let light_array = tags["light"]
+            for (tag, items) in tags {
+                if tag != "plant type" {
+                    tagsString += "\(tag.capitalized): "
+                    for item in items {
+                        tagsString += "\(item), "
+                    }
+                    tagsString = String(tagsString.dropLast(2))
+                    tagsString += "\n"
+                }
+            }
+            print(tagsString)
             let type_array = tags["plant type"]
             
-    //        var heightString = "No Height Found"
-    //        var lightString = "No Light Found"
             var typeString = "No Type Found"
             
             if case Optional<Any>.none = type_array {
@@ -218,11 +226,6 @@ extension catalogVC {
                 //not nil
                 typeString = String(describing: type_array![0])
             }
-    //        print(typeString)
-            
-    //        print(height_array)
-    //        print(light_array)
-    //        print(type_array)
             
             let days_to_water = plants[indexPath.row]["days_to_water"]
             var days_to_water_String = "N/A"
@@ -245,23 +248,25 @@ extension catalogVC {
             }
             
             
-            // currently not working in backend
-            //days_to_water
-            //watering_description
             
             catalogPage?.name = nameString
             catalogPage?.species = "Species: " + speciesString
             catalogPage?.type = "Plant type: " + typeString
             catalogPage?.desc = descriptionString
-            //
-            catalogPage?.tags = "No Tags for this Plant"
+            catalogPage?.tags = tagsString
             if days_to_water_String == "N/A" {
                 catalogPage?.waterDays = ""
             }
             else {
                 catalogPage?.waterDays = "Days until next watering: " + days_to_water_String
             }
-            catalogPage?.waterInfo = water_description_string
+            if water_description_string == "No Watering Description Available" {
+                catalogPage?.waterInfo = ""
+            }
+            else {
+                catalogPage?.waterInfo = water_description_string
+            }
+            
             
             
             self.navigationController?.pushViewController(catalogPage!, animated: true)

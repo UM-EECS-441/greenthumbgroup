@@ -36,6 +36,7 @@ class catalogPage: UIViewController {
         plantType.text = type
         plantDescription.text = desc
         // Not done yet
+        plantTags.numberOfLines = 0
         plantTags.text = tags
         daysTilWater.text = waterDays
         plantWaterInfo.text = waterInfo
