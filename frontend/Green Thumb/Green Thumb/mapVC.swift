@@ -129,6 +129,7 @@ class mapVC: UIViewController, PlantReturnDelegate {
                                         do{
                                             let json = try JSON(data: data)
                                             //let name = json["name"]
+                                            print(json)
                                             let water = json["last_watered"].stringValue
                                             let light = json["light_level"].doubleValue
                                             let lon = json["longitude"].doubleValue
@@ -139,10 +140,19 @@ class mapVC: UIViewController, PlantReturnDelegate {
                                             overlay.userData = [
                                                 // TODO: implement name
                                                 "name": String(""),
-                                                "id": String(id),
+                                                "uniq_id": String(plantId),
+                                                "type_id": String(id),
+                                                "garden_id": String(self.userGarden.gardenId),
+                                                "lat": String(lat),
+                                                "lon":
+                                                    String(lon),
                                                 "last_watered": String(water),
                                                 "light_level": String(light)
                                             ]
+                                            print("uniq_id: \(plantId)")
+                                            print("type_id: \(id)")
+                                            print(water)
+                                            print(light)
                                             self.plantOverlays?.append(overlay)
                                         }
                                         catch {
@@ -354,6 +364,7 @@ extension mapVC : GMSMapViewDelegate {
             let df = DateFormatter()
             df.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let date = df.string(from: Date())
+            // TODO: edit last watered
             let parameters: [String: Any] = [
                 "plant_type_id": self.currentPlant!.catalogPlantId,
                 "latitude": self.currentPlant!.geodata.lat,
@@ -382,7 +393,11 @@ extension mapVC : GMSMapViewDelegate {
             let name = ""
             overlay.userData = [
                 "name": name,
-                "id": String(currentPlant!.catalogPlantId),
+                "uniq_id": String(currentPlant!.userPlantId),
+                "type_id": String(currentPlant!.catalogPlantId),
+                "garden_id": String(currentPlant!.gardenId),
+                "lat": String(self.currentPlant!.geodata.lat),
+                "lon": String(self.currentPlant!.geodata.lon),
                 "last_watered": String(water),
                 "light_level": String(light)
             ]
@@ -400,7 +415,11 @@ extension mapVC : GMSMapViewDelegate {
         if let data: [String: String] = overlay.userData as? [String : String]{
             print(data)
             viewGardenPlantVC.nameText = data["name"] ?? ""
-            viewGardenPlantVC.id = data["id"] ?? ""
+            viewGardenPlantVC.uniq_id = data["uniq_id"] ?? ""
+            viewGardenPlantVC.type_id = data["type_id"] ?? ""
+            viewGardenPlantVC.garden_id = data["garden_id"] ?? ""
+            viewGardenPlantVC.lat = Double(data["lat"] ?? "") ?? -1
+            viewGardenPlantVC.lon = Double(data["lon"] ?? "") ?? -1
             viewGardenPlantVC.lightEst = data["light_level"] ?? ""
             viewGardenPlantVC.lastWatered = data["last_watered"] ?? ""
         }

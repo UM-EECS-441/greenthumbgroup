@@ -19,7 +19,11 @@ class viewGardenPlantVC: UIViewController {
     var speciesText = ""
     var lastWatered = ""
     var lightEst = ""
-    var id: String!
+    var type_id: String!
+    var uniq_id: String!
+    var garden_id: String!
+    var lat: Double!
+    var lon: Double!
     @IBOutlet weak var lastWateredLabel: UILabel!
     
     
@@ -31,8 +35,11 @@ class viewGardenPlantVC: UIViewController {
         self.lightEstimation.text = lightEst
         self.lastWateredLabel.text = lastWatered
         
+        print(lat)
+        print(lon)
+        
         // Get the plant data from catalogue
-        let url = URL(string: "http://192.81.216.18/api/v1/usergarden/api/v1/catalog/\(self.id!)/")!
+        let url = URL(string: "http://192.81.216.18/api/v1/catalog/\(self.type_id!)/")!
         
         var request = URLRequest(url: url)
         let delegate = UIApplication.shared.delegate as! AppDelegate
@@ -59,10 +66,9 @@ class viewGardenPlantVC: UIViewController {
     }
     
     @IBAction func lightEstimationChanged(_ sender: Any) {
-        // Potentially don't even need this
         self.lightEst = lightEstimation.text ?? ""
+        print(self.lightEst)
     }
-    
     @IBAction func dateChanged(_ sender: Any) {
         let newLastWatered: Date = lastWateredPicker.date
         let df = DateFormatter()
@@ -72,8 +78,43 @@ class viewGardenPlantVC: UIViewController {
         self.lastWatered = date
     }
     
+    @IBAction func nameChanged(_ sender: UITextField) {
+        self.nameText = name.text ?? ""
+    }
+    
     @IBAction func saveClicked(_ sender: UIButton) {
-        // TODO: send changes to the backend
+        // Update plant data in database
+        let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(garden_id ?? "")/edit_plant/\(uniq_id ?? "")/")!
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "PUT"
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        let date = df.string(from: Date())
+        print(date)
+        // TODO: edit last watered
+        let parameters: [String: Any] = [
+            "plant_type_id": self.type_id,
+            "latitude": self.lat,
+            "longitude": self.lon,
+            "light_level": Double(self.lightEst) ?? -1,
+            "last_watered": self.lastWatered
+        ]
+        print(parameters)
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+       } catch let error {
+           print(error.localizedDescription)
+       }
+        
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            // TODO: handle bad response
+            print(response ?? "")
+        }
+        task.resume()
     }
     /*
     // MARK: - Navigation
