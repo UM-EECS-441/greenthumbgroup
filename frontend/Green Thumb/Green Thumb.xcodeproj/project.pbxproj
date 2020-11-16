@@ -12,6 +12,7 @@
 		404264522544884A005C6F8D /* plantInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042645025448849005C6F8D /* plantInfoVC.swift */; };
 		40426456254488DF005C6F8D /* catalogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40426455254488DF005C6F8D /* catalogVC.swift */; };
 		4042645B2548FC9F005C6F8D /* catalogPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042645A2548FC9F005C6F8D /* catalogPage.swift */; };
+		4074C0EA2562FA100021416A /* homeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4074C0E92562FA100021416A /* homeVC.swift */; };
 		40C7CBA5253768FB005A2283 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA4253768FB005A2283 /* AppDelegate.swift */; };
 		40C7CBA7253768FB005A2283 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA6253768FB005A2283 /* SceneDelegate.swift */; };
 		40C7CBA9253768FB005A2283 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA8253768FB005A2283 /* ViewController.swift */; };
@@ -47,6 +48,7 @@
 		4042645025448849005C6F8D /* plantInfoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = plantInfoVC.swift; sourceTree = "<group>"; };
 		40426455254488DF005C6F8D /* catalogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogVC.swift; sourceTree = "<group>"; };
 		4042645A2548FC9F005C6F8D /* catalogPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogPage.swift; sourceTree = "<group>"; };
+		4074C0E92562FA100021416A /* homeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = homeVC.swift; sourceTree = "<group>"; };
 		40C7CBA1253768FB005A2283 /* Green Thumb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Green Thumb.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40C7CBA4253768FB005A2283 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		40C7CBA6253768FB005A2283 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				A56F04C42544DD730060976F /* gardenCell.swift */,
 				A56B4ECE254522A70041372B /* addPlantVC.swift */,
 				A56B4ED7254528DE0041372B /* addPlantOptionsVC.swift */,
+				4074C0E92562FA100021416A /* homeVC.swift */,
 				A5C523B7254A60CD000B2B13 /* registerVC.swift */,
 				40CD41E92562E48400C3DE3E /* updatePasswordVC.swift */,
 				A5C523BA254A612E000B2B13 /* loginVC.swift */,
@@ -308,6 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40CD41ED2562E8DF00C3DE3E /* welcomeVC.swift in Sources */,
+				4074C0EA2562FA100021416A /* homeVC.swift in Sources */,
 				A56F04C52544DD730060976F /* gardenCell.swift in Sources */,
 				A83E47FF2543B37F003F1193 /* UserPlant.swift in Sources */,
 				40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */,
