@@ -19,6 +19,7 @@
 		40C7CBAE253768FF005A2283 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40C7CBAD253768FF005A2283 /* Assets.xcassets */; };
 		40C7CBB1253768FF005A2283 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40C7CBAF253768FF005A2283 /* LaunchScreen.storyboard */; };
 		40CD41EA2562E48400C3DE3E /* updatePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CD41E92562E48400C3DE3E /* updatePasswordVC.swift */; };
+		40CD41ED2562E8DF00C3DE3E /* welcomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CD41EC2562E8DE00C3DE3E /* welcomeVC.swift */; };
 		5665D8DAA8A7A036525377EB /* Pods_Green_Thumb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F268A82F4911AD68A1F4F916 /* Pods_Green_Thumb.framework */; };
 		81288543253EB41400E6AAD7 /* guideTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81288542253EB41400E6AAD7 /* guideTable.swift */; };
 		8172874A254894BE001420BA /* guidePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81728749254894BE001420BA /* guidePage.swift */; };
@@ -55,6 +56,7 @@
 		40C7CBB0253768FF005A2283 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		40C7CBB2253768FF005A2283 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		40CD41E92562E48400C3DE3E /* updatePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = updatePasswordVC.swift; sourceTree = "<group>"; };
+		40CD41EC2562E8DE00C3DE3E /* welcomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = welcomeVC.swift; sourceTree = "<group>"; };
 		81288542253EB41400E6AAD7 /* guideTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = guideTable.swift; sourceTree = "<group>"; };
 		81728749254894BE001420BA /* guidePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = guidePage.swift; sourceTree = "<group>"; };
 		92F96ABF4FBECF795ED13803 /* Pods-Green Thumb.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Green Thumb.debug.xcconfig"; path = "Target Support Files/Pods-Green Thumb/Pods-Green Thumb.debug.xcconfig"; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				40CD41E92562E48400C3DE3E /* updatePasswordVC.swift */,
 				A5C523BA254A612E000B2B13 /* loginVC.swift */,
 				A5C523C7254B7C84000B2B13 /* catalogCell.swift */,
+				40CD41EC2562E8DE00C3DE3E /* welcomeVC.swift */,
 				A50034B1254BA4BC00C12F95 /* viewGardenPlantVC.swift */,
 			);
 			path = "Green Thumb";
@@ -304,6 +307,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40CD41ED2562E8DF00C3DE3E /* welcomeVC.swift in Sources */,
 				A56F04C52544DD730060976F /* gardenCell.swift in Sources */,
 				A83E47FF2543B37F003F1193 /* UserPlant.swift in Sources */,
 				40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */,
