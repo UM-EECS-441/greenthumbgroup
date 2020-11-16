@@ -14,14 +14,48 @@ class catalogVC: UITableViewController {
     var plants = [["_id":["$oid":""], "name":"", "species":"", "tags": {},
                    "description": "", "days_to_water": 0,
                    "watering_description": ""]]  // array of Plants
+    var searchedPlants = [["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                               "description": "", "days_to_water": 0,
+                               "watering_description": ""]]
+    //    var SearchBarValue:String!
+    var searching : Bool = false
     
     @IBOutlet var catalogTableView: UITableView!
+    @IBOutlet var searchBar: UITableView!
     var userGarden: UserGarden?
     
     weak var returnDelegate : PlantReturnDelegate?
     
+    override func viewWillDisappear(_ animated: Bool) {
+            // plants info page we don't end up getting scrolled all the way back to the top
+            // preferable for consistent behavior
+            searchBar.endEditing(true)
+        }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //        self.searchBar.showsCancelButton = false
+
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                /// programmatic implementation scrap code in case I do it through just that
+        //        let searchController = UISearchController(searchResultsController: nil)
+        //        // 1
+        //        searchController.searchResultsUpdater = self
+        //        // 2
+        //        searchController.obscuresBackgroundDuringPresentation = false
+        //        // 3
+        //        searchController.searchBar.placeholder = "Search Plants"
+        //        // 4
+        ////        navigationItem.searchController = searchController
+        //        tableView.tableHeaderView = searchController.searchBar
+        //        // 5
+        //        definesPresentationContext = true
+        //
+        //        var isSearchBarEmpty: Bool {
+        //          return searchController.searchBar.text?.isEmpty ?? true
+        //        }
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         self.refreshControl = UIRefreshControl()
         self.catalogTableView.delegate = self
@@ -113,6 +147,9 @@ class catalogVC: UITableViewController {
 extension catalogVC {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        print("Tapped")
+        // This line deselects the search bar so that when coming back from the
+        // plants info page we don't end up getting scrolled all the way back to the top
+        searchBar.endEditing(true)
         if self.presentingViewController?.title == "Map" {
             // Create plant for tap
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -229,10 +266,33 @@ extension catalogVC {
         }
 }
 
+extension catalogVC: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        print("called searchbar function")
+        if searchText == "" {
+            searching = false
+            tableView.reloadData()
+        }
+        else {
+//            print(searchText.lowercased())
+            searchedPlants = plants.filter({
+                String($0["name"] as! String).lowercased().prefix(searchText.count) == searchText.lowercased()
+            })
+//            print(searchedPlants)
+            searching = true
+            tableView.reloadData()
+        }
+    }
+}
+
 extension catalogVC {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // how many rows per section
-        return plants.count
+        if searching {
+            return searchedPlants.count
+        } else {
+            return plants.count
+        }
     }
     
     
@@ -240,9 +300,15 @@ extension catalogVC {
         let cell = tableView.dequeueReusableCell(withIdentifier: "catalogCell", for: indexPath) as! catalogCell
         
         
-        let name = plants[indexPath.row]["name"]
-        let nameString = String(describing: name!)
-        cell.textLabel?.text = nameString
+        if searching {
+            let name = searchedPlants[indexPath.row]["name"]
+            let nameString = String(describing: name!)
+            cell.textLabel?.text = nameString
+        } else {
+            let name = plants[indexPath.row]["name"]
+            let nameString = String(describing: name!)
+            cell.textLabel?.text = nameString
+        }
         
         
         return cell
