@@ -229,7 +229,7 @@ extension catalogVC {
             }
             
             let water_description = plants[indexPath.row]["watering_description"]
-            var water_description_string = "No Watering Description Available"
+            var water_description_string = ""
             if water_description is NSNull {
                 //<null>
             } else {
@@ -250,12 +250,8 @@ extension catalogVC {
             else {
                 catalogPage?.waterDays = "Days until next watering: " + days_to_water_String
             }
-            if water_description_string == "No Watering Description Available" {
-                catalogPage?.waterInfo = ""
-            }
-            else {
-                catalogPage?.waterInfo = water_description_string
-            }
+            catalogPage?.waterInfo = water_description_string
+
             
             
             

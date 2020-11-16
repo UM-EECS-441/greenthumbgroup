@@ -8,7 +8,7 @@
 import UIKit
 import SwiftyJSON
 
-class registerVC: UIViewController {
+class registerVC: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var password: UITextField!
@@ -16,8 +16,34 @@ class registerVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.email.delegate = self
+        self.password.delegate = self
+        self.setupHideKeyboardOnTap()
         // Do any additional setup after loading the view.
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.switchBasedNextTextField(textField)
+        return true
+    }
+    private func switchBasedNextTextField(_ textField: UITextField) {
+        switch textField {
+            case self.email:
+                self.password.becomeFirstResponder()
+            case self.password:
+                self.view.endEditing(true)
+            default:
+                self.email.resignFirstResponder()
+        }
+    }
+    
+    func setupHideKeyboardOnTap() {
+        self.view.addGestureRecognizer(self.endEditingRecognizer())
+        self.navigationController?.navigationBar.addGestureRecognizer(self.endEditingRecognizer())
+    }
+    private func endEditingRecognizer() -> UIGestureRecognizer {
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(self.view.endEditing(_:)))
+        tap.cancelsTouchesInView = false
+        return tap
     }
     
     @IBAction func registerButtonClicked(_ sender: UIButton) {
