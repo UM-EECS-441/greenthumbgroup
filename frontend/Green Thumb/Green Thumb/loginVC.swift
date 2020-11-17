@@ -73,6 +73,7 @@ class loginVC: UIViewController, UITextFieldDelegate {
                 let delegate = UIApplication.shared.delegate as! AppDelegate
                 if !cookies.isEmpty{
                     delegate.cookie = "\(cookies[0].name)=\(cookies[0].value)"
+                    UserDefaults.standard.set(delegate.cookie, forKey: "login")
                     print(delegate.cookie)
                 }
             }

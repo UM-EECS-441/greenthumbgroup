@@ -27,6 +27,7 @@ class welcomeVC: UIViewController {
             DispatchQueue.main.async {
                 let delegate = UIApplication.shared.delegate as! AppDelegate
                 delegate.cookie = ""
+                UserDefaults.standard.set(delegate.cookie, forKey: "login")
             }
         }
 

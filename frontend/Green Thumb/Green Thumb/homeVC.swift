@@ -12,8 +12,8 @@ class homeVC: UIViewController {
         super.viewDidLoad()
     }
     @IBAction func accountClicked(_ sender: Any) {
-        let delegate = UIApplication.shared.delegate as! AppDelegate
-        if delegate.cookie == "" {
+        let cookie = UserDefaults.standard.object(forKey: "login") as? String
+        if cookie == "" {
             self.performSegue(withIdentifier: "toLogin", sender: self)
         } else {
             self.performSegue(withIdentifier: "toWelcome", sender: self)
