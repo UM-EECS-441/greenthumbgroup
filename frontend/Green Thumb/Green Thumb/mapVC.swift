@@ -98,8 +98,9 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
             let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(self.userGarden.gardenId)/")!
             
             var request = URLRequest(url: url)
-            let delegate = UIApplication.shared.delegate as! AppDelegate
-            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
+//            let delegate = UIApplication.shared.delegate as! AppDelegate
+            let cookie = UserDefaults.standard.object(forKey: "login") as? String
+            request.setValue(cookie, forHTTPHeaderField: "Cookie")
             request.httpMethod = "GET"
 
             let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
@@ -119,8 +120,8 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
                                 let url = URL(string: "http://192.81.216.18/api/v1/usergarden/get_plants/\(plantId)/")!
                                 
                                 var request = URLRequest(url: url)
-                                let delegate = UIApplication.shared.delegate as! AppDelegate
-                                request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
+//                                let delegate = UIApplication.shared.delegate as! AppDelegate
+                                request.setValue(cookie, forHTTPHeaderField: "Cookie")
                                 request.httpMethod = "GET"
 
                                 let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
@@ -209,8 +210,9 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpMethod = "PUT"
             
-            let delegate = UIApplication.shared.delegate as! AppDelegate
-            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
+//            let delegate = UIApplication.shared.delegate as! AppDelegate
+            let cookie = UserDefaults.standard.object(forKey: "login") as? String
+            request.setValue(cookie, forHTTPHeaderField: "Cookie")
             
             let parameters: [String: Any] = [
                 "name": self.userGarden.name,
@@ -327,8 +329,9 @@ extension mapVC : GMSMapViewDelegate {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpMethod = "PUT"
             print("check id \(self.currentPlant!.catalogPlantId)")
-            let delegate = UIApplication.shared.delegate as! AppDelegate
-            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
+//            let delegate = UIApplication.shared.delegate as! AppDelegate
+            let cookie = UserDefaults.standard.object(forKey: "login") as? String
+            request.setValue(cookie, forHTTPHeaderField: "Cookie")
             let df = DateFormatter()
             df.dateFormat = "yyyy-MM-dd"
             let date = df.string(from: Date()) + " 00:00:00"

@@ -743,7 +743,7 @@
                                     <action selector="drawGardenClicked:" destination="30V-2j-kem" eventType="touchUpInside" id="Z6h-lw-flo"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ncc-aj-xru">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ncc-aj-xru">
                                 <rect key="frame" x="312" y="50" width="67" height="30"/>
                                 <state key="normal" title="Add Plant"/>
                                 <connections>
@@ -751,7 +751,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="acH-eh-ZSZ">
-                                <rect key="frame" x="53.5" y="51" width="32" height="29"/>
+                                <rect key="frame" x="53" y="51" width="33" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <state key="normal" title="Back"/>
                                 <connections>
@@ -772,10 +772,13 @@
                             <constraint firstItem="TZQ-Cf-KPb" firstAttribute="baseline" secondItem="HA4-Wm-gTT" secondAttribute="baseline" id="AUp-DY-4Ia"/>
                             <constraint firstItem="HHF-0g-UPU" firstAttribute="centerX" secondItem="Max-SQ-6SC" secondAttribute="centerX" id="Bhk-tf-Nj9"/>
                             <constraint firstItem="SKf-jM-YMM" firstAttribute="bottom" secondItem="TZQ-Cf-KPb" secondAttribute="bottom" priority="250" constant="70" id="Gly-Iu-ZMh"/>
+                            <constraint firstItem="acH-eh-ZSZ" firstAttribute="leading" secondItem="SKf-jM-YMM" secondAttribute="leading" constant="53" id="HHR-zf-418"/>
+                            <constraint firstItem="Ncc-aj-xru" firstAttribute="leading" secondItem="acH-eh-ZSZ" secondAttribute="trailing" priority="250" constant="226" id="IBg-gO-mzo"/>
                             <constraint firstItem="HHF-0g-UPU" firstAttribute="centerX" secondItem="Wti-b3-zit" secondAttribute="centerX" id="KBd-mB-xbd"/>
                             <constraint firstItem="YTz-C5-QuD" firstAttribute="top" secondItem="HHF-0g-UPU" secondAttribute="bottom" constant="8" id="Mh5-qH-QnS"/>
                             <constraint firstItem="HHF-0g-UPU" firstAttribute="top" secondItem="Max-SQ-6SC" secondAttribute="top" constant="103" id="V7S-tH-CzF"/>
                             <constraint firstItem="HHF-0g-UPU" firstAttribute="leading" secondItem="SKf-jM-YMM" secondAttribute="leading" id="awg-cu-fyu"/>
+                            <constraint firstItem="SKf-jM-YMM" firstAttribute="trailing" secondItem="Ncc-aj-xru" secondAttribute="trailing" constant="35" id="bRY-8u-R8w"/>
                             <constraint firstItem="HHF-0g-UPU" firstAttribute="centerX" secondItem="YTz-C5-QuD" secondAttribute="centerX" id="cbP-SY-rCD"/>
                             <constraint firstItem="Wti-b3-zit" firstAttribute="leading" secondItem="SKf-jM-YMM" secondAttribute="leading" constant="146" id="fym-Qu-Yqk"/>
                             <constraint firstItem="HA4-Wm-gTT" firstAttribute="centerX" secondItem="acH-eh-ZSZ" secondAttribute="centerX" id="gsm-Sy-WbG"/>
