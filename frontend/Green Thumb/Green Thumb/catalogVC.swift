@@ -112,6 +112,9 @@ class catalogVC: UITableViewController {
                     //would throw an error if we ever have a null name pls dont
                     String($0["name"] as! String).lowercased() < String($1["name"] as! String).lowercased()
                 }
+                
+                
+                
                 let groupedPlants = Dictionary(grouping: json, by: {
                     String($0["name"] as! String).prefix(1).lowercased()
                 })
@@ -119,6 +122,37 @@ class catalogVC: UITableViewController {
                 let keys = groupedPlants.keys.sorted()
                 
                 self.plants = sortedJSON
+                
+                var duplicateNames = [String:Int]()
+                
+                for (index, _) in self.plants.enumerated() {
+                    if let val = duplicateNames[self.plants[index]["name"] as! String] {
+                        // now val is not nil and the Optional has been unwrapped, so use it
+                        duplicateNames[self.plants[index]["name"] as! String]! += 1
+//                        print(val + 1)
+                    }
+                    else {
+                        duplicateNames[self.plants[index]["name"] as! String] = 0
+                    }
+                }
+                
+                for (index, _) in self.plants.enumerated() {
+                    if duplicateNames[self.plants[index]["name"] as! String]! > 0 {
+                        self.plants[index]["name"] =
+                            self.plants[index]["name"] as! String + " (" +
+                            String(self.plants[index]["species"] as! String) + ")"
+                    }
+//                    if let val = duplicateNames[self.plants[index]["name"] as! String] {
+//                        // now val is not nil and the Optional has been unwrapped, so use it
+//                        print(self.plants[index]["name"] as! String)
+//                        self.plants[index]["name"] =
+//                            self.plants[index]["name"] as! String + " (" +
+//                            String(self.plants[index]["species"] as! String) + ")"
+//                    }
+//                    else {
+////                        duplicateNames[self.plants[index]["name"] as! String] = true
+//                    }
+                }
 //                self.plants = groupedSortedPlants
                 
                 DispatchQueue.main.async {
@@ -171,6 +205,7 @@ extension catalogVC {
             } else {
                 //not nil
                 nameString = String(describing: name!)
+//                nameString = nameString.components(separatedBy: "(")[0]
             }
 
             let species = plants[indexPath.row]["species"]
