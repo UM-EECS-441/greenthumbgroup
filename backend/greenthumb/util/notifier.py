@@ -1,3 +1,11 @@
+"""
+
+GreenThumb notification system.
+
+GreenThumb Group <greenthumb441@umich.edu>
+
+"""
+
 import sys, smtplib, ssl, sched, schedule
 
 from os import name
