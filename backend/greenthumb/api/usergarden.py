@@ -1,5 +1,6 @@
 import greenthumb
 import json
+import sched
 
 from greenthumb import util
 from greenthumb.models.mongo import (users, gardens, plant_types, user_plants)
@@ -330,7 +331,7 @@ def add_plant_to_garden(garden_id: str):
                 )
                 #goes in place of "Water it": plant_type["watering_description"]
                 #goes in place of 1: plant_type['days_to_water']
-                job.day.every(1)
+                job.day.every(int(plant_type['days_to_water']))
 
             return {"id": str(user_plant.id)}, 200
         else:
@@ -438,7 +439,7 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
                 )
                 #goes in place of "Water it": plant_type["watering_description"]
                 #goes in place of 1: plant_type['days_to_water']
-                job.day.every(1)
+                job.day.every(int(plant_type['days_to_water']))
 
         else:
             abort(401)

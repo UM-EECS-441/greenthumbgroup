@@ -1,6 +1,7 @@
 from mongoengine import Document
 from mongoengine import (ListField, StringField, IntField, MapField, FloatField, DateField)
 from mongoengine.base.fields import ObjectIdField
+from mongoengine.fields import BooleanField
 
 class users(Document):
     email = StringField()
@@ -54,6 +55,7 @@ class user_plants(Document):
     last_watered = DateField()
     name = StringField()
     price = FloatField()
+    outdoors = BooleanField()
 
     def to_dict(self):
         return {
@@ -66,6 +68,7 @@ class user_plants(Document):
             "last_watered": self.last_watered,
             "name": self.name,
             "price": self.price,
+            "outdoors": self.outdoors
         }
 
 class guides(Document):
