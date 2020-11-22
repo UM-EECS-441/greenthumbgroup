@@ -18,7 +18,12 @@ class catalogVC: UITableViewController {
                                "description": "", "days_to_water": 0,
                                "watering_description": ""]]
     //    var SearchBarValue:String!
+    var sortedKeys : [String] = []
     var searching : Bool = false
+//    var sections : [String : [Any]] = [:]
+    var sections = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
     
     @IBOutlet var catalogTableView: UITableView!
     @IBOutlet var searchBar: UITableView!
@@ -116,12 +121,13 @@ class catalogVC: UITableViewController {
                 
                 
                 let groupedPlants = Dictionary(grouping: json, by: {
-                    String($0["name"] as! String).prefix(1).lowercased()
+                    String($0["name"] as! String).prefix(1).uppercased()
                 })
-                
-                let keys = groupedPlants.keys.sorted()
+//                print(groupedPlants)
+                self.sortedKeys = groupedPlants.keys.sorted()
                 
                 self.plants = sortedJSON
+                
                 
                 var duplicateNames = [String:Int]()
                 
@@ -142,6 +148,16 @@ class catalogVC: UITableViewController {
                             self.plants[index]["name"] as! String + " (" +
                             String(self.plants[index]["species"] as! String) + ")"
                     }
+                    let firstLetter = String(self.plants[index]["name"] as! String).prefix(1).uppercased()
+                    if let val = self.sections[firstLetter] {
+                        self.sections[firstLetter]?.append(self.plants[index])
+                    }
+                    else {
+                        self.sections[firstLetter] = []
+                        self.sections[firstLetter]?.append(self.plants[index])
+                    }
+//                    print(self.sections)
+//                    print(String(self.plants[index]["name"] as! String).prefix(1))
 //                    if let val = duplicateNames[self.plants[index]["name"] as! String] {
 //                        // now val is not nil and the Optional has been unwrapped, so use it
 //                        print(self.plants[index]["name"] as! String)
@@ -153,6 +169,7 @@ class catalogVC: UITableViewController {
 ////                        duplicateNames[self.plants[index]["name"] as! String] = true
 //                    }
                 }
+                print(self.sections)
 //                self.plants = groupedSortedPlants
                 
                 DispatchQueue.main.async {
@@ -191,24 +208,34 @@ extension catalogVC {
             addPlantVC.userGarden = userGarden
             addPlantVC.returnDelegate = self.returnDelegate
             // TODO: just add species here
-            let newPlant: UserPlant = UserPlant(catalogPlantId: self.plants[indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.plants[indexPath.row]["name"] as! String)
+            var newPlant: UserPlant = UserPlant(catalogPlantId: self.plants[indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.searchedPlants[indexPath.row]["name"] as! String)
+            if searching {
+                newPlant = UserPlant(catalogPlantId: self.plants[indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.searchedPlants[indexPath.row]["name"] as! String)
+            }
             addPlantVC.currentPlant = newPlant
             self.present(addPlantVC, animated: true, completion: nil)
         }
         else{
             let catalogPage = storyboard?.instantiateViewController(identifier: "catalogPage") as? catalogPage
             
-            let name = plants[indexPath.row]["name"]
+            var name = plants[indexPath.row]["name"]
+            if searching {
+                name = searchedPlants[indexPath.row]["name"]
+            }
             var nameString = "I been thru the desert on a plant with no name :("
             if case Optional<Any>.none = name {
                 //nil
             } else {
                 //not nil
                 nameString = String(describing: name!)
-//                nameString = nameString.components(separatedBy: "(")[0]
+                nameString = nameString.components(separatedBy: "(")[0]
             }
 
-            let species = plants[indexPath.row]["species"]
+            
+            var species = plants[indexPath.row]["species"]
+            if searching {
+                species = searchedPlants[indexPath.row]["species"]
+            }
             var speciesString = "No Species Available"
             if case Optional<Any>.none = species {
                 //nil
@@ -217,7 +244,11 @@ extension catalogVC {
                 speciesString = String(describing: species!)
             }
             
-            let description = plants[indexPath.row]["description"]
+
+            var description = plants[indexPath.row]["description"]
+            if searching {
+                description = searchedPlants[indexPath.row]["description"]
+            }
             var descriptionString = "No Description Available"
             if case Optional<Any>.none = description {
                 //nil
@@ -227,7 +258,10 @@ extension catalogVC {
             }
             
     //        let tags = String(describing: plants[indexPath.row]["tags"])
-            let tags: [String: [String]] = plants[indexPath.row]["tags"] as! [String: [String]]
+            var tags: [String: [String]] = plants[indexPath.row]["tags"] as! [String: [String]]
+            if searching {
+                tags = searchedPlants[indexPath.row]["tags"] as! [String: [String]]
+            }
             var tagsString = ""
     //        print(tags["plant type"])
             for (tag, items) in tags {
@@ -252,7 +286,10 @@ extension catalogVC {
                 typeString = String(describing: type_array![0])
             }
             
-            let days_to_water = plants[indexPath.row]["days_to_water"]
+            var days_to_water = plants[indexPath.row]["days_to_water"]
+            if searching {
+                days_to_water = searchedPlants[indexPath.row]["days_to_water"]
+            }
             var days_to_water_String = "N/A"
             if days_to_water is NSNull {
                 //<null>
@@ -263,7 +300,10 @@ extension catalogVC {
                 days_to_water_String = String(describing: days_to_water!)
             }
             
-            let water_description = plants[indexPath.row]["watering_description"]
+            var water_description = plants[indexPath.row]["watering_description"]
+            if searching {
+                water_description = searchedPlants[indexPath.row]["watering_description"]
+            }
             var water_description_string = "No Watering Description Available"
             if water_description is NSNull {
                 //<null>
@@ -295,10 +335,10 @@ extension catalogVC {
             
             
             self.navigationController?.pushViewController(catalogPage!, animated: true)
-    //        performSegue(withIdentifier: "guideSegue", sender: self)
-
+            //        performSegue(withIdentifier: "guideSegue", sender: self)
+            
         }
-        }
+    }
 }
 
 extension catalogVC: UISearchBarDelegate {
@@ -321,12 +361,40 @@ extension catalogVC: UISearchBarDelegate {
 }
 
 extension catalogVC {
+//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        if searching {
+//            return ""
+//        }
+//        else {
+//            return sortedKeys[section]
+//        }
+//    }
+//
+//    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+//        if searching {
+//            return [""]
+//        }
+//        else {
+//            return sortedKeys
+//        }
+//    }
+//
+//    override func numberOfSections(in tableView: UITableView) -> Int {
+//        if searching {
+//            return 1
+//        }
+//        else {
+//            return sortedKeys.count // or sortedFirstLetters.count
+//        }
+//    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // how many rows per section
         if searching {
             return searchedPlants.count
         } else {
             return plants.count
+//            return sections[sortedKeys[section]]!.count
         }
     }
     
@@ -343,6 +411,10 @@ extension catalogVC {
             let name = plants[indexPath.row]["name"]
             let nameString = String(describing: name!)
             cell.textLabel?.text = nameString
+            
+//            let name = sections[sortedKeys[indexPath.section]]![indexPath.row]["name"]
+//            let nameString = String(describing: name!)
+//            cell.textLabel?.text = nameString
         }
         
         
