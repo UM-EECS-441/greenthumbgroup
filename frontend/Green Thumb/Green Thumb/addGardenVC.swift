@@ -76,9 +76,10 @@ class addGardenVC: UIViewController {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpMethod = "POST"
             
-            let delegate = UIApplication.shared.delegate as! AppDelegate
-            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
-            print(delegate.cookie)
+//            let delegate = UIApplication.shared.delegate as! AppDelegate
+            let cookie = UserDefaults.standard.object(forKey: "login") as? String
+            request.setValue(cookie, forHTTPHeaderField: "Cookie")
+            print(cookie)
             
             let parameters: [String: Any] = [
                 "name": self.gardenName.text!,

@@ -8,15 +8,42 @@
 import UIKit
 import SwiftyJSON
 
-class loginVC: UIViewController {
+class loginVC: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var password: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.email.delegate = self
+        self.password.delegate = self
+        self.setupHideKeyboardOnTap()
         // Do any additional setup after loading the view.
     }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.switchBasedNextTextField(textField)
+        return true
+    }
+    private func switchBasedNextTextField(_ textField: UITextField) {
+        switch textField {
+            case self.email:
+                self.password.becomeFirstResponder()
+            case self.password:
+                self.view.endEditing(true)
+            default:
+                self.email.resignFirstResponder()
+        }
+    }
+    
+    func setupHideKeyboardOnTap() {
+        self.view.addGestureRecognizer(self.endEditingRecognizer())
+        self.navigationController?.navigationBar.addGestureRecognizer(self.endEditingRecognizer())
+    }
+    private func endEditingRecognizer() -> UIGestureRecognizer {
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(self.view.endEditing(_:)))
+        tap.cancelsTouchesInView = false
+        return tap
+    }
+
     
     @IBAction func loginButtonClicked(_ sender: UIButton) {
         // Add garden to database
@@ -46,6 +73,7 @@ class loginVC: UIViewController {
                 let delegate = UIApplication.shared.delegate as! AppDelegate
                 if !cookies.isEmpty{
                     delegate.cookie = "\(cookies[0].name)=\(cookies[0].value)"
+                    UserDefaults.standard.set(delegate.cookie, forKey: "login")
                     print(delegate.cookie)
                 }
             }
@@ -53,7 +81,7 @@ class loginVC: UIViewController {
 
         task.resume()
     }
-    
+    @IBAction func unwindToLogin(_ unwindSegue: UIStoryboardSegue) {}
     /*
     // MARK: - Navigation
 

@@ -20,8 +20,9 @@ class gardensTableVC: UITableViewController, ReturnDelegate {
         let url = URL(string: "http://192.81.216.18/api/v1/usergarden/")!
         
         var request = URLRequest(url: url)
-        let delegate = UIApplication.shared.delegate as! AppDelegate
-        request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
+//        let delegate = UIApplication.shared.delegate as! AppDelegate
+        let cookie = UserDefaults.standard.object(forKey: "login") as? String
+        request.setValue(cookie, forHTTPHeaderField: "Cookie")
         request.httpMethod = "GET"
 
         let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
