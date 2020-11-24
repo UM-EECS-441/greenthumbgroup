@@ -24,6 +24,7 @@ class plant_types(Document):
     description = StringField()
     days_to_water = IntField()
     watering_description = StringField()
+    base64_image = StringField()
 
     def to_dict(self):
         return {
@@ -34,6 +35,18 @@ class plant_types(Document):
             "description": self.description,
             "days_to_water": self.days_to_water,
             "watering_description": self.watering_description
+        }
+
+    def to_dict_base64(self):
+        return {
+            "_id": str(self.id),
+            "name": self.name,
+            "species": self.species,
+            "tags": self.tags,
+            "description": self.description,
+            "days_to_water": self.days_to_water,
+            "watering_description": self.watering_description,
+            "base64_image": self.base64_image
         }
 
 class gardens(Document):
