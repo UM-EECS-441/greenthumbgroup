@@ -12,6 +12,9 @@ from os import name
 from greenthumb import config
 from email.message import EmailMessage
 from crontab import CronTab
+from greenthumb import util
+from greenthumb.models.mongo import (users, gardens, plant_types, user_plants)
+from datetime import date
 
 class Notifier:
 
@@ -39,7 +42,51 @@ class Notifier:
         self.smtp_serv = smtp_serv
         self.port = port
 
+    def send_task_lists(self):
+
+        """
+
+        Generate task_lists for all subscribed users.
+
+        """
+
+        with util.MongoConnect():
+            usrs = users.objects()
+            for usr in usrs:
+                if not usr.unsubscribed:
+                    task_list = self.generate_user_notifications(usr)
+                    email_msg = self.create_email_msg(task_list)
+                    # self.send_email_notification()
+
+    def generate_user_tasks(self, usr):
+
+        """
+
+        Generate task list for a user.
+
+        """
+
+        
+
+        pass
+
+    def create_email_msg(self, task_list):
+
+        """
+
+        Create an email message string from a task list.
+
+        """
+
+        pass
+
     def send_email_notification(self, rec_email, plant_name, lat, long, water_desc):
+
+        """
+
+        Send an email message to a user's email address.
+        
+        """
 
         with open(self.pass_filename, 'r') as email_pass_file:
             password = email_pass_file.readline()
@@ -91,7 +138,7 @@ if __name__ == "__main__":
 
 # SPECIAL CONDITIONS
 # rain/wet
-# frost/cold
+# frost/cold (create list of plants that need to be brought in/covered)
 # heat/dry
 
 # MAINTENANCE TYPES
@@ -102,3 +149,5 @@ if __name__ == "__main__":
 # pest prevention
 # weeding
 # new planting
+
+# RECALCULATE EVERY MORNING BASED ON WEATHER (CONSIDER ZONE FOR LOWEST SURVIVABLE TEMPS), LAST WATERED (>= DAYS TO WATER FROM CURRENT DATE)
