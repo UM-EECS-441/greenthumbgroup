@@ -25,7 +25,7 @@ def create_user():
                     return "", 200
             # insert into database, then login
             with util.MongoConnect():
-                users(email=request.json['email'], gardens=[]).save()
+                users(email=request.json['email'], gardens=[], unsubscribed=False).save()
             session['email'] = request.json['email']
             # TODO: change based on function name
             return "", 200
@@ -54,3 +54,26 @@ def logout():
 
     # TODO: need different redirect
     return "", 200
+
+@greenthumb.app.route('/accounts/subscribe/<string:user_email>/', methods=['GET'])
+def subscribe(user_email: str):
+    with util.MongoConnect():
+        for user in users.objects():
+            if user_email == user.email:
+                user.unsubscribed = False
+                user.save()
+                return "Successfully subscribed.", 200
+    return "User not found.", 404
+
+@greenthumb.app.route('/accounts/unsubscribe/<string:user_email>/', methods=['GET'])
+def unsubscribe(user_email: str):
+    with util.MongoConnect():
+        for user in users.objects():
+            if user_email == user.email:
+                user.unsubscribed = True
+                user.save()
+                return "Successfully unsubscribed.", 200
+    return "User not found.", 404
+
+
+

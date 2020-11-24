@@ -1,10 +1,12 @@
 from mongoengine import Document
-from mongoengine import (ListField, StringField, IntField, MapField, FloatField, DateField)
+from mongoengine import (ListField, StringField, IntField, MapField, FloatField, DateField, BooleanField)
 from mongoengine.base.fields import ObjectIdField
 
 class users(Document):
     email = StringField()
     gardens = ListField(ObjectIdField())
+    unsubscribed = BooleanField()
+
 
 class plant_types(Document):
     '''
