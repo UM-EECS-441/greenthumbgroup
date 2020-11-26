@@ -6,6 +6,7 @@ GreenThumb Group <greenthumb441@umich.edu>
 
 """
 
+from greenthumb.models.tasks import WateringTask
 import sys, smtplib, ssl, sched, schedule
 
 from os import name
@@ -20,11 +21,11 @@ class Notifier:
 
     MSG_TITLE = "GreenThumb Task List for {tasks_date}"
     DIGEST_MSG = "Hey {username}! Here's your gardening task list for the day: "
-    PLANT_MSG = "{plant_name} is a {plant_type} and is located at ({lat}, {long})."
+    PLANT_MSG = "{plant_name} is a {plant_type} and is located at ({lat}, {long}). "
     INSTR_MSG = "Here's what you need to do: {maintain_instr}"
     EXPLAIN_MSG = "Why this is important: {explanation}"
 
-    WATER_MSG = "Water {plant_name}."
+    WATER_MSG = "Water these plants today: "
     FERTILIZE_MSG = "Fertilize {plant_name}."
     TRIM_MSG = "Trim {plant_name}."
     HARVEST_MSG = "Harvest {plant_name}."
@@ -46,7 +47,7 @@ class Notifier:
 
         """
 
-        Generate task_lists for all subscribed users.
+        Generate and send task_lists for all subscribed users.
 
         """
 
@@ -54,23 +55,44 @@ class Notifier:
             usrs = users.objects()
             for usr in usrs:
                 if not usr.unsubscribed:
-                    task_list = self.generate_user_notifications(usr)
-                    email_msg = self.create_email_msg(task_list)
-                    # self.send_email_notification()
+                    water_tasks, weather_tasks = self.generate_user_tasks(usr)
+                    email_msg = self.create_email_msg(water_tasks, weather_tasks)
+                    email_topic = self.MSG_TITLE.format(tasks_date=date.today())
+                    self.send_email_notification(email_content=email_msg, email_subject=email_topic)
 
     def generate_user_tasks(self, usr):
 
         """
 
-        Generate task list for a user.
+        Generate task lists for a user.
 
         """
 
-        
+        watering_tasks = []
+        weather_tasks = []
 
-        pass
+        for garden_id in usr.gardens:
+            hist_data, forecast_data, plant_watering_data = util.calc_garden_plants_watering(garden_id)
+            garden = gardens.objects(id=garden_id)[0]
+            for plant_id in garden.plants:
+                plant = user_plants.objects(id=plant_id)[0]
+                last_watered_date = plant.last_watered
+                plant_type = plant_types.objects(id=plant.plant_type_id)[0]
+                days_to_water = plant_type.days_to_water
+                if (date.today() - last_watered_date).days >= days_to_water:
+                    watering_tasks.append(
+                        WateringTask(
+                            plant_name=plant.name,
+                            plant_type=plant_type.name,
+                            plant_lat=plant.latitude,
+                            plant_long=plant.longitude,
+                            water_instr=plant_type.watering_description,
+                        )
+                    )
 
-    def create_email_msg(self, task_list):
+        return watering_tasks, weather_tasks
+
+    def create_email_msg(self, usr, water_tasks, weather_tasks):
 
         """
 
@@ -78,9 +100,33 @@ class Notifier:
 
         """
 
-        pass
+        # email_subject = self.MSG_TITLE.format(tasks_date=date.today()) + "\n\n"
 
-    def send_email_notification(self, rec_email, plant_name, lat, long, water_desc):
+        email_msg = (
+            self.DIGEST_MSG.format(username=usr.email) +
+            "\n\n" +
+            self.WATER_MSG + 
+            "\n"
+        )
+
+        for wt in water_tasks:
+            email_msg.append(
+                "- " +
+                self.PLANT_MSG.format(
+                    plant_name=wt.plant_name,
+                    plant_type=wt.plant_type,
+                    lat=wt.plant_lat,
+                    long=wt.plant_long
+                ) +
+                self.INSTR_MSG.format(
+                    maintain_instr=wt.water_instr
+                ) +
+                "\n"
+            )
+
+        return email_msg
+
+    def send_email_notification(self, rec_email, email_subject, email_content):
 
         """
 
@@ -94,32 +140,19 @@ class Notifier:
         # Create a secure SSL context
         context = ssl.create_default_context()
 
-        with smtplib.SMTP_SSL("smtp.gmail.com", self.port, context=context) as server:
+        with smtplib.SMTP_SSL(self.smtp_serv, self.port, context=context) as server:
             server.login(self.email_addr, password)
             # TODO: Send email here
             sender_email = self.email_addr
 
             message = EmailMessage()
-            message.set_content(
-                f"\tIt's time to water your {plant_name}!\n\n\
-                Your plant is located at ({lat}, {long})\n\n\
-                Watering instructions: {water_desc}"
-            )
-            message['Subject'] = f'Watering Notification for {plant_name.capitalize()}'
+            message.set_content(email_content)
+            message['Subject'] = email_subject
             message['From'] = self.email_addr
             message['To'] = rec_email
 
             server.send_message(message)
             server.quit()
-
-    def create_notification(days_until=1, recurring=False):
-        if recurring:
-            with CronTab(user='root') as cron:
-                pass
-
-    def remove_notification(recurring=False):
-        with CronTab(user='root') as cron:
-            pass
 
 if __name__ == "__main__":
     notif = Notifier(
@@ -150,4 +183,4 @@ if __name__ == "__main__":
 # weeding
 # new planting
 
-# RECALCULATE EVERY MORNING BASED ON WEATHER (CONSIDER ZONE FOR LOWEST SURVIVABLE TEMPS), LAST WATERED (>= DAYS TO WATER FROM CURRENT DATE)
+# RECALCULATE EVERY MORNING BASED ON WEATHER (CONSIDER ZONE FOR LOWEST SURVIVABLE TEMPS)
