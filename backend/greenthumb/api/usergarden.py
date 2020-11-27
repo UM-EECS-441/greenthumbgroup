@@ -5,7 +5,6 @@ import sched
 from greenthumb import util
 from greenthumb.models.mongo import (users, gardens, plant_types, user_plants)
 from flask import (abort, request, session, jsonify)
-from crontab import CronTab
 
 import datetime
 
@@ -90,19 +89,10 @@ def get_garden(garden_id: str):
                         continue
                     plant = plant[0]
                     plant_type = plant_types.objects(id=plant.plant_type_id)
-                    # if no plant type can't delete cronjob
                     if str(plant_type) == '[]':
                         plant.delete()
                         continue
                     plant_type = plant_type[0]
-                    # Delete cron job when plant is deleted
-                    with CronTab(user='root') as cron:
-                        cron.remove_all(command="python notification.py " +
-                            str(session['email']) + " " +
-                            str(plant_type["name"]) + " " +
-                            str(float(plant["latitude"])) + " " +
-                            str(float(plant["longitude"])) + " " +
-                            str(WATERING_DESCRIPTION))
 
                     plant.delete()
 
@@ -319,20 +309,6 @@ def add_plant_to_garden(garden_id: str):
             garden.plants.append(str(user_plant.id))
             garden.save()
 
-            # TODO: implement using/setting last_watered later
-            with CronTab(user='root') as cron:
-                job = cron.new(
-                    command="python notification.py " +
-                    str(session['email']) + " " +
-                    str(plant_type["name"]) + " " +
-                    str(float(request.json['latitude'])) + " " +
-                    str(float(request.json['longitude'])) + " " +
-                    str(WATERING_DESCRIPTION)
-                )
-                #goes in place of "Water it": plant_type["watering_description"]
-                #goes in place of 1: plant_type['days_to_water']
-                job.day.every(int(plant_type['days_to_water']))
-
             return {"id": str(user_plant.id)}, 200
         else:
             abort(401)
@@ -408,15 +384,6 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
                 abort(404)
             plant = plant[0]
 
-            # delete old cron job since the plants latitude/longitude can change
-            with CronTab(user='root') as cron:
-                cron.remove_all(command="python notification.py " +
-                    str(session['email']) + " " +
-                    str(plant_type["name"]) + " " +
-                    str(float(plant["latitude"])) + " " +
-                    str(float(plant["longitude"])) + " " +
-                    str(WATERING_DESCRIPTION))
-
             plant.plant_type_id = plant_type.id
             plant.latitude = request.json['latitude']
             plant.longitude = request.json['longitude']
@@ -426,20 +393,6 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
             plant.price = request.json['price']
             plant.last_watered = datetime.datetime.strptime(request.json['last_watered'], '%Y-%m-%d %H:%M:%S.%f')
             plant.save()
-
-            # remake cron job
-            with CronTab(user='root') as cron:
-                job = cron.new(
-                    command="python notification.py " +
-                    str(session['email']) + " " +
-                    str(plant_type["name"]) + " " +
-                    str(float(request.json['latitude'])) + " " +
-                    str(float(request.json['longitude'])) + " " +
-                    str(WATERING_DESCRIPTION)
-                )
-                #goes in place of "Water it": plant_type["watering_description"]
-                #goes in place of 1: plant_type['days_to_water']
-                job.day.every(int(plant_type['days_to_water']))
 
         else:
             abort(401)
@@ -487,15 +440,6 @@ def delete_plant_in_garden(garden_id: str, plant_id: str):
             if str(plant_type) == '[]':
                 abort(401)
             plant_type = plant_type[0]
-
-            # Delete cron job when plant is deleted
-            with CronTab(user='root') as cron:
-                cron.remove_all(command="python notification.py " +
-                    str(session['email']) + " " +
-                    str(plant_type["name"]) + " " +
-                    str(float(plant["latitude"])) + " " +
-                    str(float(plant["longitude"])) + " " +
-                    str(WATERING_DESCRIPTION))
 
                 #goes in place of "Water it": plant_type["watering_description"]
             garden.plants.remove(plant.id)

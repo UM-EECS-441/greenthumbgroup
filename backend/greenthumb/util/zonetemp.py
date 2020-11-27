@@ -1,4 +1,13 @@
 # zone temp map in celsius, max bias
+"""
+
+GreenThumb utils: zone to temperature mapping.
+
+GreenThumb Group <greenthumb441@umich.edu>
+
+"""
+
+# From the USDA
 ZONE_TEMP_MAP = {
     "0": -51.1,
     "1": -45.6,
@@ -17,6 +26,13 @@ ZONE_TEMP_MAP = {
 }
 
 def zone_min_temp(zone):
+
+    """
+
+    Convert zone number to a minimum temperature that a plant can handle.
+
+    """
+
     if zone > 13 or zone < 1:
         return None
 

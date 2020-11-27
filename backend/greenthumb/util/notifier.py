@@ -7,18 +7,31 @@ GreenThumb Group <greenthumb441@umich.edu>
 """
 
 from greenthumb.util.zonetemp import zone_min_temp
-import sys, smtplib, ssl, sched, schedule
+import smtplib, ssl
 
 from os import name
 from greenthumb import config
 from email.message import EmailMessage
-from crontab import CronTab
 from greenthumb import util
 from greenthumb.models.mongo import (users, gardens, plant_types, user_plants)
-from greenthumb.models.tasks import (WateringTask, MoveIndoorsTask, ColdWeatherTask)
+from greenthumb.models.tasks import (WateringTask, ColdWeatherTask)
 from datetime import date
 
 class Notifier:
+
+    # SPECIAL CONDITIONS
+    # rain/wet
+    # frost/cold (create list of plants that need to be brought in/covered)
+    # heat/dry
+
+    # MAINTENANCE TYPES
+    # watering
+    # fertilizing
+    # pruning/trimming
+    # picking
+    # pest prevention
+    # weeding
+    # new planting
 
     MSG_TITLE = "GreenThumb Task List for {tasks_date}"
     DIGEST_MSG = "Hey {username}! Here's your gardening task list for the day: "
@@ -32,7 +45,8 @@ class Notifier:
     HARVEST_MSG = "Harvest {plant_name}."
     WEEDING_MSG = "Remove pesky weeds from your garden!"
     COLD_MSG = ("Today's minimum temperature is {temp_today} degrees C and " +
-        "tomorrow's is {temp_tomorrow} degrees C. You may want to bring these plants inside: ")
+        "tomorrow's is {temp_tomorrow} degrees C. You may want to bring these " +
+        "plants inside or cover them up: ")
     ZONE_MSG = ("This plant's zone is {zone_num} which means it can handle a " +
         "minimum temperature of approximately {low_deg} degrees C.")
 
@@ -48,7 +62,7 @@ class Notifier:
         self.smtp_serv = smtp_serv
         self.port = port
 
-    def send_task_lists(self):
+    def generate_and_send_task_lists(self):
 
         """
 
@@ -64,7 +78,7 @@ class Notifier:
                     if water_tasks or cold_weather_tasks:
                         email_msg = self.create_email_msg(water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow)
                         email_topic = self.MSG_TITLE.format(tasks_date=date.today())
-                        self.send_email_notification(email_content=email_msg, email_subject=email_topic)
+                        self.send_email_msg(email_content=email_msg, email_subject=email_topic)
 
     def generate_user_tasks(self, usr):
 
@@ -178,7 +192,7 @@ class Notifier:
 
         return email_msg
 
-    def send_email_notification(self, rec_email, email_subject, email_content):
+    def send_email_msg(self, rec_email, email_subject, email_content):
 
         """
 
@@ -208,31 +222,9 @@ class Notifier:
 
 if __name__ == "__main__":
     notif = Notifier(
-        user=config.CRON_USER,
         email_addr=config.NOTIF_EMAIL_ADDR,
         pass_filename=config.NOTIF_EMAIL_PASS_FILE,
         smtp_serv=config.EMAIL_SMTP,
-        port=config.EMAIL_SSL_PORT)
-    notif.send_email_notification(
-        str(sys.argv[1]),
-        str(sys.argv[2]),
-        str(sys.argv[3]),
-        str(sys.argv[4]),
-        " ".join(list(sys.argv[5:]))
+        port=config.EMAIL_SSL_PORT
     )
-
-# SPECIAL CONDITIONS
-# rain/wet
-# frost/cold (create list of plants that need to be brought in/covered)
-# heat/dry
-
-# MAINTENANCE TYPES
-# watering
-# fertilizing
-# pruning/trimming
-# picking
-# pest prevention
-# weeding
-# new planting
-
-# RECALCULATE EVERY MORNING BASED ON WEATHER (CONSIDER ZONE FOR LOWEST SURVIVABLE TEMPS)
+    notif.generate_and_send_task_lists()
