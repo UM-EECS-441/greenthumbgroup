@@ -6,7 +6,7 @@ GreenThumb Group <greenthumb441@umich.edu>
 
 """
 
-from greenthumb.models.tasks import WateringTask
+from greenthumb.util.zonetemp import zone_min_temp
 import sys, smtplib, ssl, sched, schedule
 
 from os import name
@@ -15,6 +15,7 @@ from email.message import EmailMessage
 from crontab import CronTab
 from greenthumb import util
 from greenthumb.models.mongo import (users, gardens, plant_types, user_plants)
+from greenthumb.models.tasks import (WateringTask, MoveIndoorsTask, ColdWeatherTask)
 from datetime import date
 
 class Notifier:
@@ -30,6 +31,10 @@ class Notifier:
     TRIM_MSG = "Trim {plant_name}."
     HARVEST_MSG = "Harvest {plant_name}."
     WEEDING_MSG = "Remove pesky weeds from your garden!"
+    COLD_MSG = ("Today's minimum temperature is {temp_today} degrees C and " +
+        "tomorrow's is {temp_tomorrow} degrees C. You may want to bring these plants inside: ")
+    ZONE_MSG = ("This plant's zone is {zone_num} which means it can handle a " +
+        "minimum temperature of approximately {low_deg} degrees C.")
 
     # Optionals?
     PEST_PREV_MSG = "Take some pest-prevention measures in your garden!"
@@ -55,10 +60,11 @@ class Notifier:
             usrs = users.objects()
             for usr in usrs:
                 if not usr.unsubscribed:
-                    water_tasks, weather_tasks = self.generate_user_tasks(usr)
-                    email_msg = self.create_email_msg(water_tasks, weather_tasks)
-                    email_topic = self.MSG_TITLE.format(tasks_date=date.today())
-                    self.send_email_notification(email_content=email_msg, email_subject=email_topic)
+                    water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow = self.generate_user_tasks(usr)
+                    if water_tasks or cold_weather_tasks:
+                        email_msg = self.create_email_msg(water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow)
+                        email_topic = self.MSG_TITLE.format(tasks_date=date.today())
+                        self.send_email_notification(email_content=email_msg, email_subject=email_topic)
 
     def generate_user_tasks(self, usr):
 
@@ -68,11 +74,16 @@ class Notifier:
 
         """
 
+        min_temp_today = None
+        min_temp_tomorrow = None
         watering_tasks = []
-        weather_tasks = []
+        cold_weather_tasks = []
 
         for garden_id in usr.gardens:
-            hist_data, forecast_data, plant_watering_data = util.calc_garden_plants_watering(garden_id)
+            garden_weather_data = util.calc_garden_plants_watering(garden_id)
+            # in degrees C
+            min_temp_today = garden_weather_data["forecast_data"][0]["min_temp"]
+            min_temp_tomorrow = garden_weather_data["forecast_data"][1]["min_temp"]
             garden = gardens.objects(id=garden_id)[0]
             for plant_id in garden.plants:
                 plant = user_plants.objects(id=plant_id)[0]
@@ -89,10 +100,22 @@ class Notifier:
                             water_instr=plant_type.watering_description,
                         )
                     )
+                if plant.outdoors:
+                    min_zone = min(plant_type.tags["zones"])
+                    if min_temp_today < util.zone_min_temp(min_zone) or min_temp_tomorrow < util.zone_min_temp(min_zone):
+                        cold_weather_tasks.append(
+                            ColdWeatherTask(
+                                plant_name=plant.name,
+                                plant_type=plant_type.name,
+                                plant_lat=plant.latitude,
+                                plant_long=plant.longitude,
+                                plant_zone=min_zone,
+                            )
+                        )
 
-        return watering_tasks, weather_tasks
+        return watering_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow
 
-    def create_email_msg(self, usr, water_tasks, weather_tasks):
+    def create_email_msg(self, usr, water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow):
 
         """
 
@@ -104,25 +127,54 @@ class Notifier:
 
         email_msg = (
             self.DIGEST_MSG.format(username=usr.email) +
-            "\n\n" +
-            self.WATER_MSG + 
             "\n"
         )
 
-        for wt in water_tasks:
+        if water_tasks:
             email_msg.append(
-                "- " +
-                self.PLANT_MSG.format(
-                    plant_name=wt.plant_name,
-                    plant_type=wt.plant_type,
-                    lat=wt.plant_lat,
-                    long=wt.plant_long
-                ) +
-                self.INSTR_MSG.format(
-                    maintain_instr=wt.water_instr
+                "\n" +
+                self.WATER_MSG + 
+                "\n"
+            )
+
+            for wt in water_tasks:
+                email_msg.append(
+                    "- " +
+                    self.PLANT_MSG.format(
+                        plant_name=wt.plant_name,
+                        plant_type=wt.plant_type,
+                        lat=str(wt.plant_lat),
+                        long=str(wt.plant_long)
+                    ) +
+                    self.INSTR_MSG.format(
+                        maintain_instr=wt.water_instr
+                    ) +
+                    "\n"
+                )
+        if cold_weather_tasks:
+            email_msg.append(
+                "\n" +
+                self.COLD_MSG.format(
+                    temp_today=str(min_temp_today),
+                    temp_tomorrow=str(min_temp_tomorrow)
                 ) +
                 "\n"
             )
+            for wt in cold_weather_tasks:
+                email_msg.append(
+                    "- " +
+                    self.PLANT_MSG.format(
+                        plant_name=wt.plant_name,
+                        plant_type=wt.plant_type,
+                        lat=str(wt.plant_lat),
+                        long=str(wt.plant_long)
+                    ) +
+                    self.ZONE_MSG.format(
+                        zone_num=str(wt.plant_zone),
+                        low_deg=str(zone_min_temp(wt.plant_zone))
+                    ) +
+                    "\n"
+                )
 
         return email_msg
 

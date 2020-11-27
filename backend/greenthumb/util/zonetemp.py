@@ -1,0 +1,23 @@
+# zone temp map in celsius, max bias
+ZONE_TEMP_MAP = {
+    "0": -51.1,
+    "1": -45.6,
+    "2": -40,
+    "3": -34.4,
+    "4": -28.9,
+    "5": -23.3,
+    "6": -17.8,
+    "7": -12.2,
+    "8": -6.7,
+    "9": -1.1,
+    "10": 4.4,
+    "11": 10,
+    "12": 15.6,
+    "13": 21.1
+}
+
+def zone_min_temp(zone):
+    if zone > 13 or zone < 1:
+        return None
+
+    return ZONE_TEMP_MAP[str(zone)]
