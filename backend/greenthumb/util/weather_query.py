@@ -180,6 +180,3 @@ def calc_garden_plants_watering(garden_id):
 
     # Returns a dictionary of historical, forecast, and plant watering data
     return {"hist_data": hist_data, "forecast_data": forecast_data, "plant_watering_data": plant_watering_data}
-
-if __name__ == "__main__":
-    print(calc_garden_plants_watering("5f9b4b691b860dfd6a401d6e"))
