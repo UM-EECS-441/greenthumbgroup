@@ -47,7 +47,6 @@ class registerVC: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func registerButtonClicked(_ sender: UIButton) {
-        // Add garden to database
         let url = URL(string: "http://192.81.216.18/accounts/create/")!
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

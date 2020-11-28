@@ -46,7 +46,6 @@ class loginVC: UIViewController, UITextFieldDelegate {
 
     
     @IBAction func loginButtonClicked(_ sender: UIButton) {
-        // Add garden to database
         let url = URL(string: "http://192.81.216.18/accounts/login/")!
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
