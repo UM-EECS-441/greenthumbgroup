@@ -12,7 +12,6 @@ class welcomeVC: UIViewController {
         super.viewDidLoad()
     }
     @IBAction func logoutButtonClicked(_ sender: UIButton) {
-        // Add garden to database
         let url = URL(string: "http://192.81.216.18/accounts/logout/")!
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -25,9 +24,8 @@ class welcomeVC: UIViewController {
             guard let httpResponse = response as? HTTPURLResponse, let _ = httpResponse.allHeaderFields as? [String: String] else { return }
             print(response ?? "")
             DispatchQueue.main.async {
-                let delegate = UIApplication.shared.delegate as! AppDelegate
-                delegate.cookie = ""
-                UserDefaults.standard.set(delegate.cookie, forKey: "login")
+                UserDefaults.standard.set("", forKey: "login")
+                UserDefaults.standard.set("", forKey: "email")
             }
         }
 
