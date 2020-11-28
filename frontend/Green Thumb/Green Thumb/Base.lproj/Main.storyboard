@@ -408,43 +408,39 @@
             </objects>
             <point key="canvasLocation" x="-884" y="785"/>
         </scene>
-        <!--View Controller-->
+        <!--HelpVC-->
         <scene sceneID="T28-p2-div">
             <objects>
-                <viewController id="sIS-h3-cUh" sceneMemberID="viewController">
+                <viewController id="sIS-h3-cUh" customClass="helpVC" customModule="Green_Thumb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZsZ-vZ-2LK">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="mount_rainier_national_park_3484" translatesAutoresizingMaskIntoConstraints="NO" id="yec-BB-eYA">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mount_rainier_national_park_3484" translatesAutoresizingMaskIntoConstraints="NO" id="yec-BB-eYA">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Help" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dKI-GW-Bxc">
-                                <rect key="frame" x="153" y="100" width="100" height="60"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="50"/>
-                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dPa-v9-7d9">
-                                <rect key="frame" x="140" y="375" width="126" height="93"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" image="play.rectangle.fill" catalog="system">
-                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="90"/>
-                                </state>
-                            </button>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zni-a7-fmZ" customClass="YTPlayerView">
+                                <rect key="frame" x="43" y="202" width="329" height="492"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="JAC-Mv-3IP"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="JAC-Mv-3IP" firstAttribute="bottom" secondItem="dPa-v9-7d9" secondAttribute="bottom" constant="291" id="Dcq-Yd-qnQ"/>
-                            <constraint firstItem="dPa-v9-7d9" firstAttribute="centerY" secondItem="ZsZ-vZ-2LK" secondAttribute="centerY" id="N6C-zT-yo2"/>
-                            <constraint firstItem="dPa-v9-7d9" firstAttribute="leading" secondItem="JAC-Mv-3IP" secondAttribute="leading" constant="140" id="U4b-hM-nDy"/>
-                            <constraint firstItem="dPa-v9-7d9" firstAttribute="centerX" secondItem="dKI-GW-Bxc" secondAttribute="centerX" id="aFS-b5-gT5"/>
-                            <constraint firstItem="dKI-GW-Bxc" firstAttribute="top" secondItem="JAC-Mv-3IP" secondAttribute="top" constant="12" id="eA7-U8-iau"/>
+                            <constraint firstItem="yec-BB-eYA" firstAttribute="top" secondItem="ZsZ-vZ-2LK" secondAttribute="topMargin" constant="-88" id="8Pa-BD-Npj"/>
+                            <constraint firstItem="yec-BB-eYA" firstAttribute="centerY" secondItem="ZsZ-vZ-2LK" secondAttribute="centerY" id="C1U-1N-ORx"/>
+                            <constraint firstItem="Zni-a7-fmZ" firstAttribute="top" secondItem="JAC-Mv-3IP" secondAttribute="top" constant="114" id="DnF-DM-KIo"/>
+                            <constraint firstItem="yec-BB-eYA" firstAttribute="leading" secondItem="JAC-Mv-3IP" secondAttribute="leading" id="Xgz-6f-bEB"/>
+                            <constraint firstItem="Zni-a7-fmZ" firstAttribute="centerY" secondItem="yec-BB-eYA" secondAttribute="centerY" id="bPa-4r-9IJ"/>
+                            <constraint firstItem="Zni-a7-fmZ" firstAttribute="leading" secondItem="JAC-Mv-3IP" secondAttribute="leading" constant="43" id="iIc-03-qMR"/>
+                            <constraint firstItem="yec-BB-eYA" firstAttribute="centerX" secondItem="ZsZ-vZ-2LK" secondAttribute="centerX" id="rBs-be-wr2"/>
+                            <constraint firstItem="Zni-a7-fmZ" firstAttribute="centerX" secondItem="yec-BB-eYA" secondAttribute="centerX" id="rqe-ll-u4m"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="AWL-rE-h5k"/>
+                    <connections>
+                        <outlet property="youtubePlayerView" destination="Zni-a7-fmZ" id="g8m-w1-xlt"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rqu-mr-Usy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -2527,7 +2523,6 @@
         <image name="mount_rainier_national_park_3484" width="994" height="1500"/>
         <image name="person" catalog="system" width="128" height="117"/>
         <image name="planticon" width="512" height="512"/>
-        <image name="play.rectangle.fill" catalog="system" width="128" height="93"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="plus.circle.fill" catalog="system" width="128" height="121"/>
         <image name="rectangle.dashed" catalog="system" width="128" height="93"/>
