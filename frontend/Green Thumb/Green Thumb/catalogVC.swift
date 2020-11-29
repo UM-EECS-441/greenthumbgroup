@@ -20,10 +20,6 @@ class catalogVC: UITableViewController {
                                "description": "", "days_to_water": 0,
                                "watering_description": ""]]
     
-    // Sort toggle, very cool!
-    let sortToggle : [String:String] = ["alphabetical":"type",
-                                        "type":"flowercolor",
-                                        "flowercolor":"alphabetical"]
     var currentSort : String = "alphabetical"
     
     // Alphabetical Sort
@@ -39,6 +35,11 @@ class catalogVC: UITableViewController {
     // Flower Color Sort
     var sortedFlowerColorKeys : [String] = []
     var plantsByFlowerColor = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
+    // Special Features Sort
+    var sortedFeatureKeys : [String] = []
+    var plantsByFeature = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
                      "description": "", "days_to_water": 0,
                      "watering_description": ""]]]
     
@@ -58,14 +59,13 @@ class catalogVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        let temp : [String] = ["7", "8", "9", "10", "11", "12"]
-//        print(temp.min())
         
         // Bar Button Menu
         let barButtonMenu = UIMenu(title: "Filter Options", children: [
             UIAction(title: NSLocalizedString("Sort by Name", comment: ""), image: UIImage(systemName: "a.book.closed"), handler: menuHandler),
             UIAction(title: NSLocalizedString("Sort by Plant Type", comment: ""), image: UIImage(systemName: "leaf"), handler: menuHandler),
-            UIAction(title: NSLocalizedString("Sort by Flower Color", comment: ""), image: UIImage(systemName: "paintpalette"), handler: menuHandler)
+            UIAction(title: NSLocalizedString("Sort by Flower Color", comment: ""), image: UIImage(systemName: "paintpalette"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Special Features", comment: ""), image: UIImage(systemName: "paintpalette"), handler: menuHandler)
         ])
         
 //        let button = UIButton()
@@ -113,6 +113,13 @@ class catalogVC: UITableViewController {
                 self.scrollToTop()
             }
         }
+        else if action.title == "Sort by Special Features" {
+            if self.currentSort != "features" {
+                self.currentSort = "features"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
     }
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
@@ -129,22 +136,6 @@ class catalogVC: UITableViewController {
         queue.asyncAfter(deadline: DispatchTime.now() + wait, execute: closure)
     }
     
-//    @IBAction func changeSort(_ sender: Any) {
-////        print("switching from", currentSort, "sort to", sortToggle[currentSort]!);
-//        // replaced with menu instead of toggle
-//        currentSort = sortToggle[currentSort]!;
-//        if currentSort == "alphabetical" {
-//            showToast(message: "Now Sorting by Name", seconds: 0.3)
-//        }
-//        else if currentSort == "type" {
-//            showToast(message: "Now Sorting by Plant Type", seconds: 0.3)
-//        }
-//        else if currentSort == "flowercolor" {
-//            showToast(message: "Now Sorting by Flower Color", seconds: 0.3)
-//        }
-//        tableView.reloadData();
-//        self.scrollToTop()
-//    }
     
     func showToast(message : String, seconds: Double){
         // https://stackoverflow.com/questions/31540375/how-to-toast-message-in-swift
@@ -277,17 +268,36 @@ class catalogVC: UITableViewController {
                         }
                     }
                     // Grouping plants by flowercolor end
+                    
+//                    let temp : [String] = ["7", "8", "9", "10", "11", "12"]
+//                    let minimum = temp.min {a,b in Int(a)! < Int(b)!}
+                    
+                    // Grouping plants by special features begin
+                    if let features_array: [String] = tags["special features"] {
+                        for feature in features_array {
+                            if let _ = self.plantsByFeature[feature] {
+                                self.plantsByFeature[feature]?.append(self.plants[index])
+                            }
+                            else {
+                                self.plantsByFeature[feature] = []
+                                self.plantsByFeature[feature]?.append(self.plants[index])
+                            }
+                        }
+                    }
+                    // Grouping plants by special features end
                 }
                 // Don't know why "" ends up as an empty key but bonk and its gone
                 self.plantsByType.removeValue(forKey: "")
                 self.sortedTypeKeys = self.plantsByType.keys.sorted()
                 
-//                print(self.sections)
-//                self.plants = groupedSortedPlants
                 
                 self.plantsByFlowerColor.removeValue(forKey: "")
                 self.sortedFlowerColorKeys = self.plantsByFlowerColor.keys.sorted()
-//                print(self.sortedFlowerColorKeys)
+                
+                self.plantsByFeature.removeValue(forKey: "")
+                self.sortedFeatureKeys = self.plantsByFeature.keys.sorted()
+                
+//                print(self.sortedFeatureKeys)
                 
                 DispatchQueue.main.async {
                   self.tableView.estimatedRowHeight = 140
@@ -333,6 +343,9 @@ extension catalogVC {
             }
             else if currentSort == "flowercolor" {
                 selectedPlant = plantsByFlowerColor[sortedFlowerColorKeys[indexPath.section]]![indexPath.row]
+            }
+            else if currentSort == "features" {
+                selectedPlant = plantsByFeature[sortedFeatureKeys[indexPath.section]]![indexPath.row]
             }
             else {
                 selectedPlant = plants[indexPath.row]
@@ -498,6 +511,9 @@ extension catalogVC {
             else if currentSort == "flowercolor" {
                 return sortedFlowerColorKeys[section]
             }
+            else if currentSort == "features" {
+                return sortedFeatureKeys[section]
+            }
             else {
                 return ""
             }
@@ -524,6 +540,9 @@ extension catalogVC {
             else if currentSort == "flowercolor" {
                 return sortedFlowerColorKeys
             }
+            else if currentSort == "features" {
+                return sortedFeatureKeys
+            }
             else {
                 return [""]
             }
@@ -543,6 +562,9 @@ extension catalogVC {
             }
             else if currentSort == "flowercolor" {
                 return sortedFlowerColorKeys.count
+            }
+            else if currentSort == "features" {
+                return sortedFeatureKeys.count
             }
             else {
                 return 1
@@ -564,6 +586,9 @@ extension catalogVC {
             }
             else if currentSort == "flowercolor" {
                 return plantsByFlowerColor[sortedFlowerColorKeys[section]]!.count
+            }
+            else if currentSort == "features" {
+                return plantsByFeature[sortedFeatureKeys[section]]!.count
             }
             else {
                 return plants.count
@@ -593,6 +618,11 @@ extension catalogVC {
             }
             else if currentSort == "flowercolor" {
                 let name = plantsByFlowerColor[sortedFlowerColorKeys[indexPath.section]]![indexPath.row]["name"]
+                let nameString = String(describing: name!)
+                cell.textLabel?.text = nameString
+            }
+            else if currentSort == "features" {
+                let name = plantsByFeature[sortedFeatureKeys[indexPath.section]]![indexPath.row]["name"]
                 let nameString = String(describing: name!)
                 cell.textLabel?.text = nameString
             }
