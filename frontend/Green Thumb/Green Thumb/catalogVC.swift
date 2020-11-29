@@ -325,7 +325,8 @@ extension catalogVC {
             addPlantVC.returnDelegate = self.returnDelegate
             // TODO: just add species here
 
-            var newPlant: UserPlant = UserPlant(catalogPlantId: self.plants[indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.plants[indexPath.row]["name"] as! String)
+//            var newPlant: UserPlant = UserPlant(catalogPlantId: self.plants[indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.plants[indexPath.row]["name"] as! String)
+            var newPlant: UserPlant = UserPlant(catalogPlantId: self.plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["name"] as! String)
             
             if searching {
                 newPlant = UserPlant(catalogPlantId: self.searchedPlants[indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.searchedPlants[indexPath.row]["name"] as! String)
