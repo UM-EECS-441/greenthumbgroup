@@ -44,7 +44,7 @@ class catalogVC: UITableViewController {
     
     @IBOutlet var catalogTableView: UITableView!
     @IBOutlet var searchBar: UITableView!
-    @IBOutlet weak var sortButton: UIBarButtonItem!
+    @IBOutlet var sortButton: UIBarButtonItem!
     var userGarden: UserGarden?
     
     weak var returnDelegate : PlantReturnDelegate?
@@ -59,12 +59,19 @@ class catalogVC: UITableViewController {
         super.viewDidLoad()
         
         // Bar Button Menu
-        let barButtonMenu = UIMenu(title: "", children: [
-            UIAction(title: NSLocalizedString("Sort by Name", comment: ""), image: UIImage(systemName: "doc.on.doc"), handler: menuHandler),
-            UIAction(title: NSLocalizedString("Sort by Plant Type", comment: ""), image: UIImage(systemName: "pencil"), handler: menuHandler),
-            UIAction(title: NSLocalizedString("Sort by Flower Color", comment: ""), image: UIImage(systemName: "plus.square.on.square"), handler: menuHandler)
+        let barButtonMenu = UIMenu(title: "Filter Options", children: [
+            UIAction(title: NSLocalizedString("Sort by Name", comment: ""), image: UIImage(systemName: "a.book.closed"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Plant Type", comment: ""), image: UIImage(systemName: "leaf"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Flower Color", comment: ""), image: UIImage(systemName: "paintpalette"), handler: menuHandler)
         ])
+        
+//        let button = UIButton()
+//        button.setImage(UIImage(named: "arrow.up.arrow.down"), for: [])
+//        button.setTitle("YourTitle", for: [])
+//        button.sizeToFit()
+//        sortButton = UIBarButtonItem(customView: button)
         sortButton.menu = barButtonMenu
+//        sortButton.image = UIImage(systemName: "arrow.up.arrow.down")
         
         
         self.refreshControl = UIRefreshControl()
