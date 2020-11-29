@@ -58,6 +58,9 @@ class catalogVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        let temp : [String] = ["7", "8", "9", "10", "11", "12"]
+//        print(temp.min())
+        
         // Bar Button Menu
         let barButtonMenu = UIMenu(title: "Filter Options", children: [
             UIAction(title: NSLocalizedString("Sort by Name", comment: ""), image: UIImage(systemName: "a.book.closed"), handler: menuHandler),
@@ -273,6 +276,7 @@ class catalogVC: UITableViewController {
                             }
                         }
                     }
+                    // Grouping plants by flowercolor end
                 }
                 // Don't know why "" ends up as an empty key but bonk and its gone
                 self.plantsByType.removeValue(forKey: "")
