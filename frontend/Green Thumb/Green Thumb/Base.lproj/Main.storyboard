@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qWm-Mz-XDw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qWm-Mz-XDw">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -42,20 +42,12 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Catalog" id="PBV-5r-CnY">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="0gC-nJ-pM5">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="bxc-G5-562">
-                                <rect key="frame" x="302" y="7" width="92" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Change Sort"/>
-                                <connections>
-                                    <action selector="changeSort:" destination="hOa-fP-425" eventType="touchUpInside" id="rE0-ER-cRY"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Sort" id="9F6-lN-cVg"/>
                     </navigationItem>
                     <connections>
                         <outlet property="catalogTableView" destination="1NK-US-z18" id="3mf-et-08p"/>
                         <outlet property="searchBar" destination="1NK-US-z18" id="wbh-fo-IdM"/>
+                        <outlet property="sortButton" destination="9F6-lN-cVg" id="SrB-4t-KZq"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1fQ-iY-9yX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

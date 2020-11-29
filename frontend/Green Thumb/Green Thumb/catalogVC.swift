@@ -44,6 +44,7 @@ class catalogVC: UITableViewController {
     
     @IBOutlet var catalogTableView: UITableView!
     @IBOutlet var searchBar: UITableView!
+    @IBOutlet weak var sortButton: UIBarButtonItem!
     var userGarden: UserGarden?
     
     weak var returnDelegate : PlantReturnDelegate?
@@ -56,6 +57,14 @@ class catalogVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let barButtonMenu = UIMenu(title: "", children: [
+            UIAction(title: NSLocalizedString("Copy", comment: ""), image: UIImage(systemName: "doc.on.doc"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Rename", comment: ""), image: UIImage(systemName: "pencil"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Duplicate", comment: ""), image: UIImage(systemName: "plus.square.on.square"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Move", comment: ""), image: UIImage(systemName: "folder"), handler: menuHandler)
+        ])
+        sortButton.menu = barButtonMenu
         
         //        self.searchBar.showsCancelButton = false
 
@@ -89,6 +98,11 @@ class catalogVC: UITableViewController {
         
         self.refreshControl?.beginRefreshing()
         getPlants()
+    }
+    
+    func menuHandler(action: UIAction) {
+//        Swift.debugPrint("Menu handler: \(action.title)")
+        print("henlo?")
     }
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
