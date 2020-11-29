@@ -94,7 +94,6 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
         self.map.mapType = .satellite
         map.delegate = self
         
-        
         // Geocode the address
         let urlEncoded = userGarden.address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         let fullUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=\(urlEncoded ?? "")&key=\(apiKey)"
@@ -135,91 +134,91 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
             let coordinate = CLLocationCoordinate2D(latitude: gardenCenterLat, longitude: gardenCenterLon)
             map.camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 22.0)
             drawGarden()
-            
-            // Add saved plants to garden
-            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(self.userGarden.gardenId)/")!
-            
-            var request = URLRequest(url: url)
-
-            let cookie = UserDefaults.standard.object(forKey: "login") as? String
-            request.setValue(cookie, forHTTPHeaderField: "Cookie")
-            request.httpMethod = "GET"
-
-            let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
-                print(response!)
-                guard let data = data else {
-                    return
-                }
-                do{
-                    let json = try JSON(data: data)
-                    let plants = json["plants"].array
-                    if let unwrappedplants = plants{
-                        for plant in unwrappedplants {
-                            DispatchQueue.main.async {
-                                // Get plant data
-                                let plantId = plant["$oid"].stringValue
-                                let url = URL(string: "http://192.81.216.18/api/v1/usergarden/get_plants/\(plantId)/")!
-                                
-                                var request = URLRequest(url: url)
-
-                                request.setValue(cookie, forHTTPHeaderField: "Cookie")
-                                request.httpMethod = "GET"
-
-                                let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
-                                    print(response ?? "")
-                                    guard let data = data else {
-                                        return
-                                    }
-                                    DispatchQueue.main.async{
-                                        do{
-                                            let json = try JSON(data: data)
-                                            let water = json["last_watered"].stringValue
-                                            let intensity = json["light_intensity"].doubleValue
-                                            let duration = json["light_duration"].doubleValue
-                                            let lon = json["longitude"].doubleValue
-                                            let lat = json["latitude"].doubleValue
-                                            let id = json["plant_type_id"].stringValue
-                                            let name = json["name"].string ?? ""
-                                            let price = json["price"].doubleValue
-                                            let overlay = self.drawIcon(mapView: self.map, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon), iconImage: UIImage(named: "planticon.png"))
-                                            overlay.isTappable = true
-                                            overlay.userData = [
-                                                "name": String(name),
-                                                "uniq_id": String(plantId),
-                                                "type_id": String(id),
-                                                "garden_id": String(self.userGarden.gardenId),
-                                                "lat": String(lat),
-                                                "lon": String(lon),
-                                                "last_watered": String(water),
-                                                "light_intensity": String(intensity),
-                                                "light_duration": String(duration),
-                                                "price": String(price)
-                                            ]
-                                            self.plantOverlays?.append(overlay)
-                                        }
-                                        catch {
-                                            print(error)
-                                        }
-                                    }
-                                }
-                                
-                                task.resume()
-                            }
-                        }
-                    }
-                }
-                catch {
-                    print(error)
-                }
-                
-            }
-            
-            task.resume()
         }
         // Haven't mapped garden yet, zoom in on garden address instead
         else if (self.translatedGardenLoc != nil){
             map.camera = GMSCameraPosition.camera(withTarget: self.translatedGardenLoc!, zoom: 22.0)
         }
+            
+        // Add saved plants to garden
+        let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(self.userGarden.gardenId)/")!
+        
+        var request = URLRequest(url: url)
+
+        let cookie = UserDefaults.standard.object(forKey: "login") as? String
+        request.setValue(cookie, forHTTPHeaderField: "Cookie")
+        request.httpMethod = "GET"
+
+        let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
+            print(response!)
+            guard let data = data else {
+                return
+            }
+            do{
+                let json = try JSON(data: data)
+                let plants = json["plants"].array
+                if let unwrappedplants = plants{
+                    for plant in unwrappedplants {
+                        DispatchQueue.main.async {
+                            // Get plant data
+                            let plantId = plant["$oid"].stringValue
+                            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/get_plants/\(plantId)/")!
+                            
+                            var request = URLRequest(url: url)
+
+                            request.setValue(cookie, forHTTPHeaderField: "Cookie")
+                            request.httpMethod = "GET"
+
+                            let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
+                                print(response ?? "")
+                                guard let data = data else {
+                                    return
+                                }
+                                DispatchQueue.main.async{
+                                    do{
+                                        let json = try JSON(data: data)
+                                        let water = json["last_watered"].stringValue
+                                        let intensity = json["light_intensity"].doubleValue
+                                        let duration = json["light_duration"].doubleValue
+                                        let lon = json["longitude"].doubleValue
+                                        let lat = json["latitude"].doubleValue
+                                        let id = json["plant_type_id"].stringValue
+                                        let name = json["name"].string ?? ""
+                                        let price = json["price"].doubleValue
+                                        let overlay = self.drawIcon(mapView: self.map, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon), iconImage: UIImage(named: "planticon.png"))
+                                        overlay.isTappable = true
+                                        overlay.userData = [
+                                            "name": String(name),
+                                            "uniq_id": String(plantId),
+                                            "type_id": String(id),
+                                            "garden_id": String(self.userGarden.gardenId),
+                                            "lat": String(lat),
+                                            "lon": String(lon),
+                                            "last_watered": String(water),
+                                            "light_intensity": String(intensity),
+                                            "light_duration": String(duration),
+                                            "price": String(price)
+                                        ]
+                                        self.plantOverlays?.append(overlay)
+                                    }
+                                    catch {
+                                        print(error)
+                                    }
+                                }
+                            }
+                            
+                            task.resume()
+                        }
+                    }
+                }
+            }
+            catch {
+                print(error)
+            }
+            
+        }
+        
+        task.resume()
     }
     
     @IBAction func drawGardenClicked(_ sender: UIButton) {
@@ -359,6 +358,9 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
             corner.map = nil
         }
         gardenCorners.removeAll()
+        self.cancelButton.isHidden = true
+        self.userGarden.tlGeoData = GeoData(lat: -1, lon: -1)
+        self.userGarden.brGeoData = GeoData(lat: -1, lon: -1)
     }
     
     @IBAction func addPlantClicked(_ sender: UIButton) {
