@@ -37,6 +37,11 @@ class catalogVC: UITableViewController {
     var plantsByFlowerColor = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
                      "description": "", "days_to_water": 0,
                      "watering_description": ""]]]
+    // Zones Sort
+    var sortedZoneKeys : [String] = []
+    var plantsByZone = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
     // Special Features Sort
     var sortedFeatureKeys : [String] = []
     var plantsByFeature = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
@@ -64,8 +69,10 @@ class catalogVC: UITableViewController {
         let barButtonMenu = UIMenu(title: "Filter Options", children: [
             UIAction(title: NSLocalizedString("Sort by Name", comment: ""), image: UIImage(systemName: "a.book.closed"), handler: menuHandler),
             UIAction(title: NSLocalizedString("Sort by Plant Type", comment: ""), image: UIImage(systemName: "leaf"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Lowest Zone", comment: ""), image: UIImage(systemName: "globe"), handler: menuHandler),
             UIAction(title: NSLocalizedString("Sort by Flower Color", comment: ""), image: UIImage(systemName: "paintpalette"), handler: menuHandler),
-            UIAction(title: NSLocalizedString("Sort by Special Features", comment: ""), image: UIImage(systemName: "paintpalette"), handler: menuHandler)
+            UIAction(title: NSLocalizedString("Sort by Special Features", comment: ""), image: UIImage(systemName: "books.vertical"), handler: menuHandler)
+            
         ])
         
 //        let button = UIButton()
@@ -116,6 +123,13 @@ class catalogVC: UITableViewController {
         else if action.title == "Sort by Special Features" {
             if self.currentSort != "features" {
                 self.currentSort = "features"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Lowest Zone" {
+            if self.currentSort != "zones" {
+                self.currentSort = "zones"
                 tableView.reloadData();
                 self.scrollToTop()
             }
@@ -269,10 +283,26 @@ class catalogVC: UITableViewController {
                     }
                     // Grouping plants by flowercolor end
                     
-//                    let temp : [String] = ["7", "8", "9", "10", "11", "12"]
-//                    let minimum = temp.min {a,b in Int(a)! < Int(b)!}
+                    // Grouping plants by min zones begin
+                    if let zone_array: [String] = tags["zones"] {
+//                        let min_zone = zone_array.min {a,b in Int(a)! < Int(b)!}
+                        let min_zone = zone_array[0]
+                        let num = Int(min_zone)
+                        // Check if its a number because some of the zones in the pulled data had random stuff in it
+                        if num != nil {
+                            if let _ = self.plantsByZone[min_zone] {
+                                self.plantsByZone[min_zone]?.append(self.plants[index])
+                            }
+                            else {
+                                self.plantsByZone[min_zone] = []
+                                self.plantsByZone[min_zone]?.append(self.plants[index])
+                            }
+                        }
+                    }
+                    // Grouping plants by min zones end
                     
                     // Grouping plants by special features begin
+                    
                     if let features_array: [String] = tags["special features"] {
                         for feature in features_array {
                             if let _ = self.plantsByFeature[feature] {
@@ -293,6 +323,12 @@ class catalogVC: UITableViewController {
                 
                 self.plantsByFlowerColor.removeValue(forKey: "")
                 self.sortedFlowerColorKeys = self.plantsByFlowerColor.keys.sorted()
+                
+                self.plantsByZone.removeValue(forKey: "")
+                self.sortedZoneKeys = self.plantsByZone.keys.sorted(by: {
+                    a,b in Int(a)! < Int(b)!
+                })
+                print(self.sortedZoneKeys)
                 
                 self.plantsByFeature.removeValue(forKey: "")
                 self.sortedFeatureKeys = self.plantsByFeature.keys.sorted()
@@ -346,6 +382,9 @@ extension catalogVC {
             }
             else if currentSort == "features" {
                 selectedPlant = plantsByFeature[sortedFeatureKeys[indexPath.section]]![indexPath.row]
+            }
+            else if currentSort == "zones" {
+                selectedPlant = plantsByZone[sortedZoneKeys[indexPath.section]]![indexPath.row]
             }
             else {
                 selectedPlant = plants[indexPath.row]
@@ -514,6 +553,9 @@ extension catalogVC {
             else if currentSort == "features" {
                 return sortedFeatureKeys[section]
             }
+            else if currentSort == "zones" {
+                return sortedZoneKeys[section]
+            }
             else {
                 return ""
             }
@@ -543,6 +585,9 @@ extension catalogVC {
             else if currentSort == "features" {
                 return sortedFeatureKeys
             }
+            else if currentSort == "zones" {
+                return sortedZoneKeys
+            }
             else {
                 return [""]
             }
@@ -565,6 +610,9 @@ extension catalogVC {
             }
             else if currentSort == "features" {
                 return sortedFeatureKeys.count
+            }
+            else if currentSort == "zones" {
+                return sortedZoneKeys.count
             }
             else {
                 return 1
@@ -589,6 +637,9 @@ extension catalogVC {
             }
             else if currentSort == "features" {
                 return plantsByFeature[sortedFeatureKeys[section]]!.count
+            }
+            else if currentSort == "zones" {
+                return plantsByZone[sortedZoneKeys[section]]!.count
             }
             else {
                 return plants.count
@@ -623,6 +674,11 @@ extension catalogVC {
             }
             else if currentSort == "features" {
                 let name = plantsByFeature[sortedFeatureKeys[indexPath.section]]![indexPath.row]["name"]
+                let nameString = String(describing: name!)
+                cell.textLabel?.text = nameString
+            }
+            else if currentSort == "zones" {
+                let name = plantsByZone[sortedZoneKeys[indexPath.section]]![indexPath.row]["name"]
                 let nameString = String(describing: name!)
                 cell.textLabel?.text = nameString
             }
