@@ -1,5 +1,5 @@
 from mongoengine import Document
-from mongoengine import (ListField, StringField, IntField, MapField, FloatField, DateField)
+from mongoengine import (ListField, StringField, IntField, MapField, FloatField, DateField, BinaryField)
 from mongoengine.base.fields import ObjectIdField
 
 class users(Document):
@@ -24,6 +24,7 @@ class plant_types(Document):
     description = StringField()
     days_to_water = IntField()
     watering_description = StringField()
+    image = BinaryField()
 
     def to_dict(self):
         return {
@@ -34,6 +35,18 @@ class plant_types(Document):
             "description": self.description,
             "days_to_water": self.days_to_water,
             "watering_description": self.watering_description
+        }
+
+    def to_dict_image(self):
+        return {
+            "_id": str(self.id),
+            "name": self.name,
+            "species": self.species,
+            "tags": self.tags,
+            "description": self.description,
+            "days_to_water": self.days_to_water,
+            "watering_description": self.watering_description,
+            "image": self.image
         }
 
 class gardens(Document):
