@@ -93,6 +93,9 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
         
         self.map.mapType = .satellite
         map.delegate = self
+        // don't allow rotating so tl and br coordinates aren't messed up
+        map.settings.rotateGestures = false
+        
         
         // Geocode the address
         let urlEncoded = userGarden.address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
