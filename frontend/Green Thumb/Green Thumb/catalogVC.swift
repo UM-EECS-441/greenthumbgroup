@@ -47,6 +47,11 @@ class catalogVC: UITableViewController {
     var plantsByFeature = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
                      "description": "", "days_to_water": 0,
                      "watering_description": ""]]]
+    // Problem Solver Sort
+    var sortedSolverKeys : [String] = []
+    var plantsBySolver = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
     
     @IBOutlet var catalogTableView: UITableView!
     @IBOutlet var searchBar: UITableView!
@@ -71,6 +76,7 @@ class catalogVC: UITableViewController {
             UIAction(title: NSLocalizedString("Sort by Plant Type", comment: ""), image: UIImage(systemName: "leaf"), handler: menuHandler),
             UIAction(title: NSLocalizedString("Sort by Lowest Zone", comment: ""), image: UIImage(systemName: "globe"), handler: menuHandler),
             UIAction(title: NSLocalizedString("Sort by Flower Color", comment: ""), image: UIImage(systemName: "paintpalette"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Problem Solvers", comment: ""), image: UIImage(systemName: "lightbulb"), handler: menuHandler),
             UIAction(title: NSLocalizedString("Sort by Special Features", comment: ""), image: UIImage(systemName: "books.vertical"), handler: menuHandler)
             
         ])
@@ -130,6 +136,13 @@ class catalogVC: UITableViewController {
         else if action.title == "Sort by Lowest Zone" {
             if self.currentSort != "zones" {
                 self.currentSort = "zones"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Problem Solvers" {
+            if self.currentSort != "solver" {
+                self.currentSort = "solver"
                 tableView.reloadData();
                 self.scrollToTop()
             }
@@ -315,6 +328,21 @@ class catalogVC: UITableViewController {
                         }
                     }
                     // Grouping plants by special features end
+                    
+                    // Grouping plants by problem solver begin
+                    
+                    if let solve_array: [String] = tags["problem solvers"] {
+                        for solve in solve_array {
+                            if let _ = self.plantsBySolver[solve] {
+                                self.plantsBySolver[solve]?.append(self.plants[index])
+                            }
+                            else {
+                                self.plantsBySolver[solve] = []
+                                self.plantsBySolver[solve]?.append(self.plants[index])
+                            }
+                        }
+                    }
+                    // Grouping plants by problem solver end
                 }
                 // Don't know why "" ends up as an empty key but bonk and its gone
                 self.plantsByType.removeValue(forKey: "")
@@ -328,12 +356,15 @@ class catalogVC: UITableViewController {
                 self.sortedZoneKeys = self.plantsByZone.keys.sorted(by: {
                     a,b in Int(a)! < Int(b)!
                 })
-                print(self.sortedZoneKeys)
                 
                 self.plantsByFeature.removeValue(forKey: "")
                 self.sortedFeatureKeys = self.plantsByFeature.keys.sorted()
                 
-//                print(self.sortedFeatureKeys)
+                self.plantsBySolver.removeValue(forKey: "")
+                self.sortedSolverKeys = self.plantsBySolver.keys.sorted()
+                
+//                print(self.sortedSolverKeys)
+                
                 
                 DispatchQueue.main.async {
                   self.tableView.estimatedRowHeight = 140
@@ -385,6 +416,9 @@ extension catalogVC {
             }
             else if currentSort == "zones" {
                 selectedPlant = plantsByZone[sortedZoneKeys[indexPath.section]]![indexPath.row]
+            }
+            else if currentSort == "solver" {
+                selectedPlant = plantsBySolver[sortedSolverKeys[indexPath.section]]![indexPath.row]
             }
             else {
                 selectedPlant = plants[indexPath.row]
@@ -556,6 +590,9 @@ extension catalogVC {
             else if currentSort == "zones" {
                 return sortedZoneKeys[section]
             }
+            else if currentSort == "solver" {
+                return sortedSolverKeys[section]
+            }
             else {
                 return ""
             }
@@ -588,6 +625,9 @@ extension catalogVC {
             else if currentSort == "zones" {
                 return sortedZoneKeys
             }
+            else if currentSort == "solver" {
+                return sortedSolverKeys
+            }
             else {
                 return [""]
             }
@@ -613,6 +653,9 @@ extension catalogVC {
             }
             else if currentSort == "zones" {
                 return sortedZoneKeys.count
+            }
+            else if currentSort == "solver" {
+                return sortedSolverKeys.count
             }
             else {
                 return 1
@@ -641,6 +684,9 @@ extension catalogVC {
             else if currentSort == "zones" {
                 return plantsByZone[sortedZoneKeys[section]]!.count
             }
+            else if currentSort == "solver" {
+                return plantsBySolver[sortedSolverKeys[section]]!.count
+            }
             else {
                 return plants.count
             }
@@ -651,42 +697,50 @@ extension catalogVC {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "catalogCell", for: indexPath) as! catalogCell
         
+        var name : (Any)? = nil
         
         if searching {
-            let name = searchedPlants[indexPath.row]["name"]
-            let nameString = String(describing: name!)
-            cell.textLabel?.text = nameString
+            name = searchedPlants[indexPath.row]["name"]
+//            let nameString = String(describing: name!)
+//            cell.textLabel?.text = nameString
         } else {
             if currentSort == "alphabetical" {
-                let name = plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["name"]
-                let nameString = String(describing: name!)
-                cell.textLabel?.text = nameString
+                name = plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["name"]
+//                let nameString = String(describing: name!)
+//                cell.textLabel?.text = nameString
             }
             else if currentSort == "type" {
-                let name = plantsByType[sortedTypeKeys[indexPath.section]]![indexPath.row]["name"]
-                let nameString = String(describing: name!)
-                cell.textLabel?.text = nameString
+                name = plantsByType[sortedTypeKeys[indexPath.section]]![indexPath.row]["name"]
+//                let nameString = String(describing: name!)
+//                cell.textLabel?.text = nameString
             }
             else if currentSort == "flowercolor" {
-                let name = plantsByFlowerColor[sortedFlowerColorKeys[indexPath.section]]![indexPath.row]["name"]
-                let nameString = String(describing: name!)
-                cell.textLabel?.text = nameString
+                name = plantsByFlowerColor[sortedFlowerColorKeys[indexPath.section]]![indexPath.row]["name"]
+//                let nameString = String(describing: name!)
+//                cell.textLabel?.text = nameString
             }
             else if currentSort == "features" {
-                let name = plantsByFeature[sortedFeatureKeys[indexPath.section]]![indexPath.row]["name"]
-                let nameString = String(describing: name!)
-                cell.textLabel?.text = nameString
+                name = plantsByFeature[sortedFeatureKeys[indexPath.section]]![indexPath.row]["name"]
+//                let nameString = String(describing: name!)
+//                cell.textLabel?.text = nameString
             }
             else if currentSort == "zones" {
-                let name = plantsByZone[sortedZoneKeys[indexPath.section]]![indexPath.row]["name"]
-                let nameString = String(describing: name!)
-                cell.textLabel?.text = nameString
+                name = plantsByZone[sortedZoneKeys[indexPath.section]]![indexPath.row]["name"]
+//                let nameString = String(describing: name!)
+//                cell.textLabel?.text = nameString
+            }
+            else if currentSort == "solver" {
+                name = plantsBySolver[sortedSolverKeys[indexPath.section]]![indexPath.row]["name"]
+//                let nameString = String(describing: name!)
+//                cell.textLabel?.text = nameString
             }
             else {
-                let name = plants[indexPath.row]["name"]
-                let nameString = String(describing: name!)
-                cell.textLabel?.text = nameString
+                name = plants[indexPath.row]["name"]
+//                let nameString = String(describing: name!)
+//                cell.textLabel?.text = nameString
             }
+            let nameString = String(describing: name!)
+            cell.textLabel?.text = nameString
         }
         
         
