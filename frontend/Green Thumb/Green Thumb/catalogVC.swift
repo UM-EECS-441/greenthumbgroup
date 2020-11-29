@@ -701,43 +701,27 @@ extension catalogVC {
         
         if searching {
             name = searchedPlants[indexPath.row]["name"]
-//            let nameString = String(describing: name!)
-//            cell.textLabel?.text = nameString
         } else {
             if currentSort == "alphabetical" {
                 name = plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["name"]
-//                let nameString = String(describing: name!)
-//                cell.textLabel?.text = nameString
             }
             else if currentSort == "type" {
                 name = plantsByType[sortedTypeKeys[indexPath.section]]![indexPath.row]["name"]
-//                let nameString = String(describing: name!)
-//                cell.textLabel?.text = nameString
             }
             else if currentSort == "flowercolor" {
                 name = plantsByFlowerColor[sortedFlowerColorKeys[indexPath.section]]![indexPath.row]["name"]
-//                let nameString = String(describing: name!)
-//                cell.textLabel?.text = nameString
             }
             else if currentSort == "features" {
                 name = plantsByFeature[sortedFeatureKeys[indexPath.section]]![indexPath.row]["name"]
-//                let nameString = String(describing: name!)
-//                cell.textLabel?.text = nameString
             }
             else if currentSort == "zones" {
                 name = plantsByZone[sortedZoneKeys[indexPath.section]]![indexPath.row]["name"]
-//                let nameString = String(describing: name!)
-//                cell.textLabel?.text = nameString
             }
             else if currentSort == "solver" {
                 name = plantsBySolver[sortedSolverKeys[indexPath.section]]![indexPath.row]["name"]
-//                let nameString = String(describing: name!)
-//                cell.textLabel?.text = nameString
             }
             else {
                 name = plants[indexPath.row]["name"]
-//                let nameString = String(describing: name!)
-//                cell.textLabel?.text = nameString
             }
             let nameString = String(describing: name!)
             cell.textLabel?.text = nameString
