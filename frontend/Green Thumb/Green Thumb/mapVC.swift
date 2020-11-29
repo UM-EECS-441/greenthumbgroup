@@ -20,9 +20,10 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
     var gardenCorners: [GMSGroundOverlay] = [GMSGroundOverlay]()
     var gardenPolygon: GMSPolygon? = GMSPolygon()
     var plantOverlays: [GMSGroundOverlay]? = [GMSGroundOverlay]()
-    var currentOverlay: GMSOverlay = GMSGroundOverlay()
+    var currentOverlay: GMSGroundOverlay = GMSGroundOverlay()
     var currentPlant: UserPlant? = nil
     var translatedGardenLoc: CLLocationCoordinate2D? = nil
+    weak var returnDelegate : ReturnDelegate!
     var apiKey = "AIzaSyCQAqHC69Jq2-nTvK7BJa4MwX5WXqS0VQA"
     @IBOutlet weak var map: GMSMapView!
     @IBOutlet weak var drawGardenButton: UIButton!
@@ -35,19 +36,48 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
         self.addPlantLabel.isHidden = false
     }
     
-    func didReturnOverlay(_ result: GMSOverlay, _ delete: Bool, _ move: Bool) {
+    func didReturnOverlay(_ result: GMSGroundOverlay, _ delete: Bool, _ move: Bool) {
         self.currentOverlay = result
         self.deletingPlant = delete
         self.movingPlant = move
         
         if (deletingPlant) {
             // delete plant from database
-            // delete plant overlay
+            var plantid = ""
+            if let data: [String: String] = currentOverlay.userData as? [String : String]{
+                print(data)
+                plantid = data["uniq_id"] ?? ""
+            }
             
+            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(self.userGarden.gardenId)/delete_plant/\(plantid)/")!
+            var request = URLRequest(url: url)
+
+            request.httpMethod = "DELETE"
+            
+            let cookie = UserDefaults.standard.object(forKey: "login") as? String
+            request.setValue(cookie, forHTTPHeaderField: "Cookie")
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                print(response!)
+                if error != nil{
+                    print(error!)
+                }
+            }
+
+            task.resume()
+            
+            // delete plant overlay
+            currentOverlay.map = nil
+            if let overlayIndex = plantOverlays!.firstIndex(of:currentOverlay) {
+                plantOverlays!.remove(at: overlayIndex)
+            }
         }
         
         if (movingPlant) {
+            // remove plant from map
+            currentOverlay.map = nil
             // prompt user to change the plant location
+            self.addPlantLabel.isHidden = false
         }
         
     }
@@ -98,6 +128,8 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
     func centerMapOnGarden() {
         // Zoom in on saved user's garden if have already mapped garden
         if (userGarden.brGeoData.lat != -1 && userGarden.tlGeoData.lat != -1){
+            self.drawGardenButton.setTitle("Redraw Garden", for: UIControl.State.normal)
+            
             let gardenCenterLat = self.userGarden.brGeoData.lat + abs(self.userGarden.tlGeoData.lat - self.userGarden.brGeoData.lat)
             let gardenCenterLon = self.userGarden.tlGeoData.lon + abs(self.userGarden.brGeoData.lon - self.userGarden.tlGeoData.lon)
             let coordinate = CLLocationCoordinate2D(latitude: gardenCenterLat, longitude: gardenCenterLon)
@@ -207,9 +239,9 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
             self.present(alertController, animated: true, completion: nil)
         }
         else if (self.drawGardenButton.titleLabel?.text == "Done"){
-            self.drawGardenButton.isHidden = true
             self.cancelButton.isHidden = true
-            self.deleteGardenButton.isHidden = false
+            self.drawGardenButton.setTitle("Redraw Garden", for: UIControl.State.normal)
+
             // Draw garden on map
             drawGarden()
             // Delete garden corners
@@ -223,7 +255,7 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpMethod = "PUT"
             
-//            let delegate = UIApplication.shared.delegate as! AppDelegate
+
             let cookie = UserDefaults.standard.object(forKey: "login") as? String
             request.setValue(cookie, forHTTPHeaderField: "Cookie")
             
@@ -248,25 +280,57 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
             }
             task.resume()
         }
+        else if (self.drawGardenButton.titleLabel?.text == "Redraw Garden"){
+            self.cancelButton.isHidden = false
+            self.drawGardenButton.setTitle("Next", for: UIControl.State.normal)
+            self.gardenPolygon?.map = nil
+            self.gardenPolygon = nil
+            // Reset geodata on garden
+            self.userGarden.brGeoData = GeoData(lat: -1, lon: -1)
+            self.userGarden.tlGeoData = GeoData(lat: -1, lon: -1)
+            
+            // Update garden in database
+            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(self.userGarden.gardenId)/")!
+            var request = URLRequest(url: url)
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpMethod = "PUT"
+            
+            let cookie = UserDefaults.standard.object(forKey: "login") as? String
+            request.setValue(cookie, forHTTPHeaderField: "Cookie")
+            
+            let parameters: [String: Any] = [
+                "name": self.userGarden.name,
+                "address": self.userGarden.address,
+                "latitudetl": self.userGarden.tlGeoData.lat,
+                "longitudetl": self.userGarden.tlGeoData.lon,
+                "latitudebr": self.userGarden.brGeoData.lat,
+                "longitudebr": self.userGarden.brGeoData.lon
+            ]
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+           } catch let error {
+               print(error.localizedDescription)
+           }
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                print(response ?? "")
+            }
+            task.resume()
+            
+            let alertController = UIAlertController(title: "Step 1", message:
+                "Tap the top left corner of your garden", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: .default))
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
     
     @IBAction func deleteGardenClicked(_ sender: UIButton) {
-        self.drawGardenButton.setTitle("Draw Garden", for: UIControl.State.normal)
-        self.drawGardenButton.isHidden = false
-        self.deleteGardenButton.isHidden = true
-        // Reset user garden to default
-        self.userGarden = UserGarden(gardenId: "", name: "", address: "")
         self.gardenPolygon?.map = nil
         self.gardenPolygon = nil
-        // Remove plants
-        if let plantOverlaysUnwrapped = plantOverlays {
-            for overlay in plantOverlaysUnwrapped {
-                overlay.map = nil
-            }
-            self.plantOverlays = nil
-        }
-        self.userGarden.plants.removeAll()
-        // TODO: update database with values
+        
+        // Segue back to main screen
+        self.returnDelegate.didReturn(self.userGarden, true)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func drawGarden() {
@@ -290,7 +354,7 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
     
     @IBAction func cancelClicked(_ sender: Any) {
         self.drawGardenButton.setTitle("Draw Garden", for: UIControl.State.normal)
-        self.userGarden = nil
+
         for corner in gardenCorners {
             corner.map = nil
         }
@@ -328,13 +392,77 @@ extension mapVC : GMSMapViewDelegate {
             let overlay = drawIcon(mapView: mapView, coordinate: coordinate, iconImage: UIImage(named: "doticon.png"))
             self.gardenCorners.append(overlay)
         }
+        else if (movingPlant){
+            currentOverlay.map = self.map
+            currentOverlay.position = coordinate
+            
+            var currentPlantId = ""
+            var parameters: [String: Any] = [:]
+            
+            parameters["latitude"] = coordinate.latitude
+            parameters["longitude"] = coordinate.longitude
+            
+            // Get plant data from overlay userdata
+            if let data: [String: String] = currentOverlay.userData as? [String : String]{
+                print(data)
+                parameters["name"] = data["name"] ?? ""
+                parameters["plant_type_id"] = data["type_id"] ?? ""
+                currentPlantId = data["uniq_id"] ?? ""
+                parameters["light_intensity"] = Double(data["light_intensity"] ?? "") ?? 0.0
+                parameters["light_duration"] = Double(data["light_duration"] ?? "") ?? 0.0
+                parameters["price"] = Double(data["price"] ?? "") ?? 0.0
+                
+                var lastWatered = data["last_watered"] ?? ""
+                print(lastWatered)
+                lastWatered = lastWatered.replacingOccurrences(of: " 00:00:00 GMT", with: "")
+                lastWatered = lastWatered.replacingOccurrences(of: " 00:00:00", with: "")
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "E, d MMM yyyy"
+                
+                let originalDate = dateFormatter.date(from:lastWatered)!
+                
+                let dateFormatter2 = DateFormatter()
+                dateFormatter2.dateFormat = "yyyy-MM-dd"
+                var newDate = dateFormatter2.string(from: originalDate)
+                newDate += " 00:00:00"
+                
+                print(newDate)
+                parameters["last_watered"] = newDate
+            }
+            
+            // Update plant data in database
+            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(self.userGarden.gardenId)/edit_plant/\(currentPlantId)/")!
+            var request = URLRequest(url: url)
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpMethod = "PUT"
+
+            let cookie = UserDefaults.standard.object(forKey: "login") as? String
+            request.setValue(cookie, forHTTPHeaderField: "Cookie")
+            
+            
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+           } catch let error {
+               print(error.localizedDescription)
+           }
+            
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                print(response ?? "")
+            }
+            task.resume()
+
+            // Update overlay data coordinates
+            var data = currentOverlay.userData as! [String: String]
+            data["latitude"] = String(coordinate.latitude)
+            data["longitude"] = String(coordinate.longitude)
+            
+            self.addPlantLabel.isHidden = true
+        }
         else if (self.currentPlant != nil){
             let overlay = drawIcon(mapView: self.map, coordinate: coordinate, iconImage: currentPlant!.image)
             
             currentPlant?.geodata = GeoData(lat: coordinate.latitude, lon: coordinate.longitude)
-            if let plantToAppend = currentPlant{
-                self.userGarden.plants.append(plantToAppend)
-            }
             
             // Update plant data in database
             let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(self.userGarden.gardenId)/edit_plant/\(self.currentPlant!.userPlantId)/")!
@@ -342,14 +470,12 @@ extension mapVC : GMSMapViewDelegate {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpMethod = "PUT"
             print("check id \(self.currentPlant!.catalogPlantId)")
-//            let delegate = UIApplication.shared.delegate as! AppDelegate
+
             let cookie = UserDefaults.standard.object(forKey: "login") as? String
             request.setValue(cookie, forHTTPHeaderField: "Cookie")
             let df = DateFormatter()
             df.dateFormat = "yyyy-MM-dd"
             let date = df.string(from: Date()) + " 00:00:00"
-            // TODO: edit last watered
-            // TODO: edit light level
             let parameters: [String: Any] = [
                 "name": self.currentPlant!.name,
                 "plant_type_id": self.currentPlant!.catalogPlantId,
@@ -369,14 +495,13 @@ extension mapVC : GMSMapViewDelegate {
             
             
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                // TODO: handle bad response
                 print(response ?? "")
             }
             task.resume()
             
             overlay.isTappable = true
             plantOverlays?.append(overlay)
-            // TODO: fix user data
+
             let dfsave = DateFormatter()
             dfsave.dateFormat = "E, d MMM yyyy"
             let datesave = dfsave.string(from: Date()) + " 00:00:00 GMT"
@@ -403,7 +528,7 @@ extension mapVC : GMSMapViewDelegate {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let viewGardenPlantVC = storyBoard.instantiateViewController(withIdentifier: "viewGardenPlantVC") as! viewGardenPlantVC
         viewGardenPlantVC.overlayDelegate = self
-        viewGardenPlantVC.currentOverlay = overlay
+        viewGardenPlantVC.currentOverlay = overlay as? GMSGroundOverlay
 
         self.present(viewGardenPlantVC, animated: true, completion: nil)
     }

@@ -32,7 +32,7 @@ class viewGardenPlantVC: UIViewController {
     @IBOutlet weak var price: UITextField!
     @IBOutlet weak var lastWateredPicker: UIDatePicker!
     
-    var currentOverlay: GMSOverlay!
+    var currentOverlay: GMSGroundOverlay!
     
     var overlayDelegate: OverlayReturnDelegate!
     
@@ -132,12 +132,12 @@ class viewGardenPlantVC: UIViewController {
     }
     
     @IBAction func deleteClicked(_ sender: Any) {
-        overlayDelegate.didReturnOverlay(currentOverlay, false, true);
+        overlayDelegate.didReturnOverlay(currentOverlay, true, false);
         self.dismiss(animated: false, completion: nil)
     }
     
     @IBAction func moveClicked(_ sender: Any) {
-        overlayDelegate.didReturnOverlay(currentOverlay, true, false);
+        overlayDelegate.didReturnOverlay(currentOverlay, false, true);
         self.dismiss(animated: false, completion: nil)
     }
     
@@ -199,6 +199,6 @@ class viewGardenPlantVC: UIViewController {
 
 // Generic return result delegate protocol
 protocol OverlayReturnDelegate: UIViewController {
-    func didReturnOverlay(_ result: GMSOverlay, _ delete: Bool, _ move: Bool)
+    func didReturnOverlay(_ result: GMSGroundOverlay, _ delete: Bool, _ move: Bool)
 }
 

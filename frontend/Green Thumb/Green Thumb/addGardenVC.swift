@@ -110,7 +110,7 @@ class addGardenVC: UIViewController {
                         let json = try JSON(data: data, options: .allowFragments)
                         let gardenId: String? = json["id"].stringValue
                         self.newGarden.gardenId = gardenId ?? ""
-                        self.returnDelegate?.didReturn(self.newGarden)
+                        self.returnDelegate?.didReturn(self.newGarden, false)
                         self.dismiss(animated: true, completion: nil)
                     } catch {
                         print("error with response data")
@@ -127,6 +127,6 @@ class addGardenVC: UIViewController {
 
 // Generic return result delegate protocol
 protocol ReturnDelegate: UIViewController {
-    func didReturn(_ result: UserGarden)
+    func didReturn(_ result: UserGarden?, _ delete: Bool)
 }
 

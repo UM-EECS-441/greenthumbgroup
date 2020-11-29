@@ -69,6 +69,7 @@ class gardensTableVC: UITableViewController, ReturnDelegate {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let mapVC = storyboard?.instantiateViewController(withIdentifier: "mapVC") as! mapVC
         mapVC.userGarden = self.gardenArray[indexPath.row]
+        mapVC.returnDelegate = self
         self.present(mapVC, animated: true, completion: nil)
     }
 
@@ -91,16 +92,47 @@ class gardensTableVC: UITableViewController, ReturnDelegate {
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let mapVC = storyBoard.instantiateViewController(withIdentifier: "mapVC") as! mapVC
             mapVC.userGarden = self.gardenArray[indexPath.row]
+            mapVC.returnDelegate = self
             self.present(mapVC, animated: true, completion: nil)
         }
         
         return cell
     }
     
-    func didReturn(_ result: UserGarden) {
-        gardenArray.append(result)
+    func didReturn(_ result: UserGarden?, _ delete: Bool) {
+        if (!delete){
+            gardenArray.append(result!)
+        }
         DispatchQueue.main.async{
             self.tableView.reloadData()
+        }
+        if (delete){
+            // Delete garden in database
+            // TODO: make sure plants get deleted
+            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(result!.gardenId)/")!
+            var request = URLRequest(url: url)
+
+            request.httpMethod = "DELETE"
+            
+            let cookie = UserDefaults.standard.object(forKey: "login") as? String
+            request.setValue(cookie, forHTTPHeaderField: "Cookie")
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                print(response!)
+                if error != nil{
+                    print(error!)
+                }
+                DispatchQueue.main.async{
+                    for (index, element) in self.gardenArray.enumerated() {
+                        if (element.gardenId == result!.gardenId) {
+                            self.gardenArray.remove(at: index)
+                        }
+                    }
+                    self.tableView.reloadData()
+                }
+            }
+
+            task.resume()
         }
     }
 
