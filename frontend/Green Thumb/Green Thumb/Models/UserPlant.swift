@@ -14,8 +14,10 @@ class UserPlant {
     var gardenId: String
     var name: String
     var image: UIImage = UIImage(named: "planticon.png") ?? UIImage()
+    var price = 0.0
+    var intensity = 0.0
+    var duration = 0.0
     
-    // TODO: Add more stuff as we add more properties to user customizable plants such as light data etc.
     
     init (catalogPlantId: String, gardenId: String, name: String) {
         self.catalogPlantId = catalogPlantId

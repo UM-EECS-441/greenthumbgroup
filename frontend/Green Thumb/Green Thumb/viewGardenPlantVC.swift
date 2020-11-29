@@ -131,6 +131,16 @@ class viewGardenPlantVC: UIViewController {
         self.priceInput = Double(price.text ?? "") ?? 0.0
     }
     
+    @IBAction func deleteClicked(_ sender: Any) {
+        overlayDelegate.didReturnOverlay(currentOverlay, false, true);
+        self.dismiss(animated: false, completion: nil)
+    }
+    
+    @IBAction func moveClicked(_ sender: Any) {
+        overlayDelegate.didReturnOverlay(currentOverlay, true, false);
+        self.dismiss(animated: false, completion: nil)
+    }
+    
     @IBAction func saveClicked(_ sender: UIButton) {
         // Update plant data in database
         let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(garden_id )/edit_plant/\(uniq_id )/")!
@@ -158,7 +168,6 @@ class viewGardenPlantVC: UIViewController {
         
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            // TODO: handle bad response
             print(response ?? "")
         }
         task.resume()
@@ -180,7 +189,7 @@ class viewGardenPlantVC: UIViewController {
         print(currentOverlay.userData!)
         print(data)
         
-        overlayDelegate.didReturnOverlay(currentOverlay);
+        overlayDelegate.didReturnOverlay(currentOverlay, false, false);
         self.dismiss(animated: false, completion: nil)
     }
     
@@ -190,6 +199,6 @@ class viewGardenPlantVC: UIViewController {
 
 // Generic return result delegate protocol
 protocol OverlayReturnDelegate: UIViewController {
-    func didReturnOverlay(_ result: GMSOverlay)
+    func didReturnOverlay(_ result: GMSOverlay, _ delete: Bool, _ move: Bool)
 }
 
