@@ -66,28 +66,6 @@ class catalogVC: UITableViewController {
         ])
         sortButton.menu = barButtonMenu
         
-        //        self.searchBar.showsCancelButton = false
-
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                /// programmatic implementation scrap code in case I do it through just that
-        //        let searchController = UISearchController(searchResultsController: nil)
-        //        // 1
-        //        searchController.searchResultsUpdater = self
-        //        // 2
-        //        searchController.obscuresBackgroundDuringPresentation = false
-        //        // 3
-        //        searchController.searchBar.placeholder = "Search Plants"
-        //        // 4
-        ////        navigationItem.searchController = searchController
-        //        tableView.tableHeaderView = searchController.searchBar
-        //        // 5
-        //        definesPresentationContext = true
-        //
-        //        var isSearchBarEmpty: Bool {
-        //          return searchController.searchBar.text?.isEmpty ?? true
-        //        }
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
         self.refreshControl = UIRefreshControl()
         self.catalogTableView.delegate = self
         self.catalogTableView.dataSource = self
@@ -123,15 +101,12 @@ class catalogVC: UITableViewController {
 //        print("switching from", currentSort, "sort to", sortToggle[currentSort]!);
         currentSort = sortToggle[currentSort]!;
         if currentSort == "alphabetical" {
-//            self.title = "Sorting by Name"
             showToast(message: "Now Sorting by Name", seconds: 0.3)
         }
         else if currentSort == "type" {
-//            self.title = "Sorting by Plant Type"
             showToast(message: "Now Sorting by Plant Type", seconds: 0.3)
         }
         else if currentSort == "flowercolor" {
-//            self.title = "Sorting by Flower Color"
             showToast(message: "Now Sorting by Flower Color", seconds: 0.3)
         }
         tableView.reloadData();
@@ -352,9 +327,6 @@ extension catalogVC {
             let catalogPage = storyboard?.instantiateViewController(identifier: "catalogPage") as? catalogPage
             
             let name = selectedPlant["name"]
-//            if searching {
-//                name = selectedPlant["name"]
-//            }
             var nameString = "I been thru the desert on a plant with no name :("
             if case Optional<Any>.none = name {
                 //nil
@@ -367,9 +339,6 @@ extension catalogVC {
 
             
             let species = selectedPlant["species"]
-//            if searching {
-//                species = selectedPlant["species"]
-//            }
             var speciesString = "No Species Available"
             if case Optional<Any>.none = species {
                 //nil
@@ -380,9 +349,6 @@ extension catalogVC {
             
 
             let description = selectedPlant["description"]
-//            if searching {
-//                description = selectedPlant["description"]
-//            }
             var descriptionString = "No Description Available"
             if case Optional<Any>.none = description {
                 //nil
@@ -391,13 +357,8 @@ extension catalogVC {
                 descriptionString = String(describing: description!)
             }
             
-    //        let tags = String(describing: plants[indexPath.row]["tags"])
             let tags: [String: [String]] = selectedPlant["tags"] as! [String: [String]]
-//            if searching {
-//                tags = selectedPlant["tags"] as! [String: [String]]
-//            }
             var tagsString = ""
-    //        print(tags["plant type"])
             for (tag, items) in tags {
                 if tag != "plant type" {
                     tagsString += "\(tag.capitalized): "
@@ -408,7 +369,6 @@ extension catalogVC {
                     tagsString += "\n"
                 }
             }
-//            print(tagsString)
             let type_array: [Any] = tags["plant type"]!
             
             var typeString = "No Type Found"
@@ -426,9 +386,6 @@ extension catalogVC {
             }
             
             let days_to_water = selectedPlant["days_to_water"]
-//            if searching {
-//                days_to_water = selectedPlant["days_to_water"]
-//            }
             var days_to_water_String = "N/A"
             if days_to_water is NSNull {
                 //<null>
@@ -440,9 +397,6 @@ extension catalogVC {
             }
             
             let water_description = selectedPlant["watering_description"]
-//            if searching {
-//                water_description = selectedPlant["watering_description"]
-//            }
             var water_description_string = "No Watering Description Available"
 
             if water_description is NSNull {
@@ -471,7 +425,6 @@ extension catalogVC {
             
             
             self.navigationController?.pushViewController(catalogPage!, animated: true)
-            //        performSegue(withIdentifier: "guideSegue", sender: self)
             
         }
     }
@@ -594,9 +547,6 @@ extension catalogVC {
             let nameString = String(describing: name!)
             cell.textLabel?.text = nameString
         } else {
-//            let name = plants[indexPath.row]["name"]
-//            let nameString = String(describing: name!)
-//            cell.textLabel?.text = nameString
             if currentSort == "alphabetical" {
                 let name = plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["name"]
                 let nameString = String(describing: name!)
