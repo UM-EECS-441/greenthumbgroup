@@ -58,13 +58,14 @@ class catalogVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Bar Button Menu
         let barButtonMenu = UIMenu(title: "", children: [
-            UIAction(title: NSLocalizedString("Copy", comment: ""), image: UIImage(systemName: "doc.on.doc"), handler: menuHandler),
-            UIAction(title: NSLocalizedString("Rename", comment: ""), image: UIImage(systemName: "pencil"), handler: menuHandler),
-            UIAction(title: NSLocalizedString("Duplicate", comment: ""), image: UIImage(systemName: "plus.square.on.square"), handler: menuHandler),
-            UIAction(title: NSLocalizedString("Move", comment: ""), image: UIImage(systemName: "folder"), handler: menuHandler)
+            UIAction(title: NSLocalizedString("Sort by Name", comment: ""), image: UIImage(systemName: "doc.on.doc"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Plant Type", comment: ""), image: UIImage(systemName: "pencil"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Flower Color", comment: ""), image: UIImage(systemName: "plus.square.on.square"), handler: menuHandler)
         ])
         sortButton.menu = barButtonMenu
+        
         
         self.refreshControl = UIRefreshControl()
         self.catalogTableView.delegate = self
@@ -80,7 +81,28 @@ class catalogVC: UITableViewController {
     
     func menuHandler(action: UIAction) {
 //        Swift.debugPrint("Menu handler: \(action.title)")
-        print("henlo?")
+        print(action.title)
+        if action.title == "Sort by Name" {
+            if self.currentSort != "alphabetical" {
+                self.currentSort = "alphabetical"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Plant Type" {
+            if self.currentSort != "type" {
+                self.currentSort = "type"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Flower Color" {
+            if self.currentSort != "flowercolor" {
+                self.currentSort = "flowercolor"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
     }
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
@@ -97,21 +119,22 @@ class catalogVC: UITableViewController {
         queue.asyncAfter(deadline: DispatchTime.now() + wait, execute: closure)
     }
     
-    @IBAction func changeSort(_ sender: Any) {
-//        print("switching from", currentSort, "sort to", sortToggle[currentSort]!);
-        currentSort = sortToggle[currentSort]!;
-        if currentSort == "alphabetical" {
-            showToast(message: "Now Sorting by Name", seconds: 0.3)
-        }
-        else if currentSort == "type" {
-            showToast(message: "Now Sorting by Plant Type", seconds: 0.3)
-        }
-        else if currentSort == "flowercolor" {
-            showToast(message: "Now Sorting by Flower Color", seconds: 0.3)
-        }
-        tableView.reloadData();
-        self.scrollToTop()
-    }
+//    @IBAction func changeSort(_ sender: Any) {
+////        print("switching from", currentSort, "sort to", sortToggle[currentSort]!);
+//        // replaced with menu instead of toggle
+//        currentSort = sortToggle[currentSort]!;
+//        if currentSort == "alphabetical" {
+//            showToast(message: "Now Sorting by Name", seconds: 0.3)
+//        }
+//        else if currentSort == "type" {
+//            showToast(message: "Now Sorting by Plant Type", seconds: 0.3)
+//        }
+//        else if currentSort == "flowercolor" {
+//            showToast(message: "Now Sorting by Flower Color", seconds: 0.3)
+//        }
+//        tableView.reloadData();
+//        self.scrollToTop()
+//    }
     
     func showToast(message : String, seconds: Double){
         // https://stackoverflow.com/questions/31540375/how-to-toast-message-in-swift
