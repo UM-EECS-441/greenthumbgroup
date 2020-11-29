@@ -21,7 +21,6 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
     var currentOverlay: GMSOverlay = GMSGroundOverlay()
     var currentPlant: UserPlant? = nil
     var translatedGardenLoc: CLLocationCoordinate2D? = nil
-    // TODO: store in secure location
     var apiKey = "AIzaSyCQAqHC69Jq2-nTvK7BJa4MwX5WXqS0VQA"
     @IBOutlet weak var map: GMSMapView!
     @IBOutlet weak var drawGardenButton: UIButton!
@@ -37,7 +36,6 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
         self.currentOverlay = result
         print(self.currentOverlay)
     }
-    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         navigationController?.popViewController(animated: true)
@@ -98,14 +96,13 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
             let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(self.userGarden.gardenId)/")!
             
             var request = URLRequest(url: url)
-//            let delegate = UIApplication.shared.delegate as! AppDelegate
+
             let cookie = UserDefaults.standard.object(forKey: "login") as? String
             request.setValue(cookie, forHTTPHeaderField: "Cookie")
             request.httpMethod = "GET"
 
             let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
-                print(response)
-                //print(data)
+                print(response!)
                 guard let data = data else {
                     return
                 }
@@ -120,7 +117,7 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
                                 let url = URL(string: "http://192.81.216.18/api/v1/usergarden/get_plants/\(plantId)/")!
                                 
                                 var request = URLRequest(url: url)
-//                                let delegate = UIApplication.shared.delegate as! AppDelegate
+
                                 request.setValue(cookie, forHTTPHeaderField: "Cookie")
                                 request.httpMethod = "GET"
 
@@ -133,11 +130,13 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
                                         do{
                                             let json = try JSON(data: data)
                                             let water = json["last_watered"].stringValue
-                                            let light = json["light_level"].doubleValue
+                                            let intensity = json["light_intensity"].doubleValue
+                                            let duration = json["light_duration"].doubleValue
                                             let lon = json["longitude"].doubleValue
                                             let lat = json["latitude"].doubleValue
                                             let id = json["plant_type_id"].stringValue
                                             let name = json["name"].string ?? ""
+                                            let price = json["price"].doubleValue
                                             let overlay = self.drawIcon(mapView: self.map, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon), iconImage: UIImage(named: "planticon.png"))
                                             overlay.isTappable = true
                                             overlay.userData = [
@@ -148,7 +147,9 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
                                                 "lat": String(lat),
                                                 "lon": String(lon),
                                                 "last_watered": String(water),
-                                                "light_level": String(light)
+                                                "light_intensity": String(intensity),
+                                                "light_duration": String(duration),
+                                                "price": String(price)
                                             ]
                                             self.plantOverlays?.append(overlay)
                                         }
@@ -362,7 +363,6 @@ extension mapVC : GMSMapViewDelegate {
             overlay.isTappable = true
             plantOverlays?.append(overlay)
             // TODO: fix user data
-            let light = -1
             let dfsave = DateFormatter()
             dfsave.dateFormat = "E, d MMM yyyy"
             let datesave = dfsave.string(from: Date()) + " 00:00:00 GMT"
@@ -375,7 +375,9 @@ extension mapVC : GMSMapViewDelegate {
                 "lat": String(self.currentPlant!.geodata.lat),
                 "lon": String(self.currentPlant!.geodata.lon),
                 "last_watered": String(water),
-                "light_level": String(light)
+                "light_intensity": String(0),
+                "light_duration": String(0),
+                "price": String(0)
             ]
             self.addPlantLabel.isHidden = true
             self.currentPlant = nil
@@ -383,25 +385,12 @@ extension mapVC : GMSMapViewDelegate {
     }
     
     func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
-        // Check that tapped a plant
-        print("tapped")
+        // User tapped plant on map
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let viewGardenPlantVC = storyBoard.instantiateViewController(withIdentifier: "viewGardenPlantVC") as! viewGardenPlantVC
         viewGardenPlantVC.overlayDelegate = self
         viewGardenPlantVC.currentOverlay = overlay
-        print(overlay.userData ?? "")
-        if let data: [String: String] = overlay.userData as? [String : String]{
-            print(data)
-            viewGardenPlantVC.nameText = data["name"] ?? ""
-            viewGardenPlantVC.uniq_id = data["uniq_id"] ?? ""
-            viewGardenPlantVC.type_id = data["type_id"] ?? ""
-            viewGardenPlantVC.garden_id = data["garden_id"] ?? ""
-            viewGardenPlantVC.lat = Double(data["lat"] ?? "") ?? -1
-            viewGardenPlantVC.lon = Double(data["lon"] ?? "") ?? -1
-            viewGardenPlantVC.lightEst = data["light_level"] ?? ""
-            viewGardenPlantVC.nameText = data["name"] ?? ""
-            viewGardenPlantVC.lastWatered = data["last_watered"] ?? ""
-        }
+
         self.present(viewGardenPlantVC, animated: true, completion: nil)
     }
     

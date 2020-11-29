@@ -32,6 +32,7 @@
 		A56F04BB2544DAEF0060976F /* addGardenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F04BA2544DAEF0060976F /* addGardenVC.swift */; };
 		A56F04C22544DD480060976F /* gardensTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F04C12544DD480060976F /* gardensTableVC.swift */; };
 		A56F04C52544DD730060976F /* gardenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F04C42544DD730060976F /* gardenCell.swift */; };
+		A5C158422573117400E508F6 /* lightInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C158412573117400E508F6 /* lightInfoVC.swift */; };
 		A5C523B8254A60CD000B2B13 /* registerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C523B7254A60CD000B2B13 /* registerVC.swift */; };
 		A5C523BB254A612E000B2B13 /* loginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C523BA254A612E000B2B13 /* loginVC.swift */; };
 		A5C523C8254B7C84000B2B13 /* catalogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C523C7254B7C84000B2B13 /* catalogCell.swift */; };
@@ -70,6 +71,7 @@
 		A56F04BA2544DAEF0060976F /* addGardenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addGardenVC.swift; sourceTree = "<group>"; };
 		A56F04C12544DD480060976F /* gardensTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gardensTableVC.swift; sourceTree = "<group>"; };
 		A56F04C42544DD730060976F /* gardenCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gardenCell.swift; sourceTree = "<group>"; };
+		A5C158412573117400E508F6 /* lightInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lightInfoVC.swift; sourceTree = "<group>"; };
 		A5C523B7254A60CD000B2B13 /* registerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerVC.swift; sourceTree = "<group>"; };
 		A5C523BA254A612E000B2B13 /* loginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginVC.swift; sourceTree = "<group>"; };
 		A5C523C7254B7C84000B2B13 /* catalogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogCell.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 		40C7CB98253768FB005A2283 = {
 			isa = PBXGroup;
 			children = (
+				A5C158412573117400E508F6 /* lightInfoVC.swift */,
 				40C7CBA3253768FB005A2283 /* Green Thumb */,
 				40C7CBA2253768FB005A2283 /* Products */,
 				466AE14F76FCEFB67DD4E013 /* Pods */,
@@ -314,6 +317,7 @@
 				4074C0EA2562FA100021416A /* homeVC.swift in Sources */,
 				A56F04C52544DD730060976F /* gardenCell.swift in Sources */,
 				A83E47FF2543B37F003F1193 /* UserPlant.swift in Sources */,
+				A5C158422573117400E508F6 /* lightInfoVC.swift in Sources */,
 				40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */,
 				A5C523B8254A60CD000B2B13 /* registerVC.swift in Sources */,
 				40426456254488DF005C6F8D /* catalogVC.swift in Sources */,
@@ -486,13 +490,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 75JK535DUG;
+				DEVELOPMENT_TEAM = AWUU3Q6NX7;
 				INFOPLIST_FILE = "Green Thumb/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.jpriggs.GreenThumb;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.mworrel2.GreenThumb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -507,13 +511,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 75JK535DUG;
+				DEVELOPMENT_TEAM = AWUU3Q6NX7;
 				INFOPLIST_FILE = "Green Thumb/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.jpriggs.GreenThumb;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.mworrel2.GreenThumb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
