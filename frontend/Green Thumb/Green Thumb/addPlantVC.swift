@@ -11,7 +11,8 @@ import SwiftyJSON
 class addPlantVC: UIViewController {
 
     @IBOutlet weak var plantImage: UIImageView!
-    @IBOutlet weak var name: UITextView!
+    @IBOutlet weak var name: UITextField!
+    
     var userGarden: UserGarden!
     var currentPlant: UserPlant!
     weak var returnDelegate : PlantReturnDelegate?
@@ -42,10 +43,12 @@ class addPlantVC: UIViewController {
         
         let parameters: [String: Any] = [
             "plant_type_id": self.currentPlant.catalogPlantId,
-            "name": self.name.text ?? "",
+            "name": self.currentPlant.name ?? "",
             "latitude": -1,
             "longitude": -1,
-            "light_level": -1,
+            "price": 0,
+            "light_intensity": 0,
+            "light_duration": 0,
             "last_watered": date
         ]
         do {
@@ -79,6 +82,12 @@ class addPlantVC: UIViewController {
         }
 
         task.resume()
+    }
+    
+    @IBAction func nameChanged(_ sender: Any) {
+        if name.text != nil {
+            self.currentPlant.name = name.text!
+        }
     }
     
     /*

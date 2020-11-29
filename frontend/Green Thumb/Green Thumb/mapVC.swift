@@ -13,6 +13,8 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
 
     let locmanager = CLLocationManager()
     var addingPlant = false
+    var deletingPlant = false
+    var movingPlant = false
     // Must pass in user garden
     var userGarden: UserGarden!
     var gardenCorners: [GMSGroundOverlay] = [GMSGroundOverlay]()
@@ -30,11 +32,24 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
     
     func didReturn(_ result: UserPlant) {
         self.currentPlant = result
+        self.addPlantLabel.isHidden = false
     }
     
-    func didReturnOverlay(_ result: GMSOverlay) {
+    func didReturnOverlay(_ result: GMSOverlay, _ delete: Bool, _ move: Bool) {
         self.currentOverlay = result
-        print(self.currentOverlay)
+        self.deletingPlant = delete
+        self.movingPlant = move
+        
+        if (deletingPlant) {
+            // delete plant from database
+            // delete plant overlay
+            
+        }
+        
+        if (movingPlant) {
+            // prompt user to change the plant location
+        }
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -45,9 +60,6 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(false)
         
-        if (currentPlant != nil){
-            self.addPlantLabel.isHidden = false
-        }
         
         self.map.mapType = .satellite
         map.delegate = self
@@ -343,7 +355,9 @@ extension mapVC : GMSMapViewDelegate {
                 "plant_type_id": self.currentPlant!.catalogPlantId,
                 "latitude": self.currentPlant!.geodata.lat,
                 "longitude": self.currentPlant!.geodata.lon,
-                "light_level": -1,
+                "light_intensity": self.currentPlant!.intensity,
+                "light_duration": self.currentPlant!.duration,
+                "price": self.currentPlant!.price,
                 "last_watered": date
             ]
             print(parameters)
