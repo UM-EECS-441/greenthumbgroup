@@ -14,14 +14,23 @@ class catalogVC: UITableViewController {
     var plants = [["_id":["$oid":""], "name":"", "species":"", "tags": {},
                    "description": "", "days_to_water": 0,
                    "watering_description": ""]]  // array of Plants
+    // Searchbar files
+    var searching : Bool = false
     var searchedPlants = [["_id":["$oid":""], "name":"", "species":"", "tags": {},
                                "description": "", "days_to_water": 0,
                                "watering_description": ""]]
-    //    var SearchBarValue:String!
-    var sortedKeys : [String] = []
-    var searching : Bool = false
-//    var sections : [String : [Any]] = [:]
-    var sections = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+    
+    let sortToggle : [String:String] = ["alphabetical":"type", "type":"alphabetical"]
+    var currentSort : String = "alphabetical"
+    
+    // Alphabetical Sort
+    var sortedAlphabeticalKeys : [String] = []
+    var alphabeticalSections = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
+    // Plant Type Sort
+    var plantTypeSort : [String] = []
+    var plantTypeSections = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
                      "description": "", "days_to_water": 0,
                      "watering_description": ""]]]
     
@@ -88,6 +97,13 @@ class catalogVC: UITableViewController {
         queue.asyncAfter(deadline: DispatchTime.now() + wait, execute: closure)
     }
     
+    @IBAction func changeSort(_ sender: Any) {
+        print("switching from", currentSort, "sort to", sortToggle[currentSort]!);
+        currentSort = sortToggle[currentSort]!;
+        tableView.reloadData();
+    }
+    
+    
     func getPlants() {
         let requestURL = "http://192.81.216.18/api/v1/catalog/"
         var request = URLRequest(url: URL(string: requestURL)!)
@@ -124,7 +140,7 @@ class catalogVC: UITableViewController {
                     String($0["name"] as! String).prefix(1).uppercased()
                 })
 //                print(groupedPlants)
-                self.sortedKeys = groupedPlants.keys.sorted()
+                self.sortedAlphabeticalKeys = groupedPlants.keys.sorted()
                 
                 self.plants = sortedJSON
                 
@@ -149,12 +165,12 @@ class catalogVC: UITableViewController {
                             String(self.plants[index]["species"] as! String) + ")"
                     }
                     let firstLetter = String(self.plants[index]["name"] as! String).prefix(1).uppercased()
-                    if let val = self.sections[firstLetter] {
-                        self.sections[firstLetter]?.append(self.plants[index])
+                    if let val = self.alphabeticalSections[firstLetter] {
+                        self.alphabeticalSections[firstLetter]?.append(self.plants[index])
                     }
                     else {
-                        self.sections[firstLetter] = []
-                        self.sections[firstLetter]?.append(self.plants[index])
+                        self.alphabeticalSections[firstLetter] = []
+                        self.alphabeticalSections[firstLetter]?.append(self.plants[index])
                     }
 //                    print(self.sections)
 //                    print(String(self.plants[index]["name"] as! String).prefix(1))
@@ -169,7 +185,7 @@ class catalogVC: UITableViewController {
 ////                        duplicateNames[self.plants[index]["name"] as! String] = true
 //                    }
                 }
-                print(self.sections)
+//                print(self.sections)
 //                self.plants = groupedSortedPlants
                 
                 DispatchQueue.main.async {
@@ -221,6 +237,11 @@ extension catalogVC {
             var name = plants[indexPath.row]["name"]
             if searching {
                 name = searchedPlants[indexPath.row]["name"]
+            }
+            else {
+                if currentSort == "alphabetical" {
+                    
+                }
             }
             var nameString = "I been thru the desert on a plant with no name :("
             if case Optional<Any>.none = name {
@@ -274,8 +295,8 @@ extension catalogVC {
                     tagsString += "\n"
                 }
             }
-            print(tagsString)
-            let type_array = tags["plant type"]
+//            print(tagsString)
+            let type_array: [Any] = tags["plant type"]!
             
             var typeString = "No Type Found"
             
@@ -283,7 +304,12 @@ extension catalogVC {
                 //nil
             } else {
                 //not nil
-                typeString = String(describing: type_array![0])
+//                typeString = String(describing: type_array![0])
+                typeString = ""
+                for type in type_array {
+                    typeString += "\(type), "
+                }
+                typeString = String(typeString.dropLast(2))
             }
             
             var days_to_water = plants[indexPath.row]["days_to_water"]
@@ -317,7 +343,7 @@ extension catalogVC {
             
             catalogPage?.name = nameString
             catalogPage?.species = "Species: " + speciesString
-            catalogPage?.type = "Plant type: " + typeString
+            catalogPage?.type = (type_array.count > 1 ? ("Plant types: ") : ("Plant type: ")) + typeString
             catalogPage?.desc = descriptionString
             catalogPage?.tags = tagsString
             if days_to_water_String == "N/A" {
@@ -358,40 +384,60 @@ extension catalogVC: UISearchBarDelegate {
 }
 
 extension catalogVC {
-//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        if searching {
-//            return ""
-//        }
-//        else {
-//            return sortedKeys[section]
-//        }
-//    }
-//
-//    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-//        if searching {
-//            return [""]
-//        }
-//        else {
-//            return sortedKeys
-//        }
-//    }
-//
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        if searching {
-//            return 1
-//        }
-//        else {
-//            return sortedKeys.count // or sortedFirstLetters.count
-//        }
-//    }
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if searching {
+            return ""
+        }
+        else {
+            if currentSort == "alphabetical" {
+                return sortedAlphabeticalKeys[section]
+            }
+            else {
+                return ""
+            }
+        }
+    }
+
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        if searching {
+            return [""]
+        }
+        else {
+            if currentSort == "alphabetical" {
+                return sortedAlphabeticalKeys
+            }
+            else {
+                return [""]
+            }
+        }
+    }
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        if searching {
+            return 1
+        }
+        else {
+            if currentSort == "alphabetical" {
+                return sortedAlphabeticalKeys.count // or sortedFirstLetters.count
+            }
+            else {
+                return 1
+            }
+        }
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // how many rows per section
         if searching {
             return searchedPlants.count
         } else {
-            return plants.count
-//            return sections[sortedKeys[section]]!.count
+//            return plants.count
+            if currentSort == "alphabetical" {
+            return alphabeticalSections[sortedAlphabeticalKeys[section]]!.count
+            }
+            else {
+                return plants.count
+            }
         }
     }
     
@@ -405,51 +451,25 @@ extension catalogVC {
             let nameString = String(describing: name!)
             cell.textLabel?.text = nameString
         } else {
-            let name = plants[indexPath.row]["name"]
-            let nameString = String(describing: name!)
-            cell.textLabel?.text = nameString
-            
-//            let name = sections[sortedKeys[indexPath.section]]![indexPath.row]["name"]
+//            let name = plants[indexPath.row]["name"]
 //            let nameString = String(describing: name!)
 //            cell.textLabel?.text = nameString
+            if currentSort == "alphabetical" {
+                let name = alphabeticalSections[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["name"]
+                let nameString = String(describing: name!)
+                cell.textLabel?.text = nameString
+            }
+            else {
+                let name = plants[indexPath.row]["name"]
+                let nameString = String(describing: name!)
+                cell.textLabel?.text = nameString
+            }
         }
         
         
         return cell
     }
 }
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        // how many sections are in table
-//        return 1
-//    }
-//
-
-//
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        // event handler when a cell is tapped
-//        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-//    }
-//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        // populate a single cell
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: "catalogTableCell", for: indexPath) as? catalogTableCell else {
-//            fatalError("No reusable cell!")
-//        }
-//
-//        let plantName = plants[indexPath.row]["name"]
-//        let nameString = String(describing: plantName!)
-//        cell.plantName.text = nameString
-//        cell.plantName.sizeToFit()
-////        if (plant.plantImage != "") {
-////            let img = UIImage(data: Data(base64Encoded: plant.plantImage, options: .ignoreUnknownCharacters)!)!
-////            cell.plantImage?.image = img.resizeImage(targetSize: CGSize(width: 150, height: 181))
-////
-////        } else {
-////            cell.plantImage?.image = nil
-////        }
-//
-//        return cell
-//    }
-//
 
 
 
