@@ -723,10 +723,9 @@ extension catalogVC {
             else {
                 name = plants[indexPath.row]["name"]
             }
-            let nameString = String(describing: name!)
-            cell.textLabel?.text = nameString
         }
-        
+        let nameString = String(describing: name!)
+        cell.textLabel?.text = nameString
         
         return cell
     }
