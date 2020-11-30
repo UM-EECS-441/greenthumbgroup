@@ -72,9 +72,9 @@ class Notifier:
         if not usr.unsubscribed:
             water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow = self.generate_user_tasks(usr)
             if water_tasks or cold_weather_tasks:
-                email_msg = self.create_email_msg(water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow)
+                email_msg = self.create_email_msg(usr, water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow)
                 email_topic = self.MSG_TITLE.format(tasks_date=date.today())
-                self.send_email_msg(email_content=email_msg, email_subject=email_topic)
+                self.send_email_msg(rec_email=usr.email, email_content=email_msg, email_subject=email_topic)
 
     def send_all_task_lists(self):
 
@@ -107,11 +107,16 @@ class Notifier:
             # in degrees C
             min_temp_today = garden_weather_data["forecast_data"][0]["min_temp"]
             min_temp_tomorrow = garden_weather_data["forecast_data"][1]["min_temp"]
-            garden = gardens.objects(id=garden_id)[0]
+            garden = None
+            with util.MongoConnect():
+                garden = gardens.objects(id=garden_id)[0]
             for plant_id in garden.plants:
-                plant = user_plants.objects(id=plant_id)[0]
+                plant = None
+                plant_type = None
+                with util.MongoConnect():
+                    plant = user_plants.objects(id=plant_id)[0]
+                    plant_type = plant_types.objects(id=plant.plant_type_id)[0]
                 last_watered_date = plant.last_watered
-                plant_type = plant_types.objects(id=plant.plant_type_id)[0]
                 days_to_water = plant_type.days_to_water
                 if (date.today() - last_watered_date).days >= days_to_water:
                     watering_tasks.append(
@@ -154,14 +159,14 @@ class Notifier:
         )
 
         if water_tasks:
-            email_msg.append(
+            email_msg = email_msg + (
                 "\n" +
                 self.WATER_MSG + 
                 "\n"
             )
 
             for wt in water_tasks:
-                email_msg.append(
+                email_msg = email_msg + (
                     "- " +
                     self.PLANT_MSG.format(
                         plant_name=wt.plant_name,
@@ -175,7 +180,7 @@ class Notifier:
                     "\n"
                 )
         if cold_weather_tasks:
-            email_msg.append(
+            email_msg = email_msg + (
                 "\n" +
                 self.COLD_MSG.format(
                     temp_today=str(min_temp_today),
@@ -184,7 +189,7 @@ class Notifier:
                 "\n"
             )
             for wt in cold_weather_tasks:
-                email_msg.append(
+                email_msg = email_msg + (
                     "- " +
                     self.PLANT_MSG.format(
                         plant_name=wt.plant_name,
@@ -199,7 +204,7 @@ class Notifier:
                     "\n"
                 )
 
-        email_msg.append(
+        email_msg = email_msg + (
             "\n" +
             "Unsubscribe here: http://192.81.216.18/accounts/unsubscribe/" +
             str(usr.email) +
@@ -216,6 +221,8 @@ class Notifier:
         
         """
 
+        password = ""
+
         with open(self.pass_filename, 'r') as email_pass_file:
             password = email_pass_file.readline()
 
@@ -223,7 +230,7 @@ class Notifier:
         context = ssl.create_default_context()
 
         with smtplib.SMTP_SSL(self.smtp_serv, self.port, context=context) as server:
-            server.login(self.email_addr, password)
+            server.login(user=str(self.email_addr), password=str(password))
             # TODO: Send email here
             sender_email = self.email_addr
 
@@ -238,6 +245,7 @@ class Notifier:
 
 if __name__ == "__main__":
     notif = Notifier(
+        user="root",
         email_addr=config.NOTIF_EMAIL_ADDR,
         pass_filename=config.NOTIF_EMAIL_PASS_FILE,
         smtp_serv=config.EMAIL_SMTP,

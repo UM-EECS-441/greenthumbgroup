@@ -51,6 +51,9 @@ def get_historical_data(lat, lng, today_midnight_utc):
         # Gets the historic open weather map api url for i days in the past
         # (from 0 offset being yesterday to 5 days in the past)
         # Converts json to dict
+        resp = requests.get(ONE_HIST_URL, params=payload)
+        print(resp.status_code)
+        print(resp.json())
         hist_json = json.loads(requests.get(ONE_HIST_URL, params=payload).text)
 
         # Min temp in celcius
@@ -67,9 +70,9 @@ def get_historical_data(lat, lng, today_midnight_utc):
             if (h_data["temp"] < min_temp):
                 min_temp = h_data["temp"]
             if (h_data.get("rain") != None):
-                rain += h_data.get("rain")
+                rain += h_data["rain"]["1h"]
             if (h_data.get("snow") != None):
-                snow += h_data.get("snow")
+                snow += h_data["snow"]["1h"]
 
         # print(json.dumps(hist_json))
         hist_data.append({"dt": hist_json["current"]["dt"], "min_temp": min_temp, "max_temp": max_temp, "rain": rain, "snow": snow})
@@ -84,6 +87,7 @@ def get_forecast_data(lat, lng):
     OWM_KEY = os.environ.get("OPEN_WEATHER_MAP_KEY")
     ONE_FORE_URL = "https://api.openweathermap.org/data/2.5/onecall"
     exclude = "minutely,hoursly,alerts"
+    units = "metric"
 
     forecast_data = []
     # Get request payload
@@ -100,9 +104,9 @@ def get_forecast_data(lat, lng):
         rain = 0
         snow = 0
         if (h_data.get("rain") != None):
-            rain += h_data.get("rain")
+            rain += h_data["rain"]
         if (h_data.get("snow") != None):
-            snow += h_data.get("snow")
+            snow += h_data["snow"]
 
         # print(json.dumps(hist_json))
         forecast_data.append({"dt": (h_data["dt"] // 86400) * 86400,
@@ -157,9 +161,9 @@ def calc_garden_plants_watering(garden_id):
         # And adds it to a dictionary stating if the weather watered the plant sufficiently
         plant_watering_data = []
         for plant_id in user_garden.plants:
-            plant = user_plants.get(id=plant_id)
+            plant = user_plants.objects(id=plant_id)[0]
             if plant.outdoors:
-                plant_type = plant_types.get(id=plant.plant_type_id)
+                plant_type = plant_types.objects(id=plant.plant_type_id)[0]
                 rain_amt = 0
                 last_day_watered = -1
                 # Uses the min because we can only look back 5 days in the past

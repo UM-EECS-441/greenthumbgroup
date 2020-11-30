@@ -33,7 +33,7 @@ def zone_min_temp(zone):
 
     """
 
-    if zone > 13 or zone < 1:
+    if int(zone) > 13 or int(zone) < 1:
         return None
 
     return ZONE_TEMP_MAP[str(zone)]
