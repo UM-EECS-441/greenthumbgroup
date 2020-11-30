@@ -101,7 +101,6 @@
 		40C7CB98253768FB005A2283 = {
 			isa = PBXGroup;
 			children = (
-				A5C158412573117400E508F6 /* lightInfoVC.swift */,
 				40C7CBA3253768FB005A2283 /* Green Thumb */,
 				40C7CBA2253768FB005A2283 /* Products */,
 				466AE14F76FCEFB67DD4E013 /* Pods */,
@@ -124,6 +123,7 @@
 				40C7CBA4253768FB005A2283 /* AppDelegate.swift */,
 				40426455254488DF005C6F8D /* catalogVC.swift */,
 				4042645A2548FC9F005C6F8D /* catalogPage.swift */,
+				A5C158412573117400E508F6 /* lightInfoVC.swift */,
 				40C7CBA6253768FB005A2283 /* SceneDelegate.swift */,
 				40C7CBA8253768FB005A2283 /* ViewController.swift */,
 				40C7CBAA253768FB005A2283 /* Main.storyboard */,
