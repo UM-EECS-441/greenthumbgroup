@@ -7,7 +7,7 @@ GreenThumb Group <greenthumb441@umich.edu>
 """
 
 from greenthumb.util.zonetemp import zone_min_temp
-import smtplib, ssl
+import smtplib, ssl, sys
 
 from os import name
 from greenthumb import config
@@ -16,7 +16,6 @@ from greenthumb import util
 from greenthumb.models.mongo import (users, gardens, plant_types, user_plants)
 from greenthumb.models.tasks import (WateringTask, ColdWeatherTask)
 from datetime import date
-
 class Notifier:
 
     # SPECIAL CONDITIONS
@@ -62,23 +61,33 @@ class Notifier:
         self.smtp_serv = smtp_serv
         self.port = port
 
-    def generate_and_send_task_lists(self):
+    def generate_and_send_task_list(self, usr):
 
         """
 
-        Generate and send task_lists for all subscribed users.
+        Generate and send a task list for a single user.
+
+        """
+
+        if not usr.unsubscribed:
+            water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow = self.generate_user_tasks(usr)
+            if water_tasks or cold_weather_tasks:
+                email_msg = self.create_email_msg(water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow)
+                email_topic = self.MSG_TITLE.format(tasks_date=date.today())
+                self.send_email_msg(email_content=email_msg, email_subject=email_topic)
+
+    def send_all_task_lists(self):
+
+        """
+
+        Generate and send task lists for all subscribed users.
 
         """
 
         with util.MongoConnect():
             usrs = users.objects()
             for usr in usrs:
-                if not usr.unsubscribed:
-                    water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow = self.generate_user_tasks(usr)
-                    if water_tasks or cold_weather_tasks:
-                        email_msg = self.create_email_msg(water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow)
-                        email_topic = self.MSG_TITLE.format(tasks_date=date.today())
-                        self.send_email_msg(email_content=email_msg, email_subject=email_topic)
+                self.generate_and_send_task_list(usr)
 
     def generate_user_tasks(self, usr):
 
@@ -190,6 +199,13 @@ class Notifier:
                     "\n"
                 )
 
+        email_msg.append(
+            "\n" +
+            "Unsubscribe here: http://192.81.216.18/accounts/unsubscribe/" +
+            str(usr.email) +
+            "/" +
+            "\n"
+        )
         return email_msg
 
     def send_email_msg(self, rec_email, email_subject, email_content):
@@ -227,4 +243,6 @@ if __name__ == "__main__":
         smtp_serv=config.EMAIL_SMTP,
         port=config.EMAIL_SSL_PORT
     )
-    notif.generate_and_send_task_lists()
+    with util.MongoConnect():
+        usr = users.objects(email=sys.argv[1])[0]
+        notif.generate_and_send_task_list(usr)
