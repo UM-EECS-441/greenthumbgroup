@@ -31,5 +31,7 @@ setup(
         'requests',
         'pandas',
         'python-crontab',
+        'schedule',
+        'timezonefinder'
     ],
 )

@@ -1,10 +1,10 @@
 import greenthumb
 import json
+import sched
 
 from greenthumb import util
 from greenthumb.models.mongo import (users, gardens, plant_types, user_plants)
 from flask import (abort, request, session, jsonify)
-from crontab import CronTab
 
 import datetime
 
@@ -89,19 +89,10 @@ def get_garden(garden_id: str):
                         continue
                     plant = plant[0]
                     plant_type = plant_types.objects(id=plant.plant_type_id)
-                    # if no plant type can't delete cronjob
                     if str(plant_type) == '[]':
                         plant.delete()
                         continue
                     plant_type = plant_type[0]
-                    # Delete cron job when plant is deleted
-                    with CronTab(user='root') as cron:
-                        cron.remove_all(command="python notification.py " +
-                            str(session['email']) + " " +
-                            str(plant_type["name"]) + " " +
-                            str(float(plant["latitude"])) + " " +
-                            str(float(plant["longitude"])) + " " +
-                            str(WATERING_DESCRIPTION))
 
                     plant.delete()
 
@@ -253,12 +244,11 @@ def add_garden_location():
         user.save()
         return {"id": str(garden.id)}, 200
 
-
 @greenthumb.app.route('/api/v1/usergarden/<string:garden_id>/add_plant/', methods=['POST'])
 def add_plant_to_garden(garden_id: str):
 
     expected_fields = ['plant_type_id', 'latitude',
-        'longitude', 'light_level', 'last_watered']
+        'longitude', 'light_duration', 'light_intensity', 'last_watered', 'name', 'price', 'outdoors']
 
     if 'email' not in session:
         abort(403)
@@ -269,7 +259,15 @@ def add_plant_to_garden(garden_id: str):
     # check that the right info was provided, else 401
     for field in expected_fields:
         if field not in request.json:
-            abort(401)
+            # Don't reject if still using the old set of expected fields
+            if field in ['light_duration', 'light_intensity', 'price']:
+                request.json[field] = 0
+            elif field == 'name':
+                request.json['name'] = ''
+            elif field == 'outdoors':
+                request.json['outdoors'] = False
+            else:
+                abort(401)
 
     if not is_valid_id(request.json['plant_type_id']):
         abort(401)
@@ -304,24 +302,14 @@ def add_plant_to_garden(garden_id: str):
             user_plant = user_plants(plant_type_id=request.json['plant_type_id'],
                 latitude=request.json['latitude'],
                 longitude=request.json['longitude'],
-                light_level=request.json['light_level'],
+                light_duration=request.json['light_duration'],
+                light_intensity=request.json['light_intensity'],
+                name=request.json['name'],
+                price=request.json['price'],
+                outdoors=request.json['outdoors'],
                 last_watered=datetime.datetime.strptime(request.json['last_watered'], '%Y-%m-%d %H:%M:%S.%f')).save()
             garden.plants.append(str(user_plant.id))
             garden.save()
-
-            # TODO: implement using/setting last_watered later
-            with CronTab(user='root') as cron:
-                job = cron.new(
-                    command="python notification.py " +
-                    str(session['email']) + " " +
-                    str(plant_type["name"]) + " " +
-                    str(float(request.json['latitude'])) + " " +
-                    str(float(request.json['longitude'])) + " " +
-                    str(WATERING_DESCRIPTION)
-                )
-                #goes in place of "Water it": plant_type["watering_description"]
-                #goes in place of 1: plant_type['days_to_water']
-                job.day.every(1)
 
             return {"id": str(user_plant.id)}, 200
         else:
@@ -331,32 +319,36 @@ def add_plant_to_garden(garden_id: str):
 def edit_plant_in_garden(garden_id: str, plant_id: str):
 
     expected_fields = ['plant_type_id', 'latitude',
-        'longitude', 'light_level', 'last_watered']
+        'longitude', 'light_duration', 'light_intensity', 'last_watered', 'name', 'price', 'outdoors']
 
     if 'email' not in session:
         abort(403)
 
-    print('Email in session')
 
     if not is_valid_id(garden_id):
         abort(401)
 
-    print('Garden id valid')
 
     if not is_valid_id(plant_id):
         abort(401)
 
-    print('Plant id valid')
 
     # check that the right info was provided, else 401
     for field in expected_fields:
         if field not in request.json:
-            abort(401)
+             # Don't reject if still using the old set of expected fields
+            if field in ['light_duration', 'light_intensity', 'price']:
+                request.json[field] = 0
+            elif field == 'name':
+                request.json['name'] = ''
+            elif field == 'outdoors':
+                request.json['outdoors'] = False
+            else:
+                abort(401)
 
     if not is_valid_id(request.json['plant_type_id']):
         abort(401)
 
-    print('Plant type id valid')
 
     if request.json['last_watered'].find('.') == -1:
         request.json['last_watered'] = request.json['last_watered'] + '.000000'
@@ -382,7 +374,7 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
                 plant_type = plant_types.objects(id=request.json['plant_type_id'])
             except Exception as e:
                 abort(404)
-            print(str(plant_type))
+
             if str(plant_type) == '[]':
                 abort(404)
 
@@ -396,35 +388,16 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
                 abort(404)
             plant = plant[0]
 
-            # delete old cron job since the plants latitude/longitude can change
-            with CronTab(user='root') as cron:
-                cron.remove_all(command="python notification.py " +
-                    str(session['email']) + " " +
-                    str(plant_type["name"]) + " " +
-                    str(float(plant["latitude"])) + " " +
-                    str(float(plant["longitude"])) + " " +
-                    str(WATERING_DESCRIPTION))
-
             plant.plant_type_id = plant_type.id
             plant.latitude = request.json['latitude']
             plant.longitude = request.json['longitude']
-            plant.light_level = request.json['light_level']
+            plant.light_duration = request.json['light_duration']
+            plant.light_intensity = request.json['light_intensity']
+            plant.name = request.json['name']
+            plant.price = request.json['price']
+            plant.outdoors = request.json['outdoors']
             plant.last_watered = datetime.datetime.strptime(request.json['last_watered'], '%Y-%m-%d %H:%M:%S.%f')
             plant.save()
-
-            # remake cron job
-            with CronTab(user='root') as cron:
-                job = cron.new(
-                    command="python notification.py " +
-                    str(session['email']) + " " +
-                    str(plant_type["name"]) + " " +
-                    str(float(request.json['latitude'])) + " " +
-                    str(float(request.json['longitude'])) + " " +
-                    str(WATERING_DESCRIPTION)
-                )
-                #goes in place of "Water it": plant_type["watering_description"]
-                #goes in place of 1: plant_type['days_to_water']
-                job.day.every(1)
 
         else:
             abort(401)
@@ -472,15 +445,6 @@ def delete_plant_in_garden(garden_id: str, plant_id: str):
             if str(plant_type) == '[]':
                 abort(401)
             plant_type = plant_type[0]
-
-            # Delete cron job when plant is deleted
-            with CronTab(user='root') as cron:
-                cron.remove_all(command="python notification.py " +
-                    str(session['email']) + " " +
-                    str(plant_type["name"]) + " " +
-                    str(float(plant["latitude"])) + " " +
-                    str(float(plant["longitude"])) + " " +
-                    str(WATERING_DESCRIPTION))
 
                 #goes in place of "Water it": plant_type["watering_description"]
             garden.plants.remove(plant.id)

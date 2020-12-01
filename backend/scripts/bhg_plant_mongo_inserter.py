@@ -45,8 +45,8 @@ for row, plant in catalog_df.iterrows():
     # adding them as list items to plant_tags
     # if they are a list item
     for tag, val in plant[plant.values != ""].items():
-        if (tag != "plant name" and tag != "plant species" \
-            and tag != "description"):
+        if (tag != "name" and tag != "species" \
+            and tag != "description" and tag != "image"):
             
             # Adds plant tags and splits on commas
             plant_tags[tag] = val.split(", ")
@@ -54,8 +54,8 @@ for row, plant in catalog_df.iterrows():
         #plant_tags[tag]
 
     # Saves the plant to the catalog document
-    plant_types(name = plant["plant name"],
-        species = plant["plant species"],
+    plant_types(name = plant["name"],
+        species = plant["species"],
         tags = plant_tags,
         description = plant["description"]).save()
 
