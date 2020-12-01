@@ -516,19 +516,6 @@ extension catalogVC {
                 days_to_water_String = String(describing: days_to_water!)
             }
             
-            let water_description = selectedPlant["watering_description"]
-            var water_description_string = "No Watering Description Available"
-
-            if water_description is NSNull {
-                //<null>
-            } else {
-                //not <null>
-                water_description_string = String(describing: water_description!)
-                if water_description_string == "autofilled" {
-                    days_to_water_String = ""
-                    water_description_string = ""
-                }
-            }
             
             
             
@@ -540,7 +527,6 @@ extension catalogVC {
             if days_to_water_String != "" {
                 catalogPage?.waterDays = "Days until next watering: " + days_to_water_String
             }
-            catalogPage?.waterInfo = water_description_string
             catalogPage?.id = selectedPlant["_id"] as! String
 
             
