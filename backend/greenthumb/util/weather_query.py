@@ -52,30 +52,32 @@ def get_historical_data(lat, lng, today_midnight_utc):
         # (from 0 offset being yesterday to 5 days in the past)
         # Converts json to dict
         resp = requests.get(ONE_HIST_URL, params=payload)
-        print(resp.status_code)
-        print(resp.json())
-        hist_json = json.loads(requests.get(ONE_HIST_URL, params=payload).text)
+        if resp.ok:
 
-        # Min temp in celcius
-        min_temp = 100
-        # Max temp in celscius
-        max_temp = -100
-        # rain in mm
-        rain = 0
-        # snow in mm
-        snow = 0
-        for h_data in hist_json["hourly"]:
-            if (h_data['temp'] > max_temp):
-                max_temp = h_data["temp"]
-            if (h_data["temp"] < min_temp):
-                min_temp = h_data["temp"]
-            if (h_data.get("rain") != None):
-                rain += h_data["rain"]["1h"]
-            if (h_data.get("snow") != None):
-                snow += h_data["snow"]["1h"]
+            hist_json = json.loads(resp.text)
 
-        # print(json.dumps(hist_json))
-        hist_data.append({"dt": hist_json["current"]["dt"], "min_temp": min_temp, "max_temp": max_temp, "rain": rain, "snow": snow})
+            # Min temp in celcius
+            min_temp = 100
+            # Max temp in celscius
+            max_temp = -100
+            # rain in mm
+            rain = 0
+            # snow in mm
+            snow = 0
+            for h_data in hist_json["hourly"]:
+                if (h_data['temp'] > max_temp):
+                    max_temp = h_data["temp"]
+                if (h_data["temp"] < min_temp):
+                    min_temp = h_data["temp"]
+                if (h_data.get("rain") != None):
+                    rain += h_data["rain"]["1h"]
+                if (h_data.get("snow") != None):
+                    snow += h_data["snow"]["1h"]
+
+            # print(json.dumps(hist_json))
+            hist_data.append({"dt": hist_json["current"]["dt"], "min_temp": min_temp, "max_temp": max_temp, "rain": rain, "snow": snow})
+        else:
+            hist_data.append({})
     return hist_data
 
 def get_forecast_data(lat, lng):
@@ -95,25 +97,31 @@ def get_forecast_data(lat, lng):
     # Gets the historic open weather map api url for next 7 days
     # (from 0 offset being today to 7 days in the future)
     # Converts json to dict
-    forecast_json = json.loads(requests.get(ONE_FORE_URL, params=payload).text)
-    for i in range(5):
-        
+    resp = requests.get(ONE_FORE_URL, params=payload)
 
-        h_data = forecast_json["daily"][i]
+    if resp.ok:
+
+        forecast_json = json.loads(resp.text)
+        for i in range(5):
             
-        rain = 0
-        snow = 0
-        if (h_data.get("rain") != None):
-            rain += h_data["rain"]
-        if (h_data.get("snow") != None):
-            snow += h_data["snow"]
 
-        # print(json.dumps(hist_json))
-        forecast_data.append({"dt": (h_data["dt"] // 86400) * 86400,
-            "min_temp": h_data["temp"]["min"],
-            "max_temp": h_data["temp"]["max"], 
-            "rain": rain, "snow": snow})
-    
+            h_data = forecast_json["daily"][i]
+                
+            rain = 0
+            snow = 0
+            if (h_data.get("rain") != None):
+                rain += h_data["rain"]
+            if (h_data.get("snow") != None):
+                snow += h_data["snow"]
+
+            # print(json.dumps(hist_json))
+            forecast_data.append({"dt": (h_data["dt"] // 86400) * 86400,
+                "min_temp": h_data["temp"]["min"],
+                "max_temp": h_data["temp"]["max"], 
+                "rain": rain, "snow": snow})
+    else:
+        forecast_data.append({})
+
     return forecast_data
 
 def calc_garden_plants_watering(garden_id):
@@ -168,19 +176,20 @@ def calc_garden_plants_watering(garden_id):
                 last_day_watered = -1
                 # Uses the min because we can only look back 5 days in the past
                 # so max size of historical data array is size 5 (max index = 4)
-                for i in range(min(plant_type["days_to_water"] - 1, 4), -1, -1):
-                    rain_amt += hist_data[i]["rain"]
-                    if hist_data[i]["rain"] > 0:
-                        last_day_watered = i + 1
+                if "days_to_water" in plant_type:
+                    for i in range(min(plant_type["days_to_water"] - 1, 4), -1, -1):
+                        rain_amt += hist_data[i]["rain"]
+                        if hist_data[i]["rain"] > 0:
+                            last_day_watered = i + 1
 
-                # Appends that plant's rain amount to the plant_weather_data
-                plant_watering_data.append({"plant_id": str(plant_id), "rain_amt": rain_amt, "last_watered": None})
+                    # Appends that plant's rain amount to the plant_weather_data
+                    plant_watering_data.append({"plant_id": str(plant_id), "rain_amt": rain_amt, "last_watered": None})
 
-                # If sufficiently watered then set last watered day
-                # to last day it rained
-                if rain_amt > 40 - 5*plant_type["days_to_water"]:
-                    plant_watering_data[-1]["last_watered"] = datetime.fromtimestamp(today_midnight_epoch_utc - last_day_watered * 86400)
-                    plant.last_watered = datetime.fromtimestamp(today_midnight_epoch_utc - last_day_watered * 86400)
+                    # If sufficiently watered then set last watered day
+                    # to last day it rained
+                    if rain_amt > 40 - 5*plant_type["days_to_water"]:
+                        plant_watering_data[-1]["last_watered"] = datetime.fromtimestamp(today_midnight_epoch_utc - last_day_watered * 86400)
+                        plant.last_watered = datetime.fromtimestamp(today_midnight_epoch_utc - last_day_watered * 86400)
 
     # Returns a dictionary of historical, forecast, and plant watering data
     return {"hist_data": hist_data, "forecast_data": forecast_data, "plant_watering_data": plant_watering_data}

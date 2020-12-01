@@ -265,7 +265,7 @@ def add_plant_to_garden(garden_id: str):
             elif field == 'name':
                 request.json['name'] = ''
             elif field == 'outdoors':
-                request.json['outdoors'] = True
+                request.json['outdoors'] = False
             else:
                 abort(401)
 
@@ -342,7 +342,7 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
             elif field == 'name':
                 request.json['name'] = ''
             elif field == 'outdoors':
-                request.json['outdoors'] = True
+                request.json['outdoors'] = False
             else:
                 abort(401)
 

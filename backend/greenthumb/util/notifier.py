@@ -61,6 +61,19 @@ class Notifier:
         self.smtp_serv = smtp_serv
         self.port = port
 
+    def send_all_task_lists(self):
+
+        """
+
+        Generate and send task lists for all subscribed users.
+
+        """
+
+        with util.MongoConnect():
+            usrs = users.objects()
+            for usr in usrs:
+                self.generate_and_send_task_list(usr)
+
     def generate_and_send_task_list(self, usr):
 
         """
@@ -75,19 +88,6 @@ class Notifier:
                 email_msg = self.create_email_msg(usr, water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow)
                 email_topic = self.MSG_TITLE.format(tasks_date=date.today())
                 self.send_email_msg(rec_email=usr.email, email_content=email_msg, email_subject=email_topic)
-
-    def send_all_task_lists(self):
-
-        """
-
-        Generate and send task lists for all subscribed users.
-
-        """
-
-        with util.MongoConnect():
-            usrs = users.objects()
-            for usr in usrs:
-                self.generate_and_send_task_list(usr)
 
     def generate_user_tasks(self, usr):
 
@@ -105,41 +105,49 @@ class Notifier:
         for garden_id in usr.gardens:
             garden_weather_data = util.calc_garden_plants_watering(garden_id)
             # in degrees C
-            min_temp_today = garden_weather_data["forecast_data"][0]["min_temp"]
-            min_temp_tomorrow = garden_weather_data["forecast_data"][1]["min_temp"]
+            if garden_weather_data[0] and garden_weather_data[1]:
+                min_temp_today = garden_weather_data["forecast_data"][0]["min_temp"]
+                min_temp_tomorrow = garden_weather_data["forecast_data"][1]["min_temp"]
             garden = None
             with util.MongoConnect():
-                garden = gardens.objects(id=garden_id)[0]
-            for plant_id in garden.plants:
-                plant = None
-                plant_type = None
-                with util.MongoConnect():
-                    plant = user_plants.objects(id=plant_id)[0]
-                    plant_type = plant_types.objects(id=plant.plant_type_id)[0]
-                last_watered_date = plant.last_watered
-                days_to_water = plant_type.days_to_water
-                if (date.today() - last_watered_date).days >= days_to_water:
-                    watering_tasks.append(
-                        WateringTask(
-                            plant_name=plant.name,
-                            plant_type=plant_type.name,
-                            plant_lat=plant.latitude,
-                            plant_long=plant.longitude,
-                            water_instr=plant_type.watering_description,
-                        )
-                    )
-                if plant.outdoors:
-                    min_zone = min(plant_type.tags["zones"])
-                    if min_temp_today < util.zone_min_temp(min_zone) or min_temp_tomorrow < util.zone_min_temp(min_zone):
-                        cold_weather_tasks.append(
-                            ColdWeatherTask(
-                                plant_name=plant.name,
-                                plant_type=plant_type.name,
-                                plant_lat=plant.latitude,
-                                plant_long=plant.longitude,
-                                plant_zone=min_zone,
+                gardens_found = gardens.objects(id=garden_id)
+                if gardens_found:
+                    garden = gardens_found[0]
+            if garden:
+                for plant_id in garden.plants:
+                    plant = None
+                    plant_type = None
+                    with util.MongoConnect():
+                        plants_found = user_plants.objects(id=plant_id)
+                        plant_types_found = plant_types.objects(id=plant.plant_type_id)
+                        if plants_found and plant_types_found:
+                            plant = plants_found[0]
+                            plant_type = plant_types_found[0]
+                    if plant and plant_type:
+                        last_watered_date = plant.last_watered
+                        days_to_water = plant_type.days_to_water
+                        if (date.today() - last_watered_date).days >= days_to_water:
+                            watering_tasks.append(
+                                WateringTask(
+                                    plant_name=plant.name,
+                                    plant_type=plant_type.name,
+                                    plant_lat=plant.latitude,
+                                    plant_long=plant.longitude,
+                                    water_instr=plant_type.watering_description,
+                                )
                             )
-                        )
+                        if plant.outdoors and min_temp_today and min_temp_tomorrow and "zones" in plant_type.tags:
+                            min_zone = min(plant_type.tags["zones"])
+                            if min_temp_today < util.zone_min_temp(min_zone) or min_temp_tomorrow < util.zone_min_temp(min_zone):
+                                cold_weather_tasks.append(
+                                    ColdWeatherTask(
+                                        plant_name=plant.name,
+                                        plant_type=plant_type.name,
+                                        plant_lat=plant.latitude,
+                                        plant_long=plant.longitude,
+                                        plant_zone=min_zone,
+                                    )
+                                )
 
         return watering_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow
 
@@ -176,10 +184,10 @@ class Notifier:
                     ) +
                     self.INSTR_MSG.format(
                         maintain_instr=wt.water_instr
-                    ) +
+                    ) if wt.water_instr else "" +
                     "\n"
                 )
-        if cold_weather_tasks:
+        if cold_weather_tasks and min_temp_today and min_temp_tomorrow:
             email_msg = email_msg + (
                 "\n" +
                 self.COLD_MSG.format(
@@ -206,7 +214,7 @@ class Notifier:
 
         email_msg = email_msg + (
             "\n" +
-            "Unsubscribe here: http://192.81.216.18/accounts/unsubscribe/" +
+            "Don't want these notifications? Unsubscribe here: http://192.81.216.18/accounts/unsubscribe/" +
             str(usr.email) +
             "/" +
             "\n"
