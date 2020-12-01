@@ -395,7 +395,7 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
             plant.light_intensity = request.json['light_intensity']
             plant.name = request.json['name']
             plant.price = request.json['price']
-            plant.outdoors = request.json['outdoors'],
+            plant.outdoors = json.loads(request.json['outdoors'])
             plant.last_watered = datetime.datetime.strptime(request.json['last_watered'], '%Y-%m-%d %H:%M:%S.%f')
             plant.save()
 
