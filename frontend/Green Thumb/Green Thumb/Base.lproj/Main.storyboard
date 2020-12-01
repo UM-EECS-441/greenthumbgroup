@@ -1166,6 +1166,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="image" destination="BTL-y7-vCX" id="Gl9-Ks-u8f"/>
                         <outlet property="lastWateredPicker" destination="YRc-Jv-3ig" id="hQz-QK-fmV"/>
                         <outlet property="lightDuration" destination="zBP-6k-ooz" id="NY6-ZO-kGB"/>
                         <outlet property="lightIntensity" destination="KmU-bT-sFR" id="3QO-gk-rB1"/>

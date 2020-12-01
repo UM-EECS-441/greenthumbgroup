@@ -327,9 +327,11 @@ extension catalogVC {
 
 //            var newPlant: UserPlant = UserPlant(catalogPlantId: self.plants[indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.plants[indexPath.row]["name"] as! String)
             var newPlant: UserPlant = UserPlant(catalogPlantId: self.plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["name"] as! String)
+            newPlant.image = self.plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["image"] as? String ?? ""
             
             if searching {
                 newPlant = UserPlant(catalogPlantId: self.searchedPlants[indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.searchedPlants[indexPath.row]["name"] as! String)
+                newPlant.image = self.searchedPlants[indexPath.row]["image"] as? String ?? ""
             }
             addPlantVC.currentPlant = newPlant
             self.present(addPlantVC, animated: true, completion: nil)

@@ -49,7 +49,8 @@ class addPlantVC: UIViewController {
             "price": 0,
             "light_intensity": 0,
             "light_duration": 0,
-            "last_watered": date
+            "last_watered": date,
+            "outdoors": true
         ]
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)

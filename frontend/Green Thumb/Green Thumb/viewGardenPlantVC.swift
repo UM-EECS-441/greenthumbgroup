@@ -13,6 +13,7 @@ class viewGardenPlantVC: UIViewController {
 
     @IBOutlet weak var name: UITextField!
     @IBOutlet weak var species: UILabel!
+    @IBOutlet weak var image: UIImageView!
     
     var nameText = ""
     var speciesText = ""
@@ -25,6 +26,8 @@ class viewGardenPlantVC: UIViewController {
     var lat = 0.0
     var lon = 0.0
     var priceInput = 0.0
+    var imageString = ""
+    var outdoors = true
 
     
     @IBOutlet weak var lightIntensity: UITextField!
@@ -54,10 +57,16 @@ class viewGardenPlantVC: UIViewController {
             self.duration = Double(data["light_duration"] ?? "") ?? 0.0
             self.priceInput = Double(data["price"] ?? "") ?? 0.0
             self.lastWatered = data["last_watered"] ?? ""
+            self.imageString = data["image"] ?? "planticon.png"
+            self.outdoors = Bool(data["outdoors"] ?? "") ?? true
         }
         
         self.name.text = nameText
         self.species.text = speciesText
+        
+        let imageData : Data = Data(base64Encoded: self.imageString, options: .ignoreUnknownCharacters)!
+        print(imageData)
+        self.image.image = UIImage(data: imageData)
         
         // Initialize last watered date
         lastWatered = lastWatered.replacingOccurrences(of: " 00:00:00 GMT", with: "")
@@ -92,7 +101,7 @@ class viewGardenPlantVC: UIViewController {
                 }
                 do{
                     let json = try JSON(data: data)
-                    //print(json)
+                    print(json)
                     self.species.text = json["species"].stringValue
                 }
                 catch {
@@ -158,7 +167,8 @@ class viewGardenPlantVC: UIViewController {
             "light_intensity": self.intensity,
             "light_duration": self.duration,
             "price": self.priceInput,
-            "last_watered": self.lastWatered
+            "last_watered": self.lastWatered,
+            "outdoors": self.outdoors
         ]
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)

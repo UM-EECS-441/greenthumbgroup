@@ -188,21 +188,58 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
                                         let id = json["plant_type_id"].stringValue
                                         let name = json["name"].string ?? ""
                                         let price = json["price"].doubleValue
-                                        let overlay = self.drawIcon(mapView: self.map, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon), iconImage: UIImage(named: "planticon.png"))
-                                        overlay.isTappable = true
-                                        overlay.userData = [
-                                            "name": String(name),
-                                            "uniq_id": String(plantId),
-                                            "type_id": String(id),
-                                            "garden_id": String(self.userGarden.gardenId),
-                                            "lat": String(lat),
-                                            "lon": String(lon),
-                                            "last_watered": String(water),
-                                            "light_intensity": String(intensity),
-                                            "light_duration": String(duration),
-                                            "price": String(price)
-                                        ]
-                                        self.plantOverlays?.append(overlay)
+                                        let outdoors = json["outdoors"].boolValue
+                                        // get image from database
+                                        let url = URL(string: "http://192.81.216.18/api/v1/catalog/\(id)/")!
+                                        
+                                        var request = URLRequest(url: url)
+
+                                        let cookie = UserDefaults.standard.object(forKey: "login") as? String
+                                        request.setValue(cookie, forHTTPHeaderField: "Cookie")
+                                        request.httpMethod = "GET"
+
+                                        let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
+                                            print(response ?? "")
+                                            //print(data)
+                                            DispatchQueue.main.async {
+                                                guard let data = data else {
+                                                    return
+                                                }
+                                                do{
+                                                    let json = try JSON(data: data)
+                                                    //print(json)
+                                                    let imageString = json["image"].string
+                                                    //print(imageString)
+                                                    let imageData : Data = Data(base64Encoded: imageString ?? "", options: .ignoreUnknownCharacters)!
+                                                    print(imageData)
+                                                    let imageDecoded = UIImage(data: imageData)
+                                                    print(imageDecoded)
+                                                    let overlay = self.drawIcon(mapView: self.map, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon), iconImage: UIImage(named: "planticon.png"))
+                                                    overlay.isTappable = true
+                                                    overlay.userData = [
+                                                        "name": String(name),
+                                                        "uniq_id": String(plantId),
+                                                        "type_id": String(id),
+                                                        "garden_id": String(self.userGarden.gardenId),
+                                                        "lat": String(lat),
+                                                        "lon": String(lon),
+                                                        "last_watered": String(water),
+                                                        "light_intensity": String(intensity),
+                                                        "light_duration": String(duration),
+                                                        "price": String(price)
+                                                    ]
+                                                    var data = overlay.userData as! [String: String]
+                                                    data["image"] = String(imageString ?? "planticon.png")
+                                                    data["outdoors"] = String(outdoors)
+                                                    self.plantOverlays?.append(overlay)
+                                                }
+                                                catch {
+                                                    print(error)
+                                                }
+                                            }
+                                        }
+                                        
+                                        task.resume()
                                     }
                                     catch {
                                         print(error)
@@ -416,6 +453,7 @@ extension mapVC : GMSMapViewDelegate {
                 parameters["light_intensity"] = Double(data["light_intensity"] ?? "") ?? 0.0
                 parameters["light_duration"] = Double(data["light_duration"] ?? "") ?? 0.0
                 parameters["price"] = Double(data["price"] ?? "") ?? 0.0
+                parameters["outdoors"] = Bool(data["outdoors"] ?? "")
                 
                 var lastWatered = data["last_watered"] ?? ""
                 print(lastWatered)
@@ -465,7 +503,9 @@ extension mapVC : GMSMapViewDelegate {
             self.addPlantLabel.isHidden = true
         }
         else if (self.currentPlant != nil){
-            let overlay = drawIcon(mapView: self.map, coordinate: coordinate, iconImage: currentPlant!.image)
+            let imageData : Data = Data(base64Encoded: self.currentPlant!.image, options: .ignoreUnknownCharacters)!
+            let imageDecoded = UIImage(data: imageData)
+            let overlay = drawIcon(mapView: self.map, coordinate: coordinate, iconImage: imageDecoded)
             
             currentPlant?.geodata = GeoData(lat: coordinate.latitude, lon: coordinate.longitude)
             
@@ -489,7 +529,8 @@ extension mapVC : GMSMapViewDelegate {
                 "light_intensity": self.currentPlant!.intensity,
                 "light_duration": self.currentPlant!.duration,
                 "price": self.currentPlant!.price,
-                "last_watered": date
+                "last_watered": date,
+                "outdoors": self.currentPlant!.outdoors
             ]
             print(parameters)
             do {
@@ -523,6 +564,9 @@ extension mapVC : GMSMapViewDelegate {
                 "light_duration": String(0),
                 "price": String(0)
             ]
+            var data = overlay.userData as! [String: String]
+            data["image"] = String(self.currentPlant!.image ?? "planticon.png")
+            data["outdoors"] = String(self.currentPlant!.outdoors)
             self.addPlantLabel.isHidden = true
             self.currentPlant = nil
         }
