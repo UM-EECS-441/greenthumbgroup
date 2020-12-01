@@ -28,8 +28,11 @@ def get_offset(lat, lng):
     """
     tzf = TimezoneFinder()
     today = datetime.now()
-    tz_target = timezone(tzf.timezone_at(lng=lng, lat=lat))
-    # ATTENTION: tz_target could be None! handle error case
+    try:
+        tz_target = timezone(tzf.timezone_at(lng=lng, lat=lat))
+        # ATTENTION: tz_target could be None! handle error case
+    except:
+        return 0
     today_target = tz_target.localize(today)
     today_utc = utc.localize(today)
     return (today_utc - today_target).total_seconds()
@@ -43,7 +46,7 @@ def get_historical_data(lat, lng, today_midnight_utc):
     OWM_KEY = ""
     
     with open(config.OWM_KEY_FILE, 'r') as owmkey_file:
-        OWM_KEY = owmkey_file.readline()
+        OWM_KEY = str(owmkey_file.readline()).strip()
 
     ONE_HIST_URL = "https://api.openweathermap.org/data/2.5/onecall/timemachine"
     units = "metric"
@@ -94,7 +97,7 @@ def get_forecast_data(lat, lng):
     OWM_KEY = ""
 
     with open(config.OWM_KEY_FILE, 'r') as owmkey_file:
-        OWM_KEY = owmkey_file.readline()
+        OWM_KEY = str(owmkey_file.readline()).strip()
 
     ONE_FORE_URL = "https://api.openweathermap.org/data/2.5/onecall"
     exclude = "minutely,hoursly,alerts"
@@ -160,8 +163,8 @@ def calc_garden_plants_watering(garden_id):
         # Gets offset from UTC
         utc_offset = get_offset(lat_avg, long_avg)
         # Gets midnight local in UTC
-        tzf = TimezoneFinder()
-        tz = timezone(tzf.certain_timezone_at(lng=long_avg, lat=lat_avg))
+        # tzf = TimezoneFinder()
+        # tz = timezone(tzf.certain_timezone_at(lng=long_avg, lat=lat_avg))
         today_date = date.today()
         today_midnight_utc = datetime.combine(today_date, time(0,0))
         # UTC Today at midnight in epoch time

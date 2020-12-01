@@ -73,6 +73,7 @@ class Notifier:
             usrs = users.objects()
             for usr in usrs:
                 self.generate_and_send_task_list(usr)
+                print("task list sent to {}.".format(usr.email))
 
     def generate_and_send_task_list(self, usr):
 
@@ -127,7 +128,7 @@ class Notifier:
                     if plant and plant_type:
                         last_watered_date = plant.last_watered
                         days_to_water = plant_type.days_to_water
-                        if (date.today() - last_watered_date).days >= days_to_water:
+                        if days_to_water and (date.today() - last_watered_date).days >= days_to_water:
                             watering_tasks.append(
                                 WateringTask(
                                     plant_name=plant.name,
@@ -262,6 +263,4 @@ if __name__ == "__main__":
         smtp_serv=config.EMAIL_SMTP,
         port=config.EMAIL_SSL_PORT
     )
-    with util.MongoConnect():
-        usr = users.objects(email=sys.argv[1])[0]
-        notif.generate_and_send_task_list(usr)
+    notif.send_all_task_lists()
