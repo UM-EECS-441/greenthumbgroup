@@ -75,6 +75,8 @@ class catalogPage: UIViewController {
                 
                 DispatchQueue.main.async {
                     self.plantImage.image = base64toImage(img: base64ImageString)
+                    self.plantImage.layer.cornerRadius = 20.0
+                    self.plantImage.layer.masksToBounds = true
                 }
             } catch let error as NSError {
                 print(error)
