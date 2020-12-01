@@ -1623,9 +1623,8 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="registerButtonClicked:" destination="2hh-QM-uZl" eventType="touchUpInside" id="565-sl-8Dw"/>
                                                     <action selector="submitButtonClicked:" destination="2hh-QM-uZl" eventType="touchUpInside" id="k6m-hT-SdJ"/>
-                                                    <segue destination="xTf-VC-1sm" kind="showDetail" id="Wka-61-hkp"/>
+                                                    <segue destination="coy-wj-2ei" kind="unwind" unwindAction="unwindToWelcomeBack:" id="ZpH-oN-CRK"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -1662,6 +1661,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ftf-WO-bc9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="coy-wj-2ei" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="880" y="2513"/>
         </scene>
@@ -2166,7 +2166,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="r2X-pL-RQh"/>
         <segue reference="3Dk-bH-fx2"/>
-        <segue reference="Wka-61-hkp"/>
+        <segue reference="CyI-Tc-TpP"/>
         <segue reference="IQf-Jf-rhh"/>
         <segue reference="DUj-V3-PAV"/>
     </inferredMetricsTieBreakers>
