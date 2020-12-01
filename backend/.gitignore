@@ -1,1 +1,7 @@
 emailpass
+images/*.jpg
+resources/*.png*
+resources/*.jpg*
+resources/*.jpeg*
+resources/plants_list*
+tests/*.log
