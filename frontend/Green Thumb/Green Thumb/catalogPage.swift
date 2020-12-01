@@ -25,6 +25,9 @@ class catalogPage: UIViewController {
     var tags = ""
     var waterDays = ""
     var waterInfo = ""
+    var id = ""
+    
+    @IBOutlet weak var plantImage: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,5 +43,52 @@ class catalogPage: UIViewController {
         plantTags.text = tags
         daysTilWater.text = waterDays
         plantWaterInfo.text = waterInfo
+        
+        getImage()
+        
     }
+    
+    func getImage() {
+        let requestURL = "http://192.81.216.18/api/v1/catalog/\(self.id)"
+        var request = URLRequest(url: URL(string: requestURL)!)
+        request.httpMethod = "GET"
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let _ = data, error == nil else {
+                print("NETWORKING ERROR")
+                DispatchQueue.main.async {
+    //              self.refreshControl?.endRefreshing()
+                }
+                return
+            }
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+                print("HTTP STATUS: \(httpStatus.statusCode)")
+                DispatchQueue.main.async {
+    //              self.refreshControl?.endRefreshing()
+                }
+                return
+            }
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!) as! [String:Any]
+//                self.base64ImageString = json["image"] as! String
+                let base64ImageString = json["image"] as! String
+                
+                DispatchQueue.main.async {
+                    self.plantImage.image = base64toImage(img: base64ImageString)
+                }
+            } catch let error as NSError {
+                print(error)
+            }
+        }
+        task.resume()
+    }
+}
+
+func base64toImage(img: String) -> UIImage? {
+    if (img == "") {
+      return nil
+    }
+    let dataDecoded : Data = Data(base64Encoded: img, options: .ignoreUnknownCharacters)!
+    let decodedimage = UIImage(data: dataDecoded)
+    return decodedimage!
 }

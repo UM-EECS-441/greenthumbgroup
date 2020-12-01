@@ -363,12 +363,12 @@ class catalogVC: UITableViewController {
                 self.plantsBySolver.removeValue(forKey: "")
                 self.sortedSolverKeys = self.plantsBySolver.keys.sorted()
                 
-//                print(self.sortedSolverKeys)
+                //                print(self.sortedSolverKeys)
                 
                 
                 DispatchQueue.main.async {
-                  self.tableView.estimatedRowHeight = 140
-                  self.tableView.rowHeight = UITableView.automaticDimension
+                    self.tableView.estimatedRowHeight = 140
+                    self.tableView.rowHeight = UITableView.automaticDimension
                     self.tableView.reloadData()
                     self.refreshControl?.endRefreshing()
                 }
@@ -540,6 +540,7 @@ extension catalogVC {
                 catalogPage?.waterDays = "Days until next watering: " + days_to_water_String
             }
             catalogPage?.waterInfo = water_description_string
+            catalogPage?.id = selectedPlant["_id"] as! String
 
             
             
