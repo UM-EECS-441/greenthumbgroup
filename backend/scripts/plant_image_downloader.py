@@ -53,8 +53,8 @@ for row, plant in catalog_df.iterrows():
         paths = response.download(download_arguments)
 
         # Generates filename to be equal to the species name
-        image_filestring = os.sep.split(paths[0][plant["species"] + " plant"][0])[:-1].join(os.sep) \
-            + plant["species"] + ".jpg"
+        image_filestring = os.sep.join(paths[0][plant["species"] + " plant"][0].split(os.sep)[:-2]) + os.sep + "images" + os.sep \
+            + plant["species"].replace(" ", "_") + ".jpg"
 
         # Renames plant file
         os.rename(r'' + paths[0][plant["species"] + " plant"][0], r'' + image_filestring)
@@ -65,13 +65,15 @@ for row, plant in catalog_df.iterrows():
         new_image.save(image_filestring)
 
 
-        # Adds plants b64 image to database
         plant_doc = plant_types.objects(species=plant["species"])
-        plant_doc.update(set__image=base64.b64encode(image_filestring.read()))
+        plant_doc.update(set__image=base64.b64encode(open(image_filestring, 'rb').read()).decode('ascii'))
 
     except:
         # plant_images_b64.append("")
         print("Failed for " + plant["species"])
+        # Adds empty string to database
+        plant_doc = plant_types.objects(species=plant["species"])
+        plant_doc.update(set__image="")
 
     sleep(random.uniform(1, 2.5))
 

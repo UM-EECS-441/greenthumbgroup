@@ -24,7 +24,7 @@ class plant_types(Document):
     description = StringField()
     days_to_water = IntField()
     watering_description = StringField()
-    image = BinaryField()
+    image = StringField()
 
     def to_dict(self):
         return {
