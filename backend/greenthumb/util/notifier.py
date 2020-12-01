@@ -15,7 +15,7 @@ from email.message import EmailMessage
 from greenthumb import util
 from greenthumb.models.mongo import (users, gardens, plant_types, user_plants)
 from greenthumb.models.tasks import (WateringTask, ColdWeatherTask)
-from datetime import date
+from datetime import date, datetime
 class Notifier:
 
     # SPECIAL CONDITIONS
@@ -39,7 +39,8 @@ class Notifier:
     EXPLAIN_MSG = "Why this is important: {explanation}"
 
     WATER_MSG = "Water these plants today: "
-    FERTILIZE_MSG = "Fertilize {plant_name}."
+    FERTILIZE_MSG = "Fertilize your garden today so your plants get the nutrients they need."
+    MULCH_MSG = "Apply new mulch to your garden today. Mulch retains moisture in the soil, suppresses weeds, and has many other benefits."
     TRIM_MSG = "Trim {plant_name}."
     HARVEST_MSG = "Harvest {plant_name}."
     WEEDING_MSG = "Remove pesky weeds from your garden!"
@@ -84,9 +85,9 @@ class Notifier:
         """
 
         if not usr.unsubscribed:
-            water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow = self.generate_user_tasks(usr)
+            fertilize, mulch, water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow = self.generate_user_tasks(usr)
             if water_tasks or cold_weather_tasks:
-                email_msg = self.create_email_msg(usr, water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow)
+                email_msg = self.create_email_msg(usr, fertilize, mulch, water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow)
                 email_topic = self.MSG_TITLE.format(tasks_date=date.today())
                 self.send_email_msg(rec_email=usr.email, email_content=email_msg, email_subject=email_topic)
 
@@ -98,10 +99,20 @@ class Notifier:
 
         """
 
+        spring_mulch_month = 3
+        spring_mulch_day = 20
+        fall_mulch_month = 9
+        fall_mulch_day = 22
+
         min_temp_today = None
         min_temp_tomorrow = None
         watering_tasks = []
         cold_weather_tasks = []
+        fertilize = (date.today().day == 1)
+        mulch = (
+            (date.today().month == spring_mulch_month and date.today().day == spring_mulch_day) or
+            (date.today().month == fall_mulch_month and date.today().day == fall_mulch_day)
+        )
 
         for garden_id in usr.gardens:
             garden_weather_data = util.calc_garden_plants_watering(garden_id)
@@ -151,9 +162,9 @@ class Notifier:
                                     )
                                 )
 
-        return watering_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow
+        return fertilize, mulch, watering_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow
 
-    def create_email_msg(self, usr, water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow):
+    def create_email_msg(self, usr, fertilize, mulch, water_tasks, cold_weather_tasks, min_temp_today, min_temp_tomorrow):
 
         """
 
@@ -167,6 +178,13 @@ class Notifier:
             self.DIGEST_MSG.format(username=usr.email) +
             "\n"
         )
+
+        if fertilize:
+            email_msg = email_msg + (
+                "\n" +
+                self.FERTILIZE_MSG +
+                "\n"
+            )
 
         if water_tasks:
             email_msg = email_msg + (
@@ -215,6 +233,13 @@ class Notifier:
                     ) +
                     "\n"
                 )
+
+        if mulch:
+            email_msg = email_msg + (
+                "\n" +
+                self.MULCH_MSG +
+                "\n"
+            )
 
         email_msg = email_msg + (
             "\n" +
