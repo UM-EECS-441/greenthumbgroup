@@ -244,12 +244,11 @@ def add_garden_location():
         user.save()
         return {"id": str(garden.id)}, 200
 
-
 @greenthumb.app.route('/api/v1/usergarden/<string:garden_id>/add_plant/', methods=['POST'])
 def add_plant_to_garden(garden_id: str):
 
     expected_fields = ['plant_type_id', 'latitude',
-        'longitude', 'light_duration', 'light_intensity', 'last_watered', 'name', 'price']
+        'longitude', 'light_duration', 'light_intensity', 'last_watered', 'name', 'price', 'outdoors']
 
     if 'email' not in session:
         abort(403)
@@ -265,6 +264,8 @@ def add_plant_to_garden(garden_id: str):
                 request.json[field] = 0
             elif field == 'name':
                 request.json['name'] = ''
+            elif field == 'outdoors':
+                request.json['outdoors'] = True
             else:
                 abort(401)
 
@@ -305,6 +306,7 @@ def add_plant_to_garden(garden_id: str):
                 light_intensity=request.json['light_intensity'],
                 name=request.json['name'],
                 price=request.json['price'],
+                outdoors=request.json['outdoors'],
                 last_watered=datetime.datetime.strptime(request.json['last_watered'], '%Y-%m-%d %H:%M:%S.%f')).save()
             garden.plants.append(str(user_plant.id))
             garden.save()
@@ -317,7 +319,7 @@ def add_plant_to_garden(garden_id: str):
 def edit_plant_in_garden(garden_id: str, plant_id: str):
 
     expected_fields = ['plant_type_id', 'latitude',
-        'longitude', 'light_duration', 'light_intensity', 'last_watered', 'name', 'price']
+        'longitude', 'light_duration', 'light_intensity', 'last_watered', 'name', 'price', 'outdoors']
 
     if 'email' not in session:
         abort(403)
@@ -339,6 +341,8 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
                 request.json[field] = 0
             elif field == 'name':
                 request.json['name'] = ''
+            elif field == 'outdoors':
+                request.json['outdoors'] = True
             else:
                 abort(401)
 
@@ -391,6 +395,7 @@ def edit_plant_in_garden(garden_id: str, plant_id: str):
             plant.light_intensity = request.json['light_intensity']
             plant.name = request.json['name']
             plant.price = request.json['price']
+            plant.outdoors = request.json['outdoors'],
             plant.last_watered = datetime.datetime.strptime(request.json['last_watered'], '%Y-%m-%d %H:%M:%S.%f')
             plant.save()
 
