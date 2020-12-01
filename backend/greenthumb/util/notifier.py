@@ -7,7 +7,7 @@ GreenThumb Group <greenthumb441@umich.edu>
 """
 
 from greenthumb.util.zonetemp import zone_min_temp
-import smtplib, ssl, sys
+import smtplib, ssl, sys, os
 
 from os import name
 from greenthumb import config
@@ -54,12 +54,16 @@ class Notifier:
     PRUNE_MSG = "Prune {plant_name}."
     PLANT_SUGGEST_MSG = "Based on the plants in your garden, we think you should consider adding some {plant_type}s!"
     
-    def __init__(self, user, email_addr, pass_filename, smtp_serv, port):
+    def __init__(self, user, email_addr, pass_filename, smtp_serv, port, owmkey_filename):
         self.user = user
         self.email_addr = email_addr
         self.pass_filename = pass_filename
         self.smtp_serv = smtp_serv
         self.port = port
+        self.owmkey_filename = owmkey_filename
+
+        with open(self.owmkey_filename, 'r') as owmkey_file:
+            os.environ["OPEN_WEATHER_MAP_KEY"] = owmkey_file.readline()
 
     def send_all_task_lists(self):
 
@@ -183,9 +187,11 @@ class Notifier:
                         lat=str(wt.plant_lat),
                         long=str(wt.plant_long)
                     ) +
-                    self.INSTR_MSG.format(
-                        maintain_instr=wt.water_instr
-                    ) if wt.water_instr else "" +
+                    (
+                        self.INSTR_MSG.format(
+                            maintain_instr=wt.water_instr
+                        ) if wt.water_instr else ""
+                    ) +
                     "\n"
                 )
         if cold_weather_tasks and min_temp_today and min_temp_tomorrow:
@@ -258,7 +264,8 @@ if __name__ == "__main__":
         email_addr=config.NOTIF_EMAIL_ADDR,
         pass_filename=config.NOTIF_EMAIL_PASS_FILE,
         smtp_serv=config.EMAIL_SMTP,
-        port=config.EMAIL_SSL_PORT
+        port=config.EMAIL_SSL_PORT,
+        owmkey_filename=config.OWM_KEY_FILE
     )
     with util.MongoConnect():
         usr = users.objects(email=sys.argv[1])[0]

@@ -24,6 +24,7 @@ NOTIF_EMAIL_ADDR = "greenthumbgroup441@gmail.com"
 NOTIF_EMAIL_PASS_FILE = "emailpass"
 EMAIL_SMTP = "smtp.gmail.com"
 EMAIL_SSL_PORT = 465
+OWM_KEY_FILE = "owmkey"
 
 # SESSION_COOKIE_NAME = ''
 
