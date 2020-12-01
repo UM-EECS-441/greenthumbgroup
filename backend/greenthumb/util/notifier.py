@@ -54,16 +54,12 @@ class Notifier:
     PRUNE_MSG = "Prune {plant_name}."
     PLANT_SUGGEST_MSG = "Based on the plants in your garden, we think you should consider adding some {plant_type}s!"
     
-    def __init__(self, user, email_addr, pass_filename, smtp_serv, port, owmkey_filename):
+    def __init__(self, user, email_addr, pass_filename, smtp_serv, port):
         self.user = user
         self.email_addr = email_addr
         self.pass_filename = pass_filename
         self.smtp_serv = smtp_serv
         self.port = port
-        self.owmkey_filename = owmkey_filename
-
-        with open(self.owmkey_filename, 'r') as owmkey_file:
-            os.environ["OPEN_WEATHER_MAP_KEY"] = owmkey_file.readline()
 
     def send_all_task_lists(self):
 
@@ -264,8 +260,7 @@ if __name__ == "__main__":
         email_addr=config.NOTIF_EMAIL_ADDR,
         pass_filename=config.NOTIF_EMAIL_PASS_FILE,
         smtp_serv=config.EMAIL_SMTP,
-        port=config.EMAIL_SSL_PORT,
-        owmkey_filename=config.OWM_KEY_FILE
+        port=config.EMAIL_SSL_PORT
     )
     with util.MongoConnect():
         usr = users.objects(email=sys.argv[1])[0]

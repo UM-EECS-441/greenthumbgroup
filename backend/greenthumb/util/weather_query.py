@@ -1,3 +1,4 @@
+from greenthumb import config
 import requests
 import os
 from datetime import datetime, date, time
@@ -39,7 +40,11 @@ def get_historical_data(lat, lng, today_midnight_utc):
     mm of rain, and mm of snow, for past 5 days before today
     """
 
-    OWM_KEY = os.environ.get("OPEN_WEATHER_MAP_KEY")
+    OWM_KEY = ""
+    
+    with open(config.OWM_KEY_FILE, 'r') as owmkey_file:
+        OWM_KEY = owmkey_file.readline()
+
     ONE_HIST_URL = "https://api.openweathermap.org/data/2.5/onecall/timemachine"
     units = "metric"
 
@@ -86,7 +91,11 @@ def get_forecast_data(lat, lng):
     mm of rain, and mm of snow, for next 5 days, including today
     """
 
-    OWM_KEY = os.environ.get("OPEN_WEATHER_MAP_KEY")
+    OWM_KEY = ""
+
+    with open(config.OWM_KEY_FILE, 'r') as owmkey_file:
+        OWM_KEY = owmkey_file.readline()
+
     ONE_FORE_URL = "https://api.openweathermap.org/data/2.5/onecall"
     exclude = "minutely,hoursly,alerts"
     units = "metric"
