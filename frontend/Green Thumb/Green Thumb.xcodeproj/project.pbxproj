@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		400EA6A22541110800C8D052 /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400EA6A12541110800C8D052 /* DesignableView.swift */; };
-		40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */; };
 		404264522544884A005C6F8D /* plantInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042645025448849005C6F8D /* plantInfoVC.swift */; };
 		40426456254488DF005C6F8D /* catalogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40426455254488DF005C6F8D /* catalogVC.swift */; };
 		4042645B2548FC9F005C6F8D /* catalogPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042645A2548FC9F005C6F8D /* catalogPage.swift */; };
@@ -47,7 +46,6 @@
 
 /* Begin PBXFileReference section */
 		400EA6A12541110800C8D052 /* DesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
-		40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSettingsVC.swift; sourceTree = "<group>"; };
 		4042645025448849005C6F8D /* plantInfoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = plantInfoVC.swift; sourceTree = "<group>"; };
 		40426455254488DF005C6F8D /* catalogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogVC.swift; sourceTree = "<group>"; };
 		4042645A2548FC9F005C6F8D /* catalogPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogPage.swift; sourceTree = "<group>"; };
@@ -103,7 +101,6 @@
 		40C7CB98253768FB005A2283 = {
 			isa = PBXGroup;
 			children = (
-				A5C158412573117400E508F6 /* lightInfoVC.swift */,
 				40C7CBA3253768FB005A2283 /* Green Thumb */,
 				40C7CBA2253768FB005A2283 /* Products */,
 				466AE14F76FCEFB67DD4E013 /* Pods */,
@@ -126,11 +123,11 @@
 				40C7CBA4253768FB005A2283 /* AppDelegate.swift */,
 				40426455254488DF005C6F8D /* catalogVC.swift */,
 				4042645A2548FC9F005C6F8D /* catalogPage.swift */,
+				A5C158412573117400E508F6 /* lightInfoVC.swift */,
 				40C7CBA6253768FB005A2283 /* SceneDelegate.swift */,
 				40C7CBA8253768FB005A2283 /* ViewController.swift */,
 				40C7CBAA253768FB005A2283 /* Main.storyboard */,
 				4042645025448849005C6F8D /* plantInfoVC.swift */,
-				40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */,
 				40C7CBAD253768FF005A2283 /* Assets.xcassets */,
 				40C7CBAF253768FF005A2283 /* LaunchScreen.storyboard */,
 				40C7CBB2253768FF005A2283 /* Info.plist */,
@@ -324,7 +321,6 @@
 				A56F04C52544DD730060976F /* gardenCell.swift in Sources */,
 				A83E47FF2543B37F003F1193 /* UserPlant.swift in Sources */,
 				A5C158422573117400E508F6 /* lightInfoVC.swift in Sources */,
-				40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */,
 				A5C523B8254A60CD000B2B13 /* registerVC.swift in Sources */,
 				40426456254488DF005C6F8D /* catalogVC.swift in Sources */,
 				4042645B2548FC9F005C6F8D /* catalogPage.swift in Sources */,
@@ -498,13 +494,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = AWUU3Q6NX7;
+				DEVELOPMENT_TEAM = 75JK535DUG;
 				INFOPLIST_FILE = "Green Thumb/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.mworrel2.GreenThumb;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.jpriggs.GreenThumb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -519,13 +515,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = AWUU3Q6NX7;
+				DEVELOPMENT_TEAM = 75JK535DUG;
 				INFOPLIST_FILE = "Green Thumb/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.mworrel2.GreenThumb;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.umich.jpriggs.GreenThumb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

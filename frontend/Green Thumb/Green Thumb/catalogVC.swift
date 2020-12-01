@@ -20,10 +20,6 @@ class catalogVC: UITableViewController {
                                "description": "", "days_to_water": 0,
                                "watering_description": ""]]
     
-    // Sort toggle, very cool!
-    let sortToggle : [String:String] = ["alphabetical":"type",
-                                        "type":"flowercolor",
-                                        "flowercolor":"alphabetical"]
     var currentSort : String = "alphabetical"
     
     // Alphabetical Sort
@@ -41,9 +37,25 @@ class catalogVC: UITableViewController {
     var plantsByFlowerColor = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
                      "description": "", "days_to_water": 0,
                      "watering_description": ""]]]
+    // Zones Sort
+    var sortedZoneKeys : [String] = []
+    var plantsByZone = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
+    // Special Features Sort
+    var sortedFeatureKeys : [String] = []
+    var plantsByFeature = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
+    // Problem Solver Sort
+    var sortedSolverKeys : [String] = []
+    var plantsBySolver = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
     
     @IBOutlet var catalogTableView: UITableView!
     @IBOutlet var searchBar: UITableView!
+    @IBOutlet var sortButton: UIBarButtonItem!
     var userGarden: UserGarden?
     
     weak var returnDelegate : PlantReturnDelegate?
@@ -57,27 +69,26 @@ class catalogVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //        self.searchBar.showsCancelButton = false
-
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                /// programmatic implementation scrap code in case I do it through just that
-        //        let searchController = UISearchController(searchResultsController: nil)
-        //        // 1
-        //        searchController.searchResultsUpdater = self
-        //        // 2
-        //        searchController.obscuresBackgroundDuringPresentation = false
-        //        // 3
-        //        searchController.searchBar.placeholder = "Search Plants"
-        //        // 4
-        ////        navigationItem.searchController = searchController
-        //        tableView.tableHeaderView = searchController.searchBar
-        //        // 5
-        //        definesPresentationContext = true
-        //
-        //        var isSearchBarEmpty: Bool {
-        //          return searchController.searchBar.text?.isEmpty ?? true
-        //        }
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        // Bar Button Menu
+        let barButtonMenu = UIMenu(title: "Filter Options", children: [
+            UIAction(title: NSLocalizedString("Sort by Name", comment: ""), image: UIImage(systemName: "a.book.closed"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Plant Type", comment: ""), image: UIImage(systemName: "leaf"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Lowest Zone", comment: ""), image: UIImage(systemName: "globe"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Flower Color", comment: ""), image: UIImage(systemName: "paintpalette"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Problem Solvers", comment: ""), image: UIImage(systemName: "lightbulb"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Special Features", comment: ""), image: UIImage(systemName: "books.vertical"), handler: menuHandler)
+            
+        ])
+        
+//        let button = UIButton()
+//        button.setImage(UIImage(named: "arrow.up.arrow.down"), for: [])
+//        button.setTitle("YourTitle", for: [])
+//        button.sizeToFit()
+//        sortButton = UIBarButtonItem(customView: button)
+        sortButton.menu = barButtonMenu
+//        sortButton.image = UIImage(systemName: "arrow.up.arrow.down")
+        
         
         self.refreshControl = UIRefreshControl()
         self.catalogTableView.delegate = self
@@ -89,6 +100,53 @@ class catalogVC: UITableViewController {
         
         self.refreshControl?.beginRefreshing()
         getPlants()
+    }
+    
+    func menuHandler(action: UIAction) {
+//        Swift.debugPrint("Menu handler: \(action.title)")
+        print(action.title)
+        if action.title == "Sort by Name" {
+            if self.currentSort != "alphabetical" {
+                self.currentSort = "alphabetical"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Plant Type" {
+            if self.currentSort != "type" {
+                self.currentSort = "type"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Flower Color" {
+            if self.currentSort != "flowercolor" {
+                self.currentSort = "flowercolor"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Special Features" {
+            if self.currentSort != "features" {
+                self.currentSort = "features"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Lowest Zone" {
+            if self.currentSort != "zones" {
+                self.currentSort = "zones"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Problem Solvers" {
+            if self.currentSort != "solver" {
+                self.currentSort = "solver"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
     }
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
@@ -105,24 +163,6 @@ class catalogVC: UITableViewController {
         queue.asyncAfter(deadline: DispatchTime.now() + wait, execute: closure)
     }
     
-    @IBAction func changeSort(_ sender: Any) {
-//        print("switching from", currentSort, "sort to", sortToggle[currentSort]!);
-        currentSort = sortToggle[currentSort]!;
-        if currentSort == "alphabetical" {
-//            self.title = "Sorting by Name"
-            showToast(message: "Now Sorting by Name", seconds: 0.3)
-        }
-        else if currentSort == "type" {
-//            self.title = "Sorting by Plant Type"
-            showToast(message: "Now Sorting by Plant Type", seconds: 0.3)
-        }
-        else if currentSort == "flowercolor" {
-//            self.title = "Sorting by Flower Color"
-            showToast(message: "Now Sorting by Flower Color", seconds: 0.3)
-        }
-        tableView.reloadData();
-        self.scrollToTop()
-    }
     
     func showToast(message : String, seconds: Double){
         // https://stackoverflow.com/questions/31540375/how-to-toast-message-in-swift
@@ -254,21 +294,81 @@ class catalogVC: UITableViewController {
                             }
                         }
                     }
+                    // Grouping plants by flowercolor end
+                    
+                    // Grouping plants by min zones begin
+                    if let zone_array: [String] = tags["zones"] {
+//                        let min_zone = zone_array.min {a,b in Int(a)! < Int(b)!}
+                        let min_zone = zone_array[0]
+                        let num = Int(min_zone)
+                        // Check if its a number because some of the zones in the pulled data had random stuff in it
+                        if num != nil {
+                            if let _ = self.plantsByZone[min_zone] {
+                                self.plantsByZone[min_zone]?.append(self.plants[index])
+                            }
+                            else {
+                                self.plantsByZone[min_zone] = []
+                                self.plantsByZone[min_zone]?.append(self.plants[index])
+                            }
+                        }
+                    }
+                    // Grouping plants by min zones end
+                    
+                    // Grouping plants by special features begin
+                    
+                    if let features_array: [String] = tags["special features"] {
+                        for feature in features_array {
+                            if let _ = self.plantsByFeature[feature] {
+                                self.plantsByFeature[feature]?.append(self.plants[index])
+                            }
+                            else {
+                                self.plantsByFeature[feature] = []
+                                self.plantsByFeature[feature]?.append(self.plants[index])
+                            }
+                        }
+                    }
+                    // Grouping plants by special features end
+                    
+                    // Grouping plants by problem solver begin
+                    
+                    if let solve_array: [String] = tags["problem solvers"] {
+                        for solve in solve_array {
+                            if let _ = self.plantsBySolver[solve] {
+                                self.plantsBySolver[solve]?.append(self.plants[index])
+                            }
+                            else {
+                                self.plantsBySolver[solve] = []
+                                self.plantsBySolver[solve]?.append(self.plants[index])
+                            }
+                        }
+                    }
+                    // Grouping plants by problem solver end
                 }
                 // Don't know why "" ends up as an empty key but bonk and its gone
                 self.plantsByType.removeValue(forKey: "")
                 self.sortedTypeKeys = self.plantsByType.keys.sorted()
                 
-//                print(self.sections)
-//                self.plants = groupedSortedPlants
                 
                 self.plantsByFlowerColor.removeValue(forKey: "")
                 self.sortedFlowerColorKeys = self.plantsByFlowerColor.keys.sorted()
-//                print(self.sortedFlowerColorKeys)
+                
+                self.plantsByZone.removeValue(forKey: "")
+                self.sortedZoneKeys = self.plantsByZone.keys.sorted(by: {
+                    a,b in Int(a)! < Int(b)!
+                })
+                
+                self.plantsByFeature.removeValue(forKey: "")
+                self.sortedFeatureKeys = self.plantsByFeature.keys.sorted()
+                
+                self.plantsBySolver.removeValue(forKey: "")
+                self.sortedSolverKeys = self.plantsBySolver.keys.sorted()
+                
+                //                print(self.sortedSolverKeys)
+                
                 
                 DispatchQueue.main.async {
-                  self.tableView.estimatedRowHeight = 140
-                  self.tableView.rowHeight = UITableView.automaticDimension
+                    self.tableView.estimatedRowHeight = 140
+                    self.tableView.rowHeight = UITableView.automaticDimension
                     self.tableView.reloadData()
                     self.refreshControl?.endRefreshing()
                 }
@@ -311,6 +411,15 @@ extension catalogVC {
             else if currentSort == "flowercolor" {
                 selectedPlant = plantsByFlowerColor[sortedFlowerColorKeys[indexPath.section]]![indexPath.row]
             }
+            else if currentSort == "features" {
+                selectedPlant = plantsByFeature[sortedFeatureKeys[indexPath.section]]![indexPath.row]
+            }
+            else if currentSort == "zones" {
+                selectedPlant = plantsByZone[sortedZoneKeys[indexPath.section]]![indexPath.row]
+            }
+            else if currentSort == "solver" {
+                selectedPlant = plantsBySolver[sortedSolverKeys[indexPath.section]]![indexPath.row]
+            }
             else {
                 selectedPlant = plants[indexPath.row]
             }
@@ -340,9 +449,6 @@ extension catalogVC {
             let catalogPage = storyboard?.instantiateViewController(identifier: "catalogPage") as? catalogPage
             
             let name = selectedPlant["name"]
-//            if searching {
-//                name = selectedPlant["name"]
-//            }
             var nameString = "I been thru the desert on a plant with no name :("
             if case Optional<Any>.none = name {
                 //nil
@@ -355,9 +461,6 @@ extension catalogVC {
 
             
             let species = selectedPlant["species"]
-//            if searching {
-//                species = selectedPlant["species"]
-//            }
             var speciesString = "No Species Available"
             if case Optional<Any>.none = species {
                 //nil
@@ -368,9 +471,6 @@ extension catalogVC {
             
 
             let description = selectedPlant["description"]
-//            if searching {
-//                description = selectedPlant["description"]
-//            }
             var descriptionString = "No Description Available"
             if case Optional<Any>.none = description {
                 //nil
@@ -379,13 +479,8 @@ extension catalogVC {
                 descriptionString = String(describing: description!)
             }
             
-    //        let tags = String(describing: plants[indexPath.row]["tags"])
             let tags: [String: [String]] = selectedPlant["tags"] as! [String: [String]]
-//            if searching {
-//                tags = selectedPlant["tags"] as! [String: [String]]
-//            }
             var tagsString = ""
-    //        print(tags["plant type"])
             for (tag, items) in tags {
                 if tag != "plant type" {
                     tagsString += "\(tag.capitalized): "
@@ -396,7 +491,6 @@ extension catalogVC {
                     tagsString += "\n"
                 }
             }
-//            print(tagsString)
             let type_array: [Any] = tags["plant type"]!
             
             var typeString = "No Type Found"
@@ -414,9 +508,6 @@ extension catalogVC {
             }
             
             let days_to_water = selectedPlant["days_to_water"]
-//            if searching {
-//                days_to_water = selectedPlant["days_to_water"]
-//            }
             var days_to_water_String = "N/A"
             if days_to_water is NSNull {
                 //<null>
@@ -428,9 +519,6 @@ extension catalogVC {
             }
             
             let water_description = selectedPlant["watering_description"]
-//            if searching {
-//                water_description = selectedPlant["watering_description"]
-//            }
             var water_description_string = "No Watering Description Available"
 
             if water_description is NSNull {
@@ -454,12 +542,12 @@ extension catalogVC {
                 catalogPage?.waterDays = "Days until next watering: " + days_to_water_String
             }
             catalogPage?.waterInfo = water_description_string
+            catalogPage?.id = selectedPlant["_id"] as! String
 
             
             
             
             self.navigationController?.pushViewController(catalogPage!, animated: true)
-            //        performSegue(withIdentifier: "guideSegue", sender: self)
             
         }
     }
@@ -499,6 +587,15 @@ extension catalogVC {
             else if currentSort == "flowercolor" {
                 return sortedFlowerColorKeys[section]
             }
+            else if currentSort == "features" {
+                return sortedFeatureKeys[section]
+            }
+            else if currentSort == "zones" {
+                return sortedZoneKeys[section]
+            }
+            else if currentSort == "solver" {
+                return sortedSolverKeys[section]
+            }
             else {
                 return ""
             }
@@ -525,6 +622,15 @@ extension catalogVC {
             else if currentSort == "flowercolor" {
                 return sortedFlowerColorKeys
             }
+            else if currentSort == "features" {
+                return sortedFeatureKeys
+            }
+            else if currentSort == "zones" {
+                return sortedZoneKeys
+            }
+            else if currentSort == "solver" {
+                return sortedSolverKeys
+            }
             else {
                 return [""]
             }
@@ -544,6 +650,15 @@ extension catalogVC {
             }
             else if currentSort == "flowercolor" {
                 return sortedFlowerColorKeys.count
+            }
+            else if currentSort == "features" {
+                return sortedFeatureKeys.count
+            }
+            else if currentSort == "zones" {
+                return sortedZoneKeys.count
+            }
+            else if currentSort == "solver" {
+                return sortedSolverKeys.count
             }
             else {
                 return 1
@@ -566,6 +681,15 @@ extension catalogVC {
             else if currentSort == "flowercolor" {
                 return plantsByFlowerColor[sortedFlowerColorKeys[section]]!.count
             }
+            else if currentSort == "features" {
+                return plantsByFeature[sortedFeatureKeys[section]]!.count
+            }
+            else if currentSort == "zones" {
+                return plantsByZone[sortedZoneKeys[section]]!.count
+            }
+            else if currentSort == "solver" {
+                return plantsBySolver[sortedSolverKeys[section]]!.count
+            }
             else {
                 return plants.count
             }
@@ -576,37 +700,35 @@ extension catalogVC {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "catalogCell", for: indexPath) as! catalogCell
         
+        var name : (Any)? = nil
         
         if searching {
-            let name = searchedPlants[indexPath.row]["name"]
-            let nameString = String(describing: name!)
-            cell.textLabel?.text = nameString
+            name = searchedPlants[indexPath.row]["name"]
         } else {
-//            let name = plants[indexPath.row]["name"]
-//            let nameString = String(describing: name!)
-//            cell.textLabel?.text = nameString
             if currentSort == "alphabetical" {
-                let name = plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["name"]
-                let nameString = String(describing: name!)
-                cell.textLabel?.text = nameString
+                name = plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["name"]
             }
             else if currentSort == "type" {
-                let name = plantsByType[sortedTypeKeys[indexPath.section]]![indexPath.row]["name"]
-                let nameString = String(describing: name!)
-                cell.textLabel?.text = nameString
+                name = plantsByType[sortedTypeKeys[indexPath.section]]![indexPath.row]["name"]
             }
             else if currentSort == "flowercolor" {
-                let name = plantsByFlowerColor[sortedFlowerColorKeys[indexPath.section]]![indexPath.row]["name"]
-                let nameString = String(describing: name!)
-                cell.textLabel?.text = nameString
+                name = plantsByFlowerColor[sortedFlowerColorKeys[indexPath.section]]![indexPath.row]["name"]
+            }
+            else if currentSort == "features" {
+                name = plantsByFeature[sortedFeatureKeys[indexPath.section]]![indexPath.row]["name"]
+            }
+            else if currentSort == "zones" {
+                name = plantsByZone[sortedZoneKeys[indexPath.section]]![indexPath.row]["name"]
+            }
+            else if currentSort == "solver" {
+                name = plantsBySolver[sortedSolverKeys[indexPath.section]]![indexPath.row]["name"]
             }
             else {
-                let name = plants[indexPath.row]["name"]
-                let nameString = String(describing: name!)
-                cell.textLabel?.text = nameString
+                name = plants[indexPath.row]["name"]
             }
         }
-        
+        let nameString = String(describing: name!)
+        cell.textLabel?.text = nameString
         
         return cell
     }

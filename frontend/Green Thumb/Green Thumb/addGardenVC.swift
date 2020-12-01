@@ -53,11 +53,13 @@ class addGardenVC: UIViewController {
     }
     @IBAction func nameEdited(_ sender: UITextField) {
         newGarden.name = gardenName.text ?? ""
+        gardenName.textColor = UIColor.white
     }
 
     
     @IBAction func addressEdited(_ sender: Any) {
         newGarden.address = gardenLoc.text ?? ""
+        gardenLoc.textColor = UIColor.white
     }
     
     
