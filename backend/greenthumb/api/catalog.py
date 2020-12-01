@@ -45,4 +45,4 @@ def get_catalog_plant_page(plant_id):
         plant = greenthumb.models.mongo.plant_types.objects.get(id=plant_id)
 
         # returns json of plant information
-        return flask.jsonify(plant.to_dict_base64())
+        return flask.jsonify(plant.to_dict_image())
