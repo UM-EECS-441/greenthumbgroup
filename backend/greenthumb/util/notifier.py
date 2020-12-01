@@ -105,7 +105,7 @@ class Notifier:
         for garden_id in usr.gardens:
             garden_weather_data = util.calc_garden_plants_watering(garden_id)
             # in degrees C
-            if garden_weather_data[0] and garden_weather_data[1]:
+            if "forecast_data" in garden_weather_data and garden_weather_data["forecast_data"][0] and garden_weather_data["forecast_data"][1]:
                 min_temp_today = garden_weather_data["forecast_data"][0]["min_temp"]
                 min_temp_tomorrow = garden_weather_data["forecast_data"][1]["min_temp"]
             garden = None
@@ -119,10 +119,11 @@ class Notifier:
                     plant_type = None
                     with util.MongoConnect():
                         plants_found = user_plants.objects(id=plant_id)
-                        plant_types_found = plant_types.objects(id=plant.plant_type_id)
-                        if plants_found and plant_types_found:
+                        if plants_found:
                             plant = plants_found[0]
-                            plant_type = plant_types_found[0]
+                            plant_types_found = plant_types.objects(id=plant.plant_type_id)
+                            if plants_found and plant_types_found:
+                                plant_type = plant_types_found[0]
                     if plant and plant_type:
                         last_watered_date = plant.last_watered
                         days_to_water = plant_type.days_to_water
