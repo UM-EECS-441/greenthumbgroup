@@ -14,6 +14,7 @@ class viewGardenPlantVC: UIViewController {
     @IBOutlet weak var name: UITextField!
     @IBOutlet weak var species: UILabel!
     @IBOutlet weak var image: UIImageView!
+    @IBOutlet weak var outdoorsPicker: UISegmentedControl!
     
     var nameText = ""
     var speciesText = ""
@@ -65,13 +66,21 @@ class viewGardenPlantVC: UIViewController {
         self.species.text = speciesText
         print(imageString)
         self.image.image = base64toImage(img: imageString)
+        if (outdoors){
+            self.outdoorsPicker.selectedSegmentIndex = 0
+        } else{
+            self.outdoorsPicker.selectedSegmentIndex = 1
+        }
         
         // Initialize last watered date
-        lastWatered = lastWatered.replacingOccurrences(of: " 00:00:00 GMT", with: "")
-        lastWatered = lastWatered.replacingOccurrences(of: " 00:00:00", with: "")
+        print(lastWatered)
+        var newWatered = lastWatered.replacingOccurrences(of: " 00:00:00 GMT", with: "")
+        newWatered = newWatered.replacingOccurrences(of: " 00:00:00", with: "")
+        newWatered = newWatered.replacingOccurrences(of: " GMT", with: "")
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "E, d MMM yyyy"
-        let date = dateFormatter.date(from:lastWatered)!
+        dateFormatter.dateFormat = "E, dd MMM yyyy"
+        print(newWatered)
+        let date = dateFormatter.date(from:newWatered)!
         self.lastWateredPicker.datePickerMode = UIDatePicker.Mode.date
         self.lastWateredPicker.date = date
         
@@ -153,6 +162,16 @@ class viewGardenPlantVC: UIViewController {
     @IBAction func saveClicked(_ sender: UIButton) {
         // Update plant data in database
         let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(garden_id )/edit_plant/\(uniq_id )/")!
+        
+        // make sure date in correct format
+        let newLastWatered: Date = lastWateredPicker.date
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd"
+        var date = df.string(from: newLastWatered)
+        date += " 00:00:00"
+        print(date)
+        self.lastWatered = date
+        
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "PUT"
@@ -170,6 +189,7 @@ class viewGardenPlantVC: UIViewController {
             "last_watered": self.lastWatered,
             "outdoors": self.outdoors
         ]
+        print(parameters)
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
        } catch let error {
@@ -187,6 +207,7 @@ class viewGardenPlantVC: UIViewController {
         data["light_intensity"] = String(self.intensity)
         data["light_duration"] = String(self.duration)
         data["price"] = String(self.priceInput)
+        data["outdoors"] = String(self.outdoors)
         
         let dfsave = DateFormatter()
         dfsave.dateFormat = "E, d MMM yyyy"
@@ -196,13 +217,21 @@ class viewGardenPlantVC: UIViewController {
         
         currentOverlay.userData = data
         
-        print(currentOverlay.userData!)
-        print(data)
+        //print(currentOverlay.userData!)
+        //print(data)
         
         overlayDelegate.didReturnOverlay(currentOverlay, false, false);
         self.dismiss(animated: false, completion: nil)
     }
     
+    @IBAction func outdoorsChanged(_ sender: Any) {
+        if (outdoorsPicker.selectedSegmentIndex == 0){
+            outdoors = true
+        } else {
+            outdoors = false
+        }
+        print(outdoors)
+    }
     
 
 }

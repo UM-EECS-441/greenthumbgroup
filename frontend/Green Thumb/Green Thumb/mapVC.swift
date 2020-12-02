@@ -450,7 +450,7 @@ extension mapVC : GMSMapViewDelegate {
                 parameters["light_intensity"] = Double(data["light_intensity"] ?? "") ?? 0.0
                 parameters["light_duration"] = Double(data["light_duration"] ?? "") ?? 0.0
                 parameters["price"] = Double(data["price"] ?? "") ?? 0.0
-                parameters["outdoors"] = data["outdoors"] ?? ""
+                parameters["outdoors"] = Bool(data["outdoors"] ?? "") ?? true
                 
                 var lastWatered = data["last_watered"] ?? ""
                 print(lastWatered)
@@ -478,7 +478,7 @@ extension mapVC : GMSMapViewDelegate {
 
             let cookie = UserDefaults.standard.object(forKey: "login") as? String
             request.setValue(cookie, forHTTPHeaderField: "Cookie")
-            
+            print(parameters)
             
             do {
                 request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
