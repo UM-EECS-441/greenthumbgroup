@@ -546,6 +546,9 @@ extension catalogVC: UISearchBarDelegate {
         if searchText == "" {
             searching = false
             tableView.reloadData()
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
         }
         else {
 //            print(searchText.lowercased())
