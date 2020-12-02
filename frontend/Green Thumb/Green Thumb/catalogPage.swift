@@ -16,7 +16,6 @@ class catalogPage: UIViewController {
     @IBOutlet weak var plantDescription: UILabel!
     @IBOutlet weak var plantTags: UILabel!
     @IBOutlet weak var daysTilWater: UILabel!
-    @IBOutlet weak var plantWaterInfo: UILabel!
     
     var name = "Plant"
     var species = "Species"
@@ -24,7 +23,6 @@ class catalogPage: UIViewController {
     var desc = "Description"
     var tags = ""
     var waterDays = ""
-    var waterInfo = ""
     var id = ""
     
     @IBOutlet weak var plantImage: UIImageView!
@@ -32,7 +30,7 @@ class catalogPage: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: plantWaterInfo.bottomAnchor).isActive = true
+        scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: daysTilWater.bottomAnchor).isActive = true
         
         plantName.text = name
         plantSpecies.text = species
@@ -42,7 +40,6 @@ class catalogPage: UIViewController {
         plantTags.numberOfLines = 0
         plantTags.text = tags
         daysTilWater.text = waterDays
-        plantWaterInfo.text = waterInfo
         
         getImage()
         

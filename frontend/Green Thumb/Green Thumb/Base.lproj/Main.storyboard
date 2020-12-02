@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qWm-Mz-XDw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qWm-Mz-XDw">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -915,7 +915,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LnQ-Vm-GUZ">
                                         <rect key="frame" x="50" y="50" width="314" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -1624,9 +1624,8 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="registerButtonClicked:" destination="2hh-QM-uZl" eventType="touchUpInside" id="565-sl-8Dw"/>
                                                     <action selector="submitButtonClicked:" destination="2hh-QM-uZl" eventType="touchUpInside" id="k6m-hT-SdJ"/>
-                                                    <segue destination="xTf-VC-1sm" kind="showDetail" id="Wka-61-hkp"/>
+                                                    <segue destination="coy-wj-2ei" kind="unwind" unwindAction="unwindToWelcomeBack:" id="ZpH-oN-CRK"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -1663,6 +1662,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ftf-WO-bc9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="coy-wj-2ei" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="880" y="2513"/>
         </scene>
@@ -1853,7 +1853,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OKf-GU-bNT">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OKf-GU-bNT">
                                 <rect key="frame" x="0.0" y="37" width="414" height="859"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1vL-8P-LjR">
@@ -1892,12 +1892,6 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Watering Info" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ikR-2Y-lRs">
-                                        <rect key="frame" x="0.0" y="774" width="414" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UkI-TF-OaH" userLabel="Plant Image">
                                         <rect key="frame" x="7" y="159" width="400" height="128"/>
                                         <constraints>
@@ -1910,9 +1904,7 @@
                                     <constraint firstItem="kbd-DZ-HnK" firstAttribute="trailing" secondItem="OKf-GU-bNT" secondAttribute="trailing" constant="-50" id="30j-h7-DjM"/>
                                     <constraint firstItem="Nal-Us-WXy" firstAttribute="top" secondItem="1vL-8P-LjR" secondAttribute="bottom" constant="50" id="8WQ-Jo-lzw"/>
                                     <constraint firstItem="6wd-Q3-6Ho" firstAttribute="top" secondItem="Nal-Us-WXy" secondAttribute="bottom" constant="30" id="8bX-7P-mT6"/>
-                                    <constraint firstItem="ikR-2Y-lRs" firstAttribute="centerX" secondItem="cIq-PF-6Xn" secondAttribute="centerX" id="A9S-mJ-Zs2"/>
                                     <constraint firstItem="cIq-PF-6Xn" firstAttribute="top" secondItem="Epw-kw-Bxm" secondAttribute="bottom" constant="30" id="Buk-ZI-fJQ"/>
-                                    <constraint firstAttribute="bottom" secondItem="ikR-2Y-lRs" secondAttribute="bottom" constant="50" placeholder="YES" id="Fap-ZJ-RTv"/>
                                     <constraint firstItem="1vL-8P-LjR" firstAttribute="top" secondItem="OKf-GU-bNT" secondAttribute="top" constant="20" id="HST-bJ-pyz"/>
                                     <constraint firstItem="UkI-TF-OaH" firstAttribute="top" secondItem="6wd-Q3-6Ho" secondAttribute="bottom" constant="15" id="Kew-Sg-GVF"/>
                                     <constraint firstItem="1vL-8P-LjR" firstAttribute="centerX" secondItem="OKf-GU-bNT" secondAttribute="centerX" id="P97-LM-Gcm"/>
@@ -1921,7 +1913,6 @@
                                     <constraint firstItem="Epw-kw-Bxm" firstAttribute="leading" secondItem="OKf-GU-bNT" secondAttribute="leading" constant="50" id="aMZ-Dz-pxq"/>
                                     <constraint firstItem="Epw-kw-Bxm" firstAttribute="trailing" secondItem="OKf-GU-bNT" secondAttribute="trailing" constant="-50" id="bEV-qU-SsQ"/>
                                     <constraint firstItem="Epw-kw-Bxm" firstAttribute="centerX" secondItem="kbd-DZ-HnK" secondAttribute="centerX" id="cwY-m9-LMq"/>
-                                    <constraint firstItem="ikR-2Y-lRs" firstAttribute="top" secondItem="cIq-PF-6Xn" secondAttribute="bottom" constant="30" id="fD9-Yo-ugO"/>
                                     <constraint firstItem="cIq-PF-6Xn" firstAttribute="centerX" secondItem="Epw-kw-Bxm" secondAttribute="centerX" id="ibs-dx-KYU"/>
                                     <constraint firstItem="kbd-DZ-HnK" firstAttribute="top" secondItem="UkI-TF-OaH" secondAttribute="bottom" constant="15" id="lpm-BF-iga"/>
                                     <constraint firstItem="kbd-DZ-HnK" firstAttribute="centerX" secondItem="6wd-Q3-6Ho" secondAttribute="centerX" id="psI-jH-8eh"/>
@@ -1952,7 +1943,6 @@
                         <outlet property="plantSpecies" destination="Nal-Us-WXy" id="C9A-m8-M6d"/>
                         <outlet property="plantTags" destination="Epw-kw-Bxm" id="SmE-EM-jZS"/>
                         <outlet property="plantType" destination="6wd-Q3-6Ho" id="CzX-GC-OlQ"/>
-                        <outlet property="plantWaterInfo" destination="ikR-2Y-lRs" id="ncz-E5-Wif"/>
                         <outlet property="scrollView" destination="OKf-GU-bNT" id="gfZ-En-IQi"/>
                     </connections>
                 </viewController>
@@ -2177,7 +2167,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="r2X-pL-RQh"/>
         <segue reference="3Dk-bH-fx2"/>
-        <segue reference="Wka-61-hkp"/>
+        <segue reference="CyI-Tc-TpP"/>
         <segue reference="IQf-Jf-rhh"/>
         <segue reference="DUj-V3-PAV"/>
     </inferredMetricsTieBreakers>
