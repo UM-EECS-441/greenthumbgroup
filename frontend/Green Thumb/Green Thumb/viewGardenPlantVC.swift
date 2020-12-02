@@ -63,10 +63,8 @@ class viewGardenPlantVC: UIViewController {
         
         self.name.text = nameText
         self.species.text = speciesText
-        
-        let imageData : Data = Data(base64Encoded: self.imageString, options: .ignoreUnknownCharacters)!
-        print(imageData)
-        self.image.image = UIImage(data: imageData)
+        print(imageString)
+        self.image.image = base64toImage(img: imageString)
         
         // Initialize last watered date
         lastWatered = lastWatered.replacingOccurrences(of: " 00:00:00 GMT", with: "")
@@ -103,6 +101,8 @@ class viewGardenPlantVC: UIViewController {
                     let json = try JSON(data: data)
                     print(json)
                     self.species.text = json["species"].stringValue
+                    self.imageString = json["image"].stringValue
+                    self.image.image = base64toImage(img: self.imageString)
                 }
                 catch {
                     print(error)

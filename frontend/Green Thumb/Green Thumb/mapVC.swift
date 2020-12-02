@@ -209,11 +209,6 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
                                                     let json = try JSON(data: data)
                                                     //print(json)
                                                     let imageString = json["image"].string
-                                                    //print(imageString)
-                                                    let imageData : Data = Data(base64Encoded: imageString ?? "", options: .ignoreUnknownCharacters)!
-                                                    print(imageData)
-                                                    let imageDecoded = UIImage(data: imageData)
-                                                    print(imageDecoded)
                                                     let overlay = self.drawIcon(mapView: self.map, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon), iconImage: UIImage(named: "planticon.png"))
                                                     overlay.isTappable = true
                                                     overlay.userData = [
@@ -230,7 +225,9 @@ class mapVC: UIViewController, PlantReturnDelegate, OverlayReturnDelegate {
                                                     ]
                                                     var data = overlay.userData as! [String: String]
                                                     data["image"] = String(imageString ?? "planticon.png")
+                                                    print(imageString)
                                                     data["outdoors"] = String(outdoors)
+                                                    overlay.userData = data
                                                     self.plantOverlays?.append(overlay)
                                                 }
                                                 catch {
@@ -453,7 +450,7 @@ extension mapVC : GMSMapViewDelegate {
                 parameters["light_intensity"] = Double(data["light_intensity"] ?? "") ?? 0.0
                 parameters["light_duration"] = Double(data["light_duration"] ?? "") ?? 0.0
                 parameters["price"] = Double(data["price"] ?? "") ?? 0.0
-                parameters["outdoors"] = Bool(data["outdoors"] ?? "")
+                parameters["outdoors"] = data["outdoors"] ?? ""
                 
                 var lastWatered = data["last_watered"] ?? ""
                 print(lastWatered)
@@ -499,13 +496,12 @@ extension mapVC : GMSMapViewDelegate {
             var data = currentOverlay.userData as! [String: String]
             data["latitude"] = String(coordinate.latitude)
             data["longitude"] = String(coordinate.longitude)
+            currentOverlay.userData = data
             
             self.addPlantLabel.isHidden = true
         }
         else if (self.currentPlant != nil){
-            let imageData : Data = Data(base64Encoded: self.currentPlant!.image, options: .ignoreUnknownCharacters)!
-            let imageDecoded = UIImage(data: imageData)
-            let overlay = drawIcon(mapView: self.map, coordinate: coordinate, iconImage: imageDecoded)
+            let overlay = drawIcon(mapView: self.map, coordinate: coordinate, iconImage: UIImage(named: "planticon.png"))
             
             currentPlant?.geodata = GeoData(lat: coordinate.latitude, lon: coordinate.longitude)
             
@@ -530,7 +526,7 @@ extension mapVC : GMSMapViewDelegate {
                 "light_duration": self.currentPlant!.duration,
                 "price": self.currentPlant!.price,
                 "last_watered": date,
-                "outdoors": self.currentPlant!.outdoors
+                "outdoors": true
             ]
             print(parameters)
             do {
@@ -546,7 +542,6 @@ extension mapVC : GMSMapViewDelegate {
             task.resume()
             
             overlay.isTappable = true
-            plantOverlays?.append(overlay)
 
             let dfsave = DateFormatter()
             dfsave.dateFormat = "E, d MMM yyyy"
@@ -565,10 +560,13 @@ extension mapVC : GMSMapViewDelegate {
                 "price": String(0)
             ]
             var data = overlay.userData as! [String: String]
-            data["image"] = String(self.currentPlant!.image ?? "planticon.png")
+            print(self.currentPlant!.image)
+            data["image"] = String(self.currentPlant!.image)
             data["outdoors"] = String(self.currentPlant!.outdoors)
+            overlay.userData = data
             self.addPlantLabel.isHidden = true
             self.currentPlant = nil
+            plantOverlays?.append(overlay)
         }
     }
     

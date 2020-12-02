@@ -16,11 +16,50 @@ class addPlantVC: UIViewController {
     var userGarden: UserGarden!
     var currentPlant: UserPlant!
     weak var returnDelegate : PlantReturnDelegate?
+    var imageString = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.name.text = currentPlant.name
+        
+        // get plant image
+        // Get the plant data from catalogue
+        let url = URL(string: "http://192.81.216.18/api/v1/catalog/\(self.currentPlant.catalogPlantId)/")!
+        
+        var request = URLRequest(url: url)
+
+        let cookie = UserDefaults.standard.object(forKey: "login") as? String
+        request.setValue(cookie, forHTTPHeaderField: "Cookie")
+        request.httpMethod = "GET"
+
+        let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
+            print(response ?? "")
+            //print(data)
+            DispatchQueue.main.async {
+                guard let data = data else {
+                    return
+                }
+                do{
+                    let json = try JSON(data: data)
+                    //print(json)
+                    self.imageString = json["image"].stringValue
+                    self.plantImage.image = base64toImage(img: self.imageString)
+                }
+                catch {
+                    print(error)
+                }
+            }
+        }
+        
+        task.resume()
+        
+        self.imageString = currentPlant.image 
+        if (self.imageString == ""){
+            self.plantImage.image = UIImage(named: "planticon.png")
+        } else {
+            self.plantImage.image = base64toImage(img: self.imageString)
+        }
 
         // Do any additional setup after loading the view.
     }
