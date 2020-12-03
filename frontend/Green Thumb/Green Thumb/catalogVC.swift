@@ -52,6 +52,16 @@ class catalogVC: UITableViewController {
     var plantsBySolver = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
                      "description": "", "days_to_water": 0,
                      "watering_description": ""]]]
+    // Sun Solver Sort
+    var sortedSunKeys : [String] = []
+    var plantsBySun = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
+    // Water Solver Sort
+    var sortedWaterKeys : [String] = []
+    var plantsByWater = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
     
     @IBOutlet var catalogTableView: UITableView!
     @IBOutlet var searchBar: UITableView!
@@ -77,15 +87,12 @@ class catalogVC: UITableViewController {
             UIAction(title: NSLocalizedString("Sort by Lowest Zone", comment: ""), image: UIImage(systemName: "globe"), handler: menuHandler),
             UIAction(title: NSLocalizedString("Sort by Flower Color", comment: ""), image: UIImage(systemName: "paintpalette"), handler: menuHandler),
             UIAction(title: NSLocalizedString("Sort by Problem Solvers", comment: ""), image: UIImage(systemName: "lightbulb"), handler: menuHandler),
-            UIAction(title: NSLocalizedString("Sort by Special Features", comment: ""), image: UIImage(systemName: "books.vertical"), handler: menuHandler)
+            UIAction(title: NSLocalizedString("Sort by Special Features", comment: ""), image: UIImage(systemName: "books.vertical"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Light Reqs", comment: ""), image: UIImage(systemName: "sun.max"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Days Between Watering", comment: ""), image: UIImage(systemName: "drop"), handler: menuHandler)
             
         ])
         
-//        let button = UIButton()
-//        button.setImage(UIImage(named: "arrow.up.arrow.down"), for: [])
-//        button.setTitle("YourTitle", for: [])
-//        button.sizeToFit()
-//        sortButton = UIBarButtonItem(customView: button)
         sortButton.menu = barButtonMenu
 //        sortButton.image = UIImage(systemName: "arrow.up.arrow.down")
         
@@ -143,6 +150,20 @@ class catalogVC: UITableViewController {
         else if action.title == "Sort by Problem Solvers" {
             if self.currentSort != "solver" {
                 self.currentSort = "solver"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Light Reqs" {
+            if self.currentSort != "sun" {
+                self.currentSort = "sun"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Days Between Watering" {
+            if self.currentSort != "water" {
+                self.currentSort = "water"
                 tableView.reloadData();
                 self.scrollToTop()
             }
@@ -249,7 +270,6 @@ class catalogVC: UITableViewController {
                     
                 }
                 
-//                print(self.sortedTypeKeys)
                 
                 for (index, _) in self.plants.enumerated() {
                     if duplicateNames[self.plants[index]["name"] as! String]! > 0 {
@@ -265,6 +285,20 @@ class catalogVC: UITableViewController {
                         self.plantsByAlphabetical[firstLetter] = []
                         self.plantsByAlphabetical[firstLetter]?.append(self.plants[index])
                     }
+                    
+                    // Grouping plants by water begin
+                    
+                    if let water : Int = self.plants[index]["days_to_water"] as? Int {
+                        let new_water = String(water)
+                        if let _ = self.plantsByWater[new_water] {
+                            self.plantsByWater[new_water]?.append(self.plants[index])
+                        }
+                        else {
+                            self.plantsByWater[new_water] = []
+                            self.plantsByWater[new_water]?.append(self.plants[index])
+                        }
+                    }
+                    // Grouping plants by water end
                     
                     // Grouping plants by type begin
                     let tags: [String: [String]] = self.plants[index]["tags"] as! [String: [String]]
@@ -343,6 +377,23 @@ class catalogVC: UITableViewController {
                         }
                     }
                     // Grouping plants by problem solver end
+                    
+                    // Grouping plants by sun begin
+                    
+                    if let sun_array: [String] = tags["light"] {
+//                        print(sun_array)
+                        for sun in sun_array {
+                            if let _ = self.plantsBySun[sun] {
+                                self.plantsBySun[sun]?.append(self.plants[index])
+                            }
+                            else {
+                                self.plantsBySun[sun] = []
+                                self.plantsBySun[sun]?.append(self.plants[index])
+                            }
+                        }
+                    }
+                    // Grouping plants by sun end
+                    
                 }
                 // Don't know why "" ends up as an empty key but bonk and its gone
                 self.plantsByType.removeValue(forKey: "")
@@ -363,7 +414,19 @@ class catalogVC: UITableViewController {
                 self.plantsBySolver.removeValue(forKey: "")
                 self.sortedSolverKeys = self.plantsBySolver.keys.sorted()
                 
-                //                print(self.sortedSolverKeys)
+                self.plantsBySun.removeValue(forKey: "")
+                self.sortedSunKeys = self.plantsBySun.keys.sorted()
+                
+                self.plantsByWater.removeValue(forKey: "")
+                self.sortedWaterKeys = self.plantsByWater.keys.sorted()
+                
+                
+//                print(self.plantsBySun)
+//                print(self.plantsByWater)
+
+
+                print(self.sortedSunKeys)
+                print(self.sortedWaterKeys)
                 
                 
                 DispatchQueue.main.async {
@@ -378,14 +441,6 @@ class catalogVC: UITableViewController {
         }
         task.resume()
     }
-//    func base64toImage(img: String) -> UIImage? {
-//        if (img == "") {
-//          return nil
-//        }
-//        let dataDecoded : Data = Data(base64Encoded: img, options: .ignoreUnknownCharacters)!
-//        let decodedimage = UIImage(data: dataDecoded)
-//        return decodedimage!
-//    }
 }
     // MARK:- TableView handlers
     
@@ -420,6 +475,12 @@ extension catalogVC {
             else if currentSort == "solver" {
                 selectedPlant = plantsBySolver[sortedSolverKeys[indexPath.section]]![indexPath.row]
             }
+            else if currentSort == "sun" {
+                selectedPlant = plantsBySun[sortedSunKeys[indexPath.section]]![indexPath.row]
+            }
+            else if currentSort == "water" {
+                selectedPlant = plantsByWater[sortedWaterKeys[indexPath.section]]![indexPath.row]
+            }
             else {
                 selectedPlant = plants[indexPath.row]
             }
@@ -432,9 +493,7 @@ extension catalogVC {
             let addPlantVC = storyBoard.instantiateViewController(withIdentifier: "addPlantVC") as! addPlantVC
             addPlantVC.userGarden = userGarden
             addPlantVC.returnDelegate = self.returnDelegate
-            // TODO: just add species here
 
-//            var newPlant: UserPlant = UserPlant(catalogPlantId: self.plants[indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.plants[indexPath.row]["name"] as! String)
             var newPlant: UserPlant = UserPlant(catalogPlantId: self.plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["name"] as! String)
             newPlant.image = self.plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["image"] as? String ?? ""
             
@@ -586,6 +645,12 @@ extension catalogVC {
             else if currentSort == "solver" {
                 return sortedSolverKeys[section]
             }
+            else if currentSort == "sun" {
+                return sortedSunKeys[section]
+            }
+            else if currentSort == "water" {
+                return sortedWaterKeys[section]
+            }
             else {
                 return ""
             }
@@ -621,6 +686,12 @@ extension catalogVC {
             else if currentSort == "solver" {
                 return sortedSolverKeys
             }
+            else if currentSort == "sun" {
+                return sortedSunKeys
+            }
+            else if currentSort == "water" {
+                return sortedWaterKeys
+            }
             else {
                 return [""]
             }
@@ -649,6 +720,12 @@ extension catalogVC {
             }
             else if currentSort == "solver" {
                 return sortedSolverKeys.count
+            }
+            else if currentSort == "sun" {
+                return sortedSunKeys.count
+            }
+            else if currentSort == "water" {
+                return sortedWaterKeys.count
             }
             else {
                 return 1
@@ -679,6 +756,12 @@ extension catalogVC {
             }
             else if currentSort == "solver" {
                 return plantsBySolver[sortedSolverKeys[section]]!.count
+            }
+            else if currentSort == "sun" {
+                return plantsBySun[sortedSunKeys[section]]!.count
+            }
+            else if currentSort == "water" {
+                return plantsByWater[sortedWaterKeys[section]]!.count
             }
             else {
                 return plants.count
@@ -712,6 +795,12 @@ extension catalogVC {
             }
             else if currentSort == "solver" {
                 name = plantsBySolver[sortedSolverKeys[indexPath.section]]![indexPath.row]["name"]
+            }
+            else if currentSort == "sun" {
+                name = plantsBySun[sortedSunKeys[indexPath.section]]![indexPath.row]["name"]
+            }
+            else if currentSort == "water" {
+                name = plantsByWater[sortedWaterKeys[indexPath.section]]![indexPath.row]["name"]
             }
             else {
                 name = plants[indexPath.row]["name"]
