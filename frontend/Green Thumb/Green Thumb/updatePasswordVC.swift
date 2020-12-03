@@ -16,6 +16,8 @@ class updatePasswordVC: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let email_cookie = UserDefaults.standard.object(forKey: "email") as? String
+        self.email.text = email_cookie
         self.email.delegate = self
         self.password.delegate = self
         self.setupHideKeyboardOnTap()

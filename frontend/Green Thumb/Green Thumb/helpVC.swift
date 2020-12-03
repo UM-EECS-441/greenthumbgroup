@@ -11,7 +11,7 @@ import UIKit
 class helpVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        youtubePlayerView.load(withVideoId: "n636NPn6zUM")
+        youtubePlayerView.load(withVideoId: "EM-RM-Lmy1M")
     }
     @IBOutlet weak var youtubePlayerView: YTPlayerView!
 }
