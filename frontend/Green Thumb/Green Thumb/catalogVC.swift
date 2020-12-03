@@ -14,14 +14,81 @@ class catalogVC: UITableViewController {
     var plants = [["_id":["$oid":""], "name":"", "species":"", "tags": {},
                    "description": "", "days_to_water": 0,
                    "watering_description": ""]]  // array of Plants
+    // Searchbar files
+    var searching : Bool = false
+    var searchedPlants = [["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                               "description": "", "days_to_water": 0,
+                               "watering_description": ""]]
+    
+    var currentSort : String = "alphabetical"
+    
+    // Alphabetical Sort
+    var sortedAlphabeticalKeys : [String] = []
+    var plantsByAlphabetical = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
+    // Plant Type Sort
+    var sortedTypeKeys : [String] = []
+    var plantsByType = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
+    // Flower Color Sort
+    var sortedFlowerColorKeys : [String] = []
+    var plantsByFlowerColor = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
+    // Zones Sort
+    var sortedZoneKeys : [String] = []
+    var plantsByZone = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
+    // Special Features Sort
+    var sortedFeatureKeys : [String] = []
+    var plantsByFeature = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
+    // Problem Solver Sort
+    var sortedSolverKeys : [String] = []
+    var plantsBySolver = ["":[["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                     "description": "", "days_to_water": 0,
+                     "watering_description": ""]]]
     
     @IBOutlet var catalogTableView: UITableView!
+    @IBOutlet var searchBar: UITableView!
+    @IBOutlet var sortButton: UIBarButtonItem!
     var userGarden: UserGarden?
     
     weak var returnDelegate : PlantReturnDelegate?
     
+    override func viewWillDisappear(_ animated: Bool) {
+            // plants info page we don't end up getting scrolled all the way back to the top
+            // preferable for consistent behavior
+            searchBar.endEditing(true)
+        }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        // Bar Button Menu
+        let barButtonMenu = UIMenu(title: "Filter Options", children: [
+            UIAction(title: NSLocalizedString("Sort by Name", comment: ""), image: UIImage(systemName: "a.book.closed"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Plant Type", comment: ""), image: UIImage(systemName: "leaf"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Lowest Zone", comment: ""), image: UIImage(systemName: "globe"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Flower Color", comment: ""), image: UIImage(systemName: "paintpalette"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Problem Solvers", comment: ""), image: UIImage(systemName: "lightbulb"), handler: menuHandler),
+            UIAction(title: NSLocalizedString("Sort by Special Features", comment: ""), image: UIImage(systemName: "books.vertical"), handler: menuHandler)
+            
+        ])
+        
+//        let button = UIButton()
+//        button.setImage(UIImage(named: "arrow.up.arrow.down"), for: [])
+//        button.setTitle("YourTitle", for: [])
+//        button.sizeToFit()
+//        sortButton = UIBarButtonItem(customView: button)
+        sortButton.menu = barButtonMenu
+//        sortButton.image = UIImage(systemName: "arrow.up.arrow.down")
+        
         
         self.refreshControl = UIRefreshControl()
         self.catalogTableView.delegate = self
@@ -33,6 +100,53 @@ class catalogVC: UITableViewController {
         
         self.refreshControl?.beginRefreshing()
         getPlants()
+    }
+    
+    func menuHandler(action: UIAction) {
+//        Swift.debugPrint("Menu handler: \(action.title)")
+        print(action.title)
+        if action.title == "Sort by Name" {
+            if self.currentSort != "alphabetical" {
+                self.currentSort = "alphabetical"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Plant Type" {
+            if self.currentSort != "type" {
+                self.currentSort = "type"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Flower Color" {
+            if self.currentSort != "flowercolor" {
+                self.currentSort = "flowercolor"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Special Features" {
+            if self.currentSort != "features" {
+                self.currentSort = "features"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Lowest Zone" {
+            if self.currentSort != "zones" {
+                self.currentSort = "zones"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
+        else if action.title == "Sort by Problem Solvers" {
+            if self.currentSort != "solver" {
+                self.currentSort = "solver"
+                tableView.reloadData();
+                self.scrollToTop()
+            }
+        }
     }
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
@@ -48,6 +162,32 @@ class catalogVC: UITableViewController {
         let queue = DispatchQueue.main
         queue.asyncAfter(deadline: DispatchTime.now() + wait, execute: closure)
     }
+    
+    
+    func showToast(message : String, seconds: Double){
+        // https://stackoverflow.com/questions/31540375/how-to-toast-message-in-swift
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.view.backgroundColor = .white
+        alert.view.alpha = 0.5
+        alert.view.layer.cornerRadius = 15
+        self.present(alert, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds) {
+            alert.dismiss(animated: true)
+        }
+    }
+     
+    
+    func scrollToTop() {
+        // 1
+        let topRow = IndexPath(row: 0,
+                               section: 0)
+                               
+        // 2
+        self.tableView.scrollToRow(at: topRow,
+                                   at: .top,
+                                   animated: true)
+    }
+    
     
     func getPlants() {
         let requestURL = "http://192.81.216.18/api/v1/catalog/"
@@ -71,25 +211,164 @@ class catalogVC: UITableViewController {
             }
             
             do {
-//                self.plants = [CatalogPlant]()
                 let json = try JSONSerialization.jsonObject(with: data!) as! [[String:Any]]
-                //sorted
                 let sortedJSON = json.sorted {
                     //would throw an error if we ever have a null name pls dont
                     String($0["name"] as! String).lowercased() < String($1["name"] as! String).lowercased()
                 }
-                let groupedPlants = Dictionary(grouping: json, by: {
-                    String($0["name"] as! String).prefix(1).lowercased()
+                // Plants sorted alphabetically by name, one big array
+                self.plants = sortedJSON
+                
+                
+                // Using group function to turn them into [first letter of name : plant]
+                let groupedAlphabeticalPlants = Dictionary(grouping: json, by: {
+                    String($0["name"] as! String).prefix(1).uppercased()
+                })
+                self.sortedAlphabeticalKeys = groupedAlphabeticalPlants.keys.sorted()
+                
+                
+                
+                var duplicateNames = [String:Int]()
+//                var groupedTypePlants = [String:[Any]]()
+                // Manually grouping by type here because I don't know how to group when theres an array inside LOL ;_;
+                // Two for loops is necessary for the name/species editing, otherwise
+                // the first plant with the same name does not get species appended to its name
+                // so the plant grouping for types and color has to be done in second loop after the name has been changed
+                
+                
+                for (index, _) in self.plants.enumerated() {
+                    // Editing names to have the species if duplicates
+                    if let _ = duplicateNames[self.plants[index]["name"] as! String] {
+                        // now val is not nil and the Optional has been unwrapped, so use it
+                        duplicateNames[self.plants[index]["name"] as! String]! += 1
+                    }
+                    else {
+                        duplicateNames[self.plants[index]["name"] as! String] = 0
+                    }
+                    // Editing names end
+                    
+                }
+                
+//                print(self.sortedTypeKeys)
+                
+                for (index, _) in self.plants.enumerated() {
+                    if duplicateNames[self.plants[index]["name"] as! String]! > 0 {
+                        self.plants[index]["name"] =
+                            self.plants[index]["name"] as! String + " (" +
+                            String(self.plants[index]["species"] as! String) + ")"
+                    }
+                    let firstLetter = String(self.plants[index]["name"] as! String).prefix(1).uppercased()
+                    if let _ = self.plantsByAlphabetical[firstLetter] {
+                        self.plantsByAlphabetical[firstLetter]?.append(self.plants[index])
+                    }
+                    else {
+                        self.plantsByAlphabetical[firstLetter] = []
+                        self.plantsByAlphabetical[firstLetter]?.append(self.plants[index])
+                    }
+                    
+                    // Grouping plants by type begin
+                    let tags: [String: [String]] = self.plants[index]["tags"] as! [String: [String]]
+                    let type_array: [String] = tags["plant type"]!
+                    for type in type_array {
+                        if let _ = self.plantsByType[type] {
+                            // now val is not nil and the Optional has been unwrapped, so use it
+                            self.plantsByType[type]?.append(self.plants[index])
+                        }
+                        else {
+                            self.plantsByType[type] = []
+                            self.plantsByType[type]?.append(self.plants[index])
+                        }
+                    }
+                    // Grouping end
+                    
+                    // Grouping plants by flowercolor begin
+//                    let flower_color_array: [String] = tags["flower color"]
+                    if let flower_color_array: [String] = tags["flower color"] {
+                        for color in flower_color_array {
+                            if let _ = self.plantsByFlowerColor[color] {
+                                self.plantsByFlowerColor[color]?.append(self.plants[index])
+                            }
+                            else {
+                                self.plantsByFlowerColor[color] = []
+                                self.plantsByFlowerColor[color]?.append(self.plants[index])
+                            }
+                        }
+                    }
+                    // Grouping plants by flowercolor end
+                    
+                    // Grouping plants by min zones begin
+                    if let zone_array: [String] = tags["zones"] {
+//                        let min_zone = zone_array.min {a,b in Int(a)! < Int(b)!}
+                        let min_zone = zone_array[0]
+                        let num = Int(min_zone)
+                        // Check if its a number because some of the zones in the pulled data had random stuff in it
+                        if num != nil {
+                            if let _ = self.plantsByZone[min_zone] {
+                                self.plantsByZone[min_zone]?.append(self.plants[index])
+                            }
+                            else {
+                                self.plantsByZone[min_zone] = []
+                                self.plantsByZone[min_zone]?.append(self.plants[index])
+                            }
+                        }
+                    }
+                    // Grouping plants by min zones end
+                    
+                    // Grouping plants by special features begin
+                    
+                    if let features_array: [String] = tags["special features"] {
+                        for feature in features_array {
+                            if let _ = self.plantsByFeature[feature] {
+                                self.plantsByFeature[feature]?.append(self.plants[index])
+                            }
+                            else {
+                                self.plantsByFeature[feature] = []
+                                self.plantsByFeature[feature]?.append(self.plants[index])
+                            }
+                        }
+                    }
+                    // Grouping plants by special features end
+                    
+                    // Grouping plants by problem solver begin
+                    
+                    if let solve_array: [String] = tags["problem solvers"] {
+                        for solve in solve_array {
+                            if let _ = self.plantsBySolver[solve] {
+                                self.plantsBySolver[solve]?.append(self.plants[index])
+                            }
+                            else {
+                                self.plantsBySolver[solve] = []
+                                self.plantsBySolver[solve]?.append(self.plants[index])
+                            }
+                        }
+                    }
+                    // Grouping plants by problem solver end
+                }
+                // Don't know why "" ends up as an empty key but bonk and its gone
+                self.plantsByType.removeValue(forKey: "")
+                self.sortedTypeKeys = self.plantsByType.keys.sorted()
+                
+                
+                self.plantsByFlowerColor.removeValue(forKey: "")
+                self.sortedFlowerColorKeys = self.plantsByFlowerColor.keys.sorted()
+                
+                self.plantsByZone.removeValue(forKey: "")
+                self.sortedZoneKeys = self.plantsByZone.keys.sorted(by: {
+                    a,b in Int(a)! < Int(b)!
                 })
                 
-                let keys = groupedPlants.keys.sorted()
+                self.plantsByFeature.removeValue(forKey: "")
+                self.sortedFeatureKeys = self.plantsByFeature.keys.sorted()
                 
-                self.plants = sortedJSON
-//                self.plants = groupedSortedPlants
+                self.plantsBySolver.removeValue(forKey: "")
+                self.sortedSolverKeys = self.plantsBySolver.keys.sorted()
+                
+                //                print(self.sortedSolverKeys)
+                
                 
                 DispatchQueue.main.async {
-                  self.tableView.estimatedRowHeight = 140
-                  self.tableView.rowHeight = UITableView.automaticDimension
+                    self.tableView.estimatedRowHeight = 140
+                    self.tableView.rowHeight = UITableView.automaticDimension
                     self.tableView.reloadData()
                     self.refreshControl?.endRefreshing()
                 }
@@ -113,77 +392,75 @@ class catalogVC: UITableViewController {
 extension catalogVC {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        print("Tapped")
-        if self.presentingViewController?.title == "Add Plant Options" {
-            // Create plant for tap, add to database, and return using delegate
-            // Add plant to database
-            let url = URL(string: "http://192.81.216.18/api/v1/usergarden/\(userGarden!.gardenId)/add_plant/")!
-            var request = URLRequest(url: url)
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpMethod = "POST"
-            
-            let delegate = UIApplication.shared.delegate as! AppDelegate
-            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
-
-            let df = DateFormatter()
-            df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-            let date = df.string(from: Date())
-            print(plants[indexPath.row])
-            print("id \(plants[indexPath.row]["_id"])")
-            let parameters: [String: Any] = [
-                "plant_type_id": plants[indexPath.row]["_id"] ?? "",
-                "latitude": -1,
-                "longitude": -1,
-                "light_level": -1,
-                "last_watered": date
-            ]
-            do {
-                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
-
-           } catch let error {
-                print("json error")
-               print(error.localizedDescription)
-           }
-            
-            
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                guard let data = data else {
-                    print("no data")
-                    return
-                }
-                DispatchQueue.main.async {
-                    do {
-                        print(response)
-                        let json = try JSON(data: data, options: .allowFragments)
-                        let plantId = json["id"].stringValue
-                        print("plantid \(plantId)")
-                        // TODO: don't force unwrap
-                        let newPlant: UserPlant = UserPlant(userPlantId: plantId, gardenId: self.userGarden!.gardenId, name: self.plants[indexPath.row]["name"] as! String, image: UIImage(named: "planticon.png")!)
-                        newPlant.catalogPlantId = self.plants[indexPath.row]["_id"] as! String
-                        self.returnDelegate?.didReturn(newPlant)
-                        self.dismiss(animated: true, completion: nil)
-                    } catch {
-                        print("error with response data")
-                        print(error)
-                    }
-                }
+        // This line deselects the search bar so that when coming back from the
+        // plants info page we don't end up getting scrolled all the way back to the top
+        searchBar.endEditing(true)
+        var selectedPlant : [String : Any] = ["_id":["$oid":""], "name":"", "species":"", "tags": {},
+                             "description": "", "days_to_water": 0,
+                             "watering_description": ""]
+        if searching {
+            selectedPlant = searchedPlants[indexPath.row]
+        }
+        else {
+            if currentSort == "alphabetical" {
+                selectedPlant = plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]
             }
+            else if currentSort == "type" {
+                selectedPlant = plantsByType[sortedTypeKeys[indexPath.section]]![indexPath.row]
+            }
+            else if currentSort == "flowercolor" {
+                selectedPlant = plantsByFlowerColor[sortedFlowerColorKeys[indexPath.section]]![indexPath.row]
+            }
+            else if currentSort == "features" {
+                selectedPlant = plantsByFeature[sortedFeatureKeys[indexPath.section]]![indexPath.row]
+            }
+            else if currentSort == "zones" {
+                selectedPlant = plantsByZone[sortedZoneKeys[indexPath.section]]![indexPath.row]
+            }
+            else if currentSort == "solver" {
+                selectedPlant = plantsBySolver[sortedSolverKeys[indexPath.section]]![indexPath.row]
+            }
+            else {
+                selectedPlant = plants[indexPath.row]
+            }
+        }
+        
+        
+        if self.presentingViewController?.title == "Map" {
+            // Create plant for tap
+            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let addPlantVC = storyBoard.instantiateViewController(withIdentifier: "addPlantVC") as! addPlantVC
+            addPlantVC.userGarden = userGarden
+            addPlantVC.returnDelegate = self.returnDelegate
+            // TODO: just add species here
 
-            task.resume()
-            self.dismiss(animated: true, completion: nil)
+//            var newPlant: UserPlant = UserPlant(catalogPlantId: self.plants[indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.plants[indexPath.row]["name"] as! String)
+            var newPlant: UserPlant = UserPlant(catalogPlantId: self.plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["name"] as! String)
+            newPlant.image = self.plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["image"] as? String ?? ""
+            
+            if searching {
+                newPlant = UserPlant(catalogPlantId: self.searchedPlants[indexPath.row]["_id"] as! String, gardenId: self.userGarden!.gardenId, name: self.searchedPlants[indexPath.row]["name"] as! String)
+                newPlant.image = self.searchedPlants[indexPath.row]["image"] as? String ?? ""
+            }
+            addPlantVC.currentPlant = newPlant
+            self.present(addPlantVC, animated: true, completion: nil)
         }
         else{
             let catalogPage = storyboard?.instantiateViewController(identifier: "catalogPage") as? catalogPage
             
-            let name = plants[indexPath.row]["name"]
+            let name = selectedPlant["name"]
             var nameString = "I been thru the desert on a plant with no name :("
             if case Optional<Any>.none = name {
                 //nil
             } else {
                 //not nil
                 nameString = String(describing: name!)
+                // getting rid of parenthesis for the plants that have species in name
+                nameString = nameString.components(separatedBy: "(")[0]
             }
 
-            let species = plants[indexPath.row]["species"]
+            
+            let species = selectedPlant["species"]
             var speciesString = "No Species Available"
             if case Optional<Any>.none = species {
                 //nil
@@ -192,7 +469,8 @@ extension catalogVC {
                 speciesString = String(describing: species!)
             }
             
-            let description = plants[indexPath.row]["description"]
+
+            let description = selectedPlant["description"]
             var descriptionString = "No Description Available"
             if case Optional<Any>.none = description {
                 //nil
@@ -201,104 +479,250 @@ extension catalogVC {
                 descriptionString = String(describing: description!)
             }
             
-    //        let tags = String(describing: plants[indexPath.row]["tags"])
-            let tags: [String: [String]] = plants[indexPath.row]["tags"] as! [String: [String]]
-    //        print(tags["plant type"])
-            let height_array = tags["height"]
-            let light_array = tags["light"]
-            let type_array = tags["plant type"]
+            let tags: [String: [String]] = selectedPlant["tags"] as! [String: [String]]
+            var tagsString = ""
+            for (tag, items) in tags {
+                if tag != "plant type" {
+                    tagsString += "\(tag.capitalized): "
+                    for item in items {
+                        tagsString += "\(item), "
+                    }
+                    tagsString = String(tagsString.dropLast(2))
+                    tagsString += "\n"
+                }
+            }
+            let type_array: [Any] = tags["plant type"]!
             
-    //        var heightString = "No Height Found"
-    //        var lightString = "No Light Found"
             var typeString = "No Type Found"
             
             if case Optional<Any>.none = type_array {
                 //nil
             } else {
                 //not nil
-                typeString = String(describing: type_array![0])
+//                typeString = String(describing: type_array![0])
+                typeString = ""
+                for type in type_array {
+                    typeString += "\(type), "
+                }
+                typeString = String(typeString.dropLast(2))
             }
-    //        print(typeString)
             
-    //        print(height_array)
-    //        print(light_array)
-    //        print(type_array)
+            let days_to_water = selectedPlant["days_to_water"]
+            var days_to_water_String = ""
+            if days_to_water is NSNull {
+                //<null>
+            }
+            else {
+                //not <null>
+                print("days to water not nil")
+                days_to_water_String = String(describing: days_to_water!)
+            }
             
-
-
             
-            // currently not working in backend
-            //days_to_water
-            //watering_description
+            
             
             catalogPage?.name = nameString
             catalogPage?.species = "Species: " + speciesString
-            catalogPage?.type = "Plant type: " + typeString
+            catalogPage?.type = (type_array.count > 1 ? ("Plant types: ") : ("Plant type: ")) + typeString
             catalogPage?.desc = descriptionString
-            //
-            catalogPage?.tags = "No Tags for this Plant"
-            catalogPage?.waterDays = ""
-            catalogPage?.waterInfo = ""
+            catalogPage?.tags = tagsString
+            if days_to_water_String != "" {
+                catalogPage?.waterDays = "Days until next watering: " + days_to_water_String
+            }
+            catalogPage?.id = selectedPlant["_id"] as! String
+
+            
             
             
             self.navigationController?.pushViewController(catalogPage!, animated: true)
-    //        performSegue(withIdentifier: "guideSegue", sender: self)
+            
+        }
+    }
+}
 
+extension catalogVC: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        print("called searchbar function")
+        if searchText == "" {
+            searching = false
+            tableView.reloadData()
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
         }
+        else {
+//            print(searchText.lowercased())
+            searchedPlants = plants.filter({
+                String($0["name"] as! String).lowercased().prefix(searchText.count) == searchText.lowercased()
+            })
+//            print(searchedPlants)
+            searching = true
+            tableView.reloadData()
         }
+    }
 }
 
 extension catalogVC {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if searching {
+            return ""
+        }
+        else {
+            if currentSort == "alphabetical" {
+                return sortedAlphabeticalKeys[section]
+            }
+            else if currentSort == "type" {
+                return sortedTypeKeys[section]
+            }
+            else if currentSort == "flowercolor" {
+                return sortedFlowerColorKeys[section]
+            }
+            else if currentSort == "features" {
+                return sortedFeatureKeys[section]
+            }
+            else if currentSort == "zones" {
+                return sortedZoneKeys[section]
+            }
+            else if currentSort == "solver" {
+                return sortedSolverKeys[section]
+            }
+            else {
+                return ""
+            }
+        }
+    }
+
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        // Scrollbar text
+        if searching {
+            return [""]
+        }
+        else {
+            if currentSort == "alphabetical" {
+                return sortedAlphabeticalKeys
+            }
+            else if currentSort == "type" {
+//                var shortenedKeys : [String] = []
+//                for key in sortedTypeKeys {
+//                    shortenedKeys.append(String(key.prefix(6)))
+//                }
+//                return shortenedKeys
+                return sortedTypeKeys
+            }
+            else if currentSort == "flowercolor" {
+                return sortedFlowerColorKeys
+            }
+            else if currentSort == "features" {
+                return sortedFeatureKeys
+            }
+            else if currentSort == "zones" {
+                return sortedZoneKeys
+            }
+            else if currentSort == "solver" {
+                return sortedSolverKeys
+            }
+            else {
+                return [""]
+            }
+        }
+    }
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        if searching {
+            return 1
+        }
+        else {
+            if currentSort == "alphabetical" {
+                return sortedAlphabeticalKeys.count // or sortedFirstLetters.count
+            }
+            else if currentSort == "type" {
+                return sortedTypeKeys.count
+            }
+            else if currentSort == "flowercolor" {
+                return sortedFlowerColorKeys.count
+            }
+            else if currentSort == "features" {
+                return sortedFeatureKeys.count
+            }
+            else if currentSort == "zones" {
+                return sortedZoneKeys.count
+            }
+            else if currentSort == "solver" {
+                return sortedSolverKeys.count
+            }
+            else {
+                return 1
+            }
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // how many rows per section
-        return plants.count
+        if searching {
+            return searchedPlants.count
+        } else {
+//            return plants.count
+            if currentSort == "alphabetical" {
+                return plantsByAlphabetical[sortedAlphabeticalKeys[section]]!.count
+            }
+            else if currentSort == "type" {
+                return plantsByType[sortedTypeKeys[section]]!.count
+            }
+            else if currentSort == "flowercolor" {
+                return plantsByFlowerColor[sortedFlowerColorKeys[section]]!.count
+            }
+            else if currentSort == "features" {
+                return plantsByFeature[sortedFeatureKeys[section]]!.count
+            }
+            else if currentSort == "zones" {
+                return plantsByZone[sortedZoneKeys[section]]!.count
+            }
+            else if currentSort == "solver" {
+                return plantsBySolver[sortedSolverKeys[section]]!.count
+            }
+            else {
+                return plants.count
+            }
+        }
     }
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "catalogCell", for: indexPath) as! catalogCell
         
+        var name : (Any)? = nil
         
-        let name = plants[indexPath.row]["name"]
+        if searching {
+            name = searchedPlants[indexPath.row]["name"]
+        } else {
+            if currentSort == "alphabetical" {
+                name = plantsByAlphabetical[sortedAlphabeticalKeys[indexPath.section]]![indexPath.row]["name"]
+            }
+            else if currentSort == "type" {
+                name = plantsByType[sortedTypeKeys[indexPath.section]]![indexPath.row]["name"]
+            }
+            else if currentSort == "flowercolor" {
+                name = plantsByFlowerColor[sortedFlowerColorKeys[indexPath.section]]![indexPath.row]["name"]
+            }
+            else if currentSort == "features" {
+                name = plantsByFeature[sortedFeatureKeys[indexPath.section]]![indexPath.row]["name"]
+            }
+            else if currentSort == "zones" {
+                name = plantsByZone[sortedZoneKeys[indexPath.section]]![indexPath.row]["name"]
+            }
+            else if currentSort == "solver" {
+                name = plantsBySolver[sortedSolverKeys[indexPath.section]]![indexPath.row]["name"]
+            }
+            else {
+                name = plants[indexPath.row]["name"]
+            }
+        }
         let nameString = String(describing: name!)
         cell.textLabel?.text = nameString
-        
         
         return cell
     }
 }
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        // how many sections are in table
-//        return 1
-//    }
-//
-
-//
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        // event handler when a cell is tapped
-//        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-//    }
-//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        // populate a single cell
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: "catalogTableCell", for: indexPath) as? catalogTableCell else {
-//            fatalError("No reusable cell!")
-//        }
-//
-//        let plantName = plants[indexPath.row]["name"]
-//        let nameString = String(describing: plantName!)
-//        cell.plantName.text = nameString
-//        cell.plantName.sizeToFit()
-////        if (plant.plantImage != "") {
-////            let img = UIImage(data: Data(base64Encoded: plant.plantImage, options: .ignoreUnknownCharacters)!)!
-////            cell.plantImage?.image = img.resizeImage(targetSize: CGSize(width: 150, height: 181))
-////
-////        } else {
-////            cell.plantImage?.image = nil
-////        }
-//
-//        return cell
-//    }
-//
 
 
 

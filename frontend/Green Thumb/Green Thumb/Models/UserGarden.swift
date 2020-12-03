@@ -14,7 +14,6 @@ class UserGarden {
     var tlGeoData: GeoData = GeoData(lat: -1, lon: -1)
     var brGeoData: GeoData = GeoData(lat: -1, lon: -1)
     var image: UIImage?
-    var plants = [UserPlant]()
     
     init (gardenId: String, name: String, address: String) {
         self.gardenId = gardenId

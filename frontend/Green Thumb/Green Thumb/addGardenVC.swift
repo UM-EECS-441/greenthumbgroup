@@ -53,11 +53,13 @@ class addGardenVC: UIViewController {
     }
     @IBAction func nameEdited(_ sender: UITextField) {
         newGarden.name = gardenName.text ?? ""
+        gardenName.textColor = UIColor.white
     }
 
     
     @IBAction func addressEdited(_ sender: Any) {
         newGarden.address = gardenLoc.text ?? ""
+        gardenLoc.textColor = UIColor.white
     }
     
     
@@ -76,9 +78,10 @@ class addGardenVC: UIViewController {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpMethod = "POST"
             
-            let delegate = UIApplication.shared.delegate as! AppDelegate
-            request.setValue(delegate.cookie, forHTTPHeaderField: "Cookie")
-            print(delegate.cookie)
+//            let delegate = UIApplication.shared.delegate as! AppDelegate
+            let cookie = UserDefaults.standard.object(forKey: "login") as? String
+            request.setValue(cookie, forHTTPHeaderField: "Cookie")
+            print(cookie)
             
             let parameters: [String: Any] = [
                 "name": self.gardenName.text!,
@@ -109,7 +112,7 @@ class addGardenVC: UIViewController {
                         let json = try JSON(data: data, options: .allowFragments)
                         let gardenId: String? = json["id"].stringValue
                         self.newGarden.gardenId = gardenId ?? ""
-                        self.returnDelegate?.didReturn(self.newGarden)
+                        self.returnDelegate?.didReturn(self.newGarden, false)
                         self.dismiss(animated: true, completion: nil)
                     } catch {
                         print("error with response data")
@@ -126,6 +129,6 @@ class addGardenVC: UIViewController {
 
 // Generic return result delegate protocol
 protocol ReturnDelegate: UIViewController {
-    func didReturn(_ result: UserGarden)
+    func didReturn(_ result: UserGarden?, _ delete: Bool)
 }
 

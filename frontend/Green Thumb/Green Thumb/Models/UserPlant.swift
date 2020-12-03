@@ -8,20 +8,21 @@
 import UIKit
 
 class UserPlant {
-    var userPlantId: String
-    var catalogPlantId: String = ""
-    // Make optional bc might not have location data yet when plant created
+    var userPlantId: String = ""
+    var catalogPlantId: String
     var geodata: GeoData = GeoData(lat: -1, lon: -1)
     var gardenId: String
     var name: String
-    var image: UIImage
+    var image: String = ""
+    var price = 0.0
+    var intensity = 0.0
+    var duration = 0.0
+    var outdoors = true
     
-    // TODO: Add more stuff as we add more properties to user customizable plants such as light data etc.
     
-    init (userPlantId: String, gardenId: String, name: String, image: UIImage) {
-        self.userPlantId = userPlantId
+    init (catalogPlantId: String, gardenId: String, name: String) {
+        self.catalogPlantId = catalogPlantId
         self.gardenId = gardenId
         self.name = name
-        self.image = image
     }
 }

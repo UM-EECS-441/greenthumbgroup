@@ -1,14 +1,14 @@
 //
-//  registerVC.swift
+//  updatePasswordVC.swift
 //  Green Thumb
 //
-//  Created by Megan Worrel on 10/28/20.
+//  Created by Joe Riggs on 11/16/20.
 //
 
 import UIKit
 import SwiftyJSON
 
-class registerVC: UIViewController, UITextFieldDelegate {
+class updatePasswordVC: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var password: UITextField!
@@ -46,18 +46,20 @@ class registerVC: UIViewController, UITextFieldDelegate {
         return tap
     }
     
-    @IBAction func registerButtonClicked(_ sender: UIButton) {
-        let url = URL(string: "http://192.81.216.18/accounts/create/")!
+    @IBAction func submitButtonClicked(_ sender: UIButton) {
+        let url = URL(string: "http://192.81.216.18/accounts/login/")!
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.httpMethod = "POST"
+        //request.httpShouldHandleCookies = true
         
         let parameters: [String: Any] = [
             "email": self.email.text!,
             "password": self.password.text!
         ]
         do {
-               request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted) 
+               request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
            } catch let error {
                print(error.localizedDescription)
            }
@@ -72,8 +74,6 @@ class registerVC: UIViewController, UITextFieldDelegate {
                 if !cookies.isEmpty{
                     delegate.cookie = "\(cookies[0].name)=\(cookies[0].value)"
                     UserDefaults.standard.set(delegate.cookie, forKey: "login")
-                    UserDefaults.standard.set(self.email.text!, forKey: "email")
-                    UserDefaults.standard.set(false, forKey: "notifications")
                     print(delegate.cookie)
                 }
             }

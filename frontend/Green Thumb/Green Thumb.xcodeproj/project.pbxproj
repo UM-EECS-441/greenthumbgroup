@@ -8,16 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		400EA6A22541110800C8D052 /* DesignableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400EA6A12541110800C8D052 /* DesignableView.swift */; };
-		40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */; };
 		404264522544884A005C6F8D /* plantInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042645025448849005C6F8D /* plantInfoVC.swift */; };
 		40426456254488DF005C6F8D /* catalogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40426455254488DF005C6F8D /* catalogVC.swift */; };
 		4042645B2548FC9F005C6F8D /* catalogPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4042645A2548FC9F005C6F8D /* catalogPage.swift */; };
+		4074C0EA2562FA100021416A /* homeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4074C0E92562FA100021416A /* homeVC.swift */; };
 		40C7CBA5253768FB005A2283 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA4253768FB005A2283 /* AppDelegate.swift */; };
 		40C7CBA7253768FB005A2283 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA6253768FB005A2283 /* SceneDelegate.swift */; };
 		40C7CBA9253768FB005A2283 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C7CBA8253768FB005A2283 /* ViewController.swift */; };
 		40C7CBAC253768FB005A2283 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40C7CBAA253768FB005A2283 /* Main.storyboard */; };
 		40C7CBAE253768FF005A2283 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40C7CBAD253768FF005A2283 /* Assets.xcassets */; };
 		40C7CBB1253768FF005A2283 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40C7CBAF253768FF005A2283 /* LaunchScreen.storyboard */; };
+		40CD41EA2562E48400C3DE3E /* updatePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CD41E92562E48400C3DE3E /* updatePasswordVC.swift */; };
+		40CD41ED2562E8DF00C3DE3E /* welcomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CD41EC2562E8DE00C3DE3E /* welcomeVC.swift */; };
+		40E2C45125730F650058430F /* helpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2C45025730F640058430F /* helpVC.swift */; };
+		40E2C4542573105A0058430F /* notificationCenterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2C4532573105A0058430F /* notificationCenterVC.swift */; };
 		5665D8DAA8A7A036525377EB /* Pods_Green_Thumb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F268A82F4911AD68A1F4F916 /* Pods_Green_Thumb.framework */; };
 		81288543253EB41400E6AAD7 /* guideTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81288542253EB41400E6AAD7 /* guideTable.swift */; };
 		8172874A254894BE001420BA /* guidePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81728749254894BE001420BA /* guidePage.swift */; };
@@ -29,6 +33,7 @@
 		A56F04BB2544DAEF0060976F /* addGardenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F04BA2544DAEF0060976F /* addGardenVC.swift */; };
 		A56F04C22544DD480060976F /* gardensTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F04C12544DD480060976F /* gardensTableVC.swift */; };
 		A56F04C52544DD730060976F /* gardenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F04C42544DD730060976F /* gardenCell.swift */; };
+		A5C158422573117400E508F6 /* lightInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C158412573117400E508F6 /* lightInfoVC.swift */; };
 		A5C523B8254A60CD000B2B13 /* registerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C523B7254A60CD000B2B13 /* registerVC.swift */; };
 		A5C523BB254A612E000B2B13 /* loginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C523BA254A612E000B2B13 /* loginVC.swift */; };
 		A5C523C8254B7C84000B2B13 /* catalogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C523C7254B7C84000B2B13 /* catalogCell.swift */; };
@@ -41,10 +46,10 @@
 
 /* Begin PBXFileReference section */
 		400EA6A12541110800C8D052 /* DesignableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableView.swift; sourceTree = "<group>"; };
-		40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSettingsVC.swift; sourceTree = "<group>"; };
 		4042645025448849005C6F8D /* plantInfoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = plantInfoVC.swift; sourceTree = "<group>"; };
 		40426455254488DF005C6F8D /* catalogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogVC.swift; sourceTree = "<group>"; };
 		4042645A2548FC9F005C6F8D /* catalogPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogPage.swift; sourceTree = "<group>"; };
+		4074C0E92562FA100021416A /* homeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = homeVC.swift; sourceTree = "<group>"; };
 		40C7CBA1253768FB005A2283 /* Green Thumb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Green Thumb.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40C7CBA4253768FB005A2283 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		40C7CBA6253768FB005A2283 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -53,6 +58,10 @@
 		40C7CBAD253768FF005A2283 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		40C7CBB0253768FF005A2283 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		40C7CBB2253768FF005A2283 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		40CD41E92562E48400C3DE3E /* updatePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = updatePasswordVC.swift; sourceTree = "<group>"; };
+		40CD41EC2562E8DE00C3DE3E /* welcomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = welcomeVC.swift; sourceTree = "<group>"; };
+		40E2C45025730F640058430F /* helpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = helpVC.swift; sourceTree = "<group>"; };
+		40E2C4532573105A0058430F /* notificationCenterVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notificationCenterVC.swift; sourceTree = "<group>"; };
 		81288542253EB41400E6AAD7 /* guideTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = guideTable.swift; sourceTree = "<group>"; };
 		81728749254894BE001420BA /* guidePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = guidePage.swift; sourceTree = "<group>"; };
 		92F96ABF4FBECF795ED13803 /* Pods-Green Thumb.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Green Thumb.debug.xcconfig"; path = "Target Support Files/Pods-Green Thumb/Pods-Green Thumb.debug.xcconfig"; sourceTree = "<group>"; };
@@ -64,6 +73,7 @@
 		A56F04BA2544DAEF0060976F /* addGardenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addGardenVC.swift; sourceTree = "<group>"; };
 		A56F04C12544DD480060976F /* gardensTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gardensTableVC.swift; sourceTree = "<group>"; };
 		A56F04C42544DD730060976F /* gardenCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gardenCell.swift; sourceTree = "<group>"; };
+		A5C158412573117400E508F6 /* lightInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lightInfoVC.swift; sourceTree = "<group>"; };
 		A5C523B7254A60CD000B2B13 /* registerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerVC.swift; sourceTree = "<group>"; };
 		A5C523BA254A612E000B2B13 /* loginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginVC.swift; sourceTree = "<group>"; };
 		A5C523C7254B7C84000B2B13 /* catalogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catalogCell.swift; sourceTree = "<group>"; };
@@ -113,16 +123,18 @@
 				40C7CBA4253768FB005A2283 /* AppDelegate.swift */,
 				40426455254488DF005C6F8D /* catalogVC.swift */,
 				4042645A2548FC9F005C6F8D /* catalogPage.swift */,
+				A5C158412573117400E508F6 /* lightInfoVC.swift */,
 				40C7CBA6253768FB005A2283 /* SceneDelegate.swift */,
 				40C7CBA8253768FB005A2283 /* ViewController.swift */,
 				40C7CBAA253768FB005A2283 /* Main.storyboard */,
 				4042645025448849005C6F8D /* plantInfoVC.swift */,
-				40360F5F25432DE300259B6E /* ReminderSettingsVC.swift */,
 				40C7CBAD253768FF005A2283 /* Assets.xcassets */,
 				40C7CBAF253768FF005A2283 /* LaunchScreen.storyboard */,
 				40C7CBB2253768FF005A2283 /* Info.plist */,
+				40E2C4532573105A0058430F /* notificationCenterVC.swift */,
 				81288542253EB41400E6AAD7 /* guideTable.swift */,
 				81728749254894BE001420BA /* guidePage.swift */,
+				40E2C45025730F640058430F /* helpVC.swift */,
 				400EA6A12541110800C8D052 /* DesignableView.swift */,
 				A56F04742544A4650060976F /* mapVC.swift */,
 				A56F04BA2544DAEF0060976F /* addGardenVC.swift */,
@@ -130,9 +142,12 @@
 				A56F04C42544DD730060976F /* gardenCell.swift */,
 				A56B4ECE254522A70041372B /* addPlantVC.swift */,
 				A56B4ED7254528DE0041372B /* addPlantOptionsVC.swift */,
+				4074C0E92562FA100021416A /* homeVC.swift */,
 				A5C523B7254A60CD000B2B13 /* registerVC.swift */,
+				40CD41E92562E48400C3DE3E /* updatePasswordVC.swift */,
 				A5C523BA254A612E000B2B13 /* loginVC.swift */,
 				A5C523C7254B7C84000B2B13 /* catalogCell.swift */,
+				40CD41EC2562E8DE00C3DE3E /* welcomeVC.swift */,
 				A50034B1254BA4BC00C12F95 /* viewGardenPlantVC.swift */,
 			);
 			path = "Green Thumb";
@@ -301,9 +316,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40CD41ED2562E8DF00C3DE3E /* welcomeVC.swift in Sources */,
+				4074C0EA2562FA100021416A /* homeVC.swift in Sources */,
 				A56F04C52544DD730060976F /* gardenCell.swift in Sources */,
 				A83E47FF2543B37F003F1193 /* UserPlant.swift in Sources */,
-				40360F6025432DE300259B6E /* ReminderSettingsVC.swift in Sources */,
+				A5C158422573117400E508F6 /* lightInfoVC.swift in Sources */,
 				A5C523B8254A60CD000B2B13 /* registerVC.swift in Sources */,
 				40426456254488DF005C6F8D /* catalogVC.swift in Sources */,
 				4042645B2548FC9F005C6F8D /* catalogPage.swift in Sources */,
@@ -312,6 +329,7 @@
 				A83E47FB2543AFCA003F1193 /* GuidePage.swift in Sources */,
 				A56F04752544A4650060976F /* mapVC.swift in Sources */,
 				A50034B2254BA4BC00C12F95 /* viewGardenPlantVC.swift in Sources */,
+				40E2C45125730F650058430F /* helpVC.swift in Sources */,
 				A56B4ED8254528DE0041372B /* addPlantOptionsVC.swift in Sources */,
 				A5C523BB254A612E000B2B13 /* loginVC.swift in Sources */,
 				A83E47FD2543B0F4003F1193 /* CatalogPlant.swift in Sources */,
@@ -319,8 +337,10 @@
 				404264522544884A005C6F8D /* plantInfoVC.swift in Sources */,
 				A83E48032543B4D9003F1193 /* UserGarden.swift in Sources */,
 				8172874A254894BE001420BA /* guidePage.swift in Sources */,
+				40CD41EA2562E48400C3DE3E /* updatePasswordVC.swift in Sources */,
 				40C7CBA7253768FB005A2283 /* SceneDelegate.swift in Sources */,
 				A56B4ECF254522A70041372B /* addPlantVC.swift in Sources */,
+				40E2C4542573105A0058430F /* notificationCenterVC.swift in Sources */,
 				400EA6A22541110800C8D052 /* DesignableView.swift in Sources */,
 				A56F04C22544DD480060976F /* gardensTableVC.swift in Sources */,
 				A83E48012543B3F6003F1193 /* GeoData.swift in Sources */,
