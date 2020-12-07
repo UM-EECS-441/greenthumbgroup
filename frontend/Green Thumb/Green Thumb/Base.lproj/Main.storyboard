@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qWm-Mz-XDw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qWm-Mz-XDw">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -937,7 +937,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.29411104319999998" green="0.51978391410000002" blue="0.31825751070000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.16740426420000001" green="0.29730343819999999" blue="0.1806508899" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="LnQ-Vm-GUZ" secondAttribute="trailing" constant="-50" id="Ipy-Sz-bjD"/>
                                     <constraint firstItem="LnQ-Vm-GUZ" firstAttribute="width" secondItem="7hZ-CK-qEf" secondAttribute="width" constant="-100" id="JDa-zn-R2T"/>
@@ -1830,9 +1830,10 @@
                                     </button>
                                     <view contentMode="scaleToFill" verticalHuggingPriority="200" translatesAutoresizingMaskIntoConstraints="NO" id="xYR-NN-xJE">
                                         <rect key="frame" x="182" y="636" width="50" height="132"/>
-                                        <color key="backgroundColor" red="0.29411104319999998" green="0.51978391410000002" blue="0.31825751070000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.16740426420000001" green="0.29730343819999999" blue="0.1806508899" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </view>
                                 </subviews>
+                                <color key="backgroundColor" red="0.16740426420000001" green="0.29730343819999999" blue="0.1806508899" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="9sw-Dt-abo" firstAttribute="leading" secondItem="Lxo-eW-A5H" secondAttribute="leading" constant="16" id="6IP-Xj-uMX"/>
                                     <constraint firstAttribute="trailing" secondItem="9sw-Dt-abo" secondAttribute="trailing" constant="16" id="GGP-QI-fjL"/>
@@ -1842,7 +1843,7 @@
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="05c-2d-bCJ"/>
-                        <color key="backgroundColor" red="0.29411104319999998" green="0.51978391410000002" blue="0.31825751070000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.16740426420000001" green="0.29730343819999999" blue="0.1806508899" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Lxo-eW-A5H" firstAttribute="top" secondItem="05c-2d-bCJ" secondAttribute="top" constant="40" id="3Va-OQ-TIH"/>
                             <constraint firstItem="05c-2d-bCJ" firstAttribute="bottom" secondItem="Lxo-eW-A5H" secondAttribute="bottom" id="7KV-QR-eew"/>
@@ -1918,6 +1919,7 @@
                                         </constraints>
                                     </imageView>
                                 </subviews>
+                                <color key="backgroundColor" red="0.16740426420000001" green="0.29730343819999999" blue="0.1806508899" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="kbd-DZ-HnK" firstAttribute="trailing" secondItem="OKf-GU-bNT" secondAttribute="trailing" constant="-50" id="30j-h7-DjM"/>
                                     <constraint firstItem="Nal-Us-WXy" firstAttribute="top" secondItem="1vL-8P-LjR" secondAttribute="bottom" constant="50" id="8WQ-Jo-lzw"/>
@@ -1944,7 +1946,7 @@
                             </scrollView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="jz7-4P-z35"/>
-                        <color key="backgroundColor" red="0.29411104319999998" green="0.51978391410000002" blue="0.31825751070000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.16740426420000001" green="0.29730343819999999" blue="0.1806508899" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="jz7-4P-z35" firstAttribute="top" secondItem="OKf-GU-bNT" secondAttribute="top" constant="7" id="5t5-u2-rro"/>
                             <constraint firstItem="jz7-4P-z35" firstAttribute="trailing" secondItem="OKf-GU-bNT" secondAttribute="trailing" id="9iA-4Z-tx7"/>
