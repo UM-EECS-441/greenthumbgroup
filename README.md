@@ -1,4 +1,4 @@
-# UN EECS 441 F20 Green Thumb Group
+# UM EECS 441 F20 Green Thumb Group
 
 | Demo  |  Wiki |  Trello  |
 |:-----:|:-----:|:--------:|
